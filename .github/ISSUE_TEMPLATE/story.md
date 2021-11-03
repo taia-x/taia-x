@@ -11,6 +11,8 @@ Epic: (provide number with #)
 
 ### Description
 
+As a <user role> I would like <goal> so that <benefit>.
+
 ### Tasks
 
 - [ ] Task 1

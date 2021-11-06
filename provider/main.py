@@ -1,3 +1,4 @@
+import uvicorn
 from fastapi import FastAPI
 
 
@@ -9,5 +10,9 @@ async def root():
 
 
 @app.get("/health")
-async def root():
+async def health():
     return 
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000)

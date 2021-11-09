@@ -10,15 +10,15 @@ jobs:
 
     strategy:
       matrix:
-        python-version: [3.9.7]
+        python-version: []
 
     steps:
       - uses: actions/checkout@master
 
       - name: Set up Python
-        uses: actions/setup-python@v2.2.2
+        uses: actions/setup-python@v2
           with:
-            python-version: ${{ matrix.python-version }}
+            python-version: 3.9.7
         
       - name: Install dependencies
         run: cd provider & pip install -r requirements.txt

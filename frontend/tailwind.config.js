@@ -2,7 +2,7 @@
 const colors = require("tailwindcss/colors");
 
 module.exports = {
-  mode: "jit",
+  //mode: "jit",
   purge: ["./public/**/*.html", "./src/**/*.{js,jsx,ts,tsx,vue}"],
   darkMode: false, // or 'media' or 'class'
   theme: {
@@ -17,6 +17,7 @@ module.exports = {
           lines: "#1D1E23",
         },
         gray: colors.gray,
+        teal: colors.teal,
       },
 
       animation: {

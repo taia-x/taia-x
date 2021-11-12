@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 <template>
-  <div>
+  <div class="font-sans">
     <div class="flex justify-center p-4 space-x-2 home">
       <button
         v-wave
@@ -26,7 +26,7 @@
         <span class="pl-1 text-teal-100 text-md">Increment</span>
       </button>
     </div>
-    <div class="flex items-center justify-center text-white">
+    <div class="flex items-center justify-center text-2xl text-white">
       Amount: {{ amount }}
     </div>
   </div>

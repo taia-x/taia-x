@@ -1,7 +1,7 @@
 import sensordata
 
 
-class CameraData(sensordata.SensorData):
+class CameraSensor(sensordata.SensorData):
     """
     Parameters
     ----------

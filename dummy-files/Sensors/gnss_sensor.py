@@ -1,7 +1,7 @@
 import sensordata
 
 
-class CollisionDetector(sensordata.SensorData):
+class GnssSensor(sensordata.SensorData):
     """
     Parameters
     ----------

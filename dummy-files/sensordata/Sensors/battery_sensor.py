@@ -1,7 +1,7 @@
-import sensordata
+from ..sensordata import SensorData
 
 
-class BatterySensor(sensordata.SensorData):
+class BatterySensor(SensorData):
     """
     Parameters
     ----------
@@ -18,7 +18,7 @@ class BatterySensor(sensordata.SensorData):
     """
 
     def __init__(self, frame, timestamp, location, rotation, soc, u_out_inst, i_out_inst, temp_max, temp_min):
-        sensordata.SensorData.__init__(self, frame, timestamp, location, rotation)
+        SensorData.__init__(self, frame, timestamp, location, rotation)
         self.soc = soc
         self.u_out_inst = u_out_inst
         self.i_out_inst = i_out_inst

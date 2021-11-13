@@ -1,7 +1,7 @@
-import sensordata
+from ..sensordata import SensorData
 
 
-class RadarSensor(sensordata.SensorData):
+class RadarSensor(SensorData):
     """
     Parameters
     ----------
@@ -16,7 +16,7 @@ class RadarSensor(sensordata.SensorData):
     """
 
     def __init__(self, frame, timestamp, location, rotation, altitude, azimuth, depth, velocity):
-        sensordata.SensorData.__init__(self, frame, timestamp, location, rotation)
+        SensorData.__init__(self, frame, timestamp, location, rotation)
         self.altitude = altitude
         self.azimuth = azimuth
         self.depth = depth

@@ -1,7 +1,7 @@
-import sensordata
+from ..sensordata import SensorData
 
 
-class LidarSensor(sensordata.SensorData):
+class LidarSensor(SensorData):
     """
     Parameters
     ----------
@@ -15,7 +15,7 @@ class LidarSensor(sensordata.SensorData):
     """
 
     def __init__(self, frame, timestamp, location, rotation, channels, horizontal_angle, raw_data):
-        sensordata.SensorData.__init__(self, frame, timestamp, location, rotation)
+        SensorData.__init__(self, frame, timestamp, location, rotation)
         self.channels = channels
         self.horizontal_angle = horizontal_angle
         self.raw_data = raw_data

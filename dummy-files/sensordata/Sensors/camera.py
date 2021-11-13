@@ -1,7 +1,7 @@
-import sensordata
+from ..sensordata import SensorData
 
 
-class CameraSensor(sensordata.SensorData):
+class CameraSensor(SensorData):
     """
     Parameters
     ----------
@@ -16,7 +16,7 @@ class CameraSensor(sensordata.SensorData):
     """
 
     def __init__(self, frame, timestamp, location, rotation, fov, height, width, raw_data=None):
-        sensordata.SensorData.__init__(self, frame, timestamp, location, rotation)
+        SensorData.__init__(self, frame, timestamp, location, rotation)
         self.fov = fov
         self.height = height
         self.width = width

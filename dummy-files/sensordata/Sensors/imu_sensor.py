@@ -1,7 +1,7 @@
-import sensordata
+from ..sensordata import SensorData
 
 
-class IMUSensor(sensordata.SensorData):
+class IMUSensor(SensorData):
     """
     Parameters
     ----------
@@ -14,7 +14,7 @@ class IMUSensor(sensordata.SensorData):
     """
 
     def __init__(self, frame, timestamp, location, rotation, accelerometer, compass, gyroscope):
-        sensordata.SensorData.__init__(self, frame, timestamp, location, rotation)
+        SensorData.__init__(self, frame, timestamp, location, rotation)
         self.accelerometer = accelerometer
         self.compass = compass
         self.gyroscope = gyroscope

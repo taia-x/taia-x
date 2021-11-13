@@ -1,7 +1,7 @@
-import sensordata
+from ..sensordata import SensorData
 
 
-class GnssSensor(sensordata.SensorData):
+class GnssSensor(SensorData):
     """
     Parameters
     ----------
@@ -14,7 +14,7 @@ class GnssSensor(sensordata.SensorData):
     """
 
     def __init__(self, frame, timestamp, location, rotation, altitude, latitude, longitude):
-        sensordata.SensorData.__init__(self, frame, timestamp, location, rotation)
+        SensorData.__init__(self, frame, timestamp, location, rotation)
         self.altitude = altitude
         self.latitude = latitude
         self.longitude = longitude

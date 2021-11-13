@@ -17,7 +17,3 @@ class SensorData:
         self.timestamp = timestamp
         self.location = location
         self.rotation = rotation
-
-
-if __name__ == "__main__":
-    pass

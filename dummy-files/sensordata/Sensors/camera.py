@@ -21,7 +21,3 @@ class CameraSensor(SensorData):
         self.height = height
         self.width = width
         self.raw_data = raw_data
-
-
-if __name__ == "__main__":
-    pass

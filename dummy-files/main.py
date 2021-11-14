@@ -88,7 +88,7 @@ def main(dir_path=None, dir_na=None, time_lapse=10):
 
 
 if __name__ == "__main__":
-    directory_path = "C:/Users/AndreMecklenborg/Desktop/"
+    directory_path = ""
     dir_name = "measurements"
     timelapse = 30  # 30 seconds
     main(directory_path, dir_name, timelapse)

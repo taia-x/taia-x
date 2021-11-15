@@ -1,6 +1,7 @@
 import json
 import os
 import time
+import datetime
 from sensordata.Sensors.battery_sensor import BatterySensor
 from sensordata.Sensors.camera import CameraSensor
 from sensordata.Sensors.gnss_sensor import GnssSensor
@@ -88,7 +89,8 @@ def main(dir_path=None, dir_na=None, time_lapse=10):
 
 
 if __name__ == "__main__":
-    directory_path = ""
-    dir_name = "measurements"
+    directory_path = "./test-measurements/"
+    dt = datetime.datetime.today()
+    dir_name = f"{dt.year}-{dt.month}-{dt.day}-{dt.hour}-{dt.minute}-{dt.second}"
     timelapse = 30  # 30 seconds
     main(directory_path, dir_name, timelapse)

@@ -7,10 +7,24 @@
             "type": "python",
             "request": "launch",
             "module": "uvicorn",
+            "cwd": "${workspaceFolder}/backend",
             "args": [
-                "provider.main:app"
+                "app.main:app"
             ],
             "jinja": true
-        }
+        },
+        {
+            "name": "Python: Remote Attach",
+            "type": "python",
+            "request": "attach",
+            "port": 5678,
+            "host": "localhost",
+            "pathMappings": [
+              {
+                "localRoot": "${workspaceFolder}/backend",
+                "remoteRoot": "."
+              }
+            ]
+          }
     ]
 }

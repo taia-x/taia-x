@@ -13,7 +13,7 @@ class GnssSensor(SensorData):
             West/East value of a point on the map.
     """
 
-    def __init__(self, frame, timestamp, location, rotation, altitude, latitude, longitude):
+    def __init__(self, frame, timestamp, location, rotation, altitude: float, latitude: float, longitude: float):
         SensorData.__init__(self, frame, timestamp, location, rotation)
         self.altitude = altitude
         self.latitude = latitude

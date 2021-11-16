@@ -14,7 +14,7 @@ class LidarSensor(SensorData):
             Each point consists of [x,y,z] coordinates plus the intensity computed for that point.
     """
 
-    def __init__(self, frame, timestamp, location, rotation, channels, horizontal_angle, raw_data):
+    def __init__(self, frame, timestamp, location, rotation, channels: int, horizontal_angle: float, raw_data=None):
         SensorData.__init__(self, frame, timestamp, location, rotation)
         self.channels = channels
         self.horizontal_angle = horizontal_angle

@@ -13,7 +13,7 @@ class IMUSensor(SensorData):
             Angular velocity. (Add 3D vector dependence)
     """
 
-    def __init__(self, frame, timestamp, location, rotation, accelerometer, compass, gyroscope):
+    def __init__(self, frame, timestamp, location, rotation, accelerometer: float, compass: float, gyroscope: float):
         SensorData.__init__(self, frame, timestamp, location, rotation)
         self.accelerometer = accelerometer
         self.compass = compass

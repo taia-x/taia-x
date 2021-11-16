@@ -15,7 +15,8 @@ class RadarSensor(SensorData):
             The velocity of the detected object towards the sensor.
     """
 
-    def __init__(self, frame, timestamp, location, rotation, altitude, azimuth, depth, velocity):
+    def __init__(self, frame, timestamp, location, rotation, altitude: float, azimuth: float, depth: float,
+                 velocity: float):
         SensorData.__init__(self, frame, timestamp, location, rotation)
         self.altitude = altitude
         self.azimuth = azimuth

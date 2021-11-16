@@ -15,7 +15,7 @@ class CameraSensor(SensorData):
 
     """
 
-    def __init__(self, frame, timestamp, location, rotation, fov, height, width, raw_data=None):
+    def __init__(self, frame, timestamp, location, rotation, fov: float, height: int, width: int, raw_data=None):
         SensorData.__init__(self, frame, timestamp, location, rotation)
         self.fov = fov
         self.height = height

@@ -17,7 +17,8 @@ class BatterySensor(SensorData):
             Minimum temperature of the battery pack.
     """
 
-    def __init__(self, frame, timestamp, location, rotation, soc, u_out_inst, i_out_inst, temp_max, temp_min):
+    def __init__(self, frame, timestamp, location, rotation, soc: float, u_out_inst: float, i_out_inst: float,
+                 temp_max: float, temp_min: float):
         SensorData.__init__(self, frame, timestamp, location, rotation)
         self.soc = soc
         self.u_out_inst = u_out_inst

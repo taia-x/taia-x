@@ -12,7 +12,7 @@ class SensorData:
 
     """
 
-    def __init__(self, frame, timestamp, location, rotation):
+    def __init__(self, frame: int, timestamp: float, location, rotation) -> None:
         self.frame = frame
         self.timestamp = timestamp
         self.location = location

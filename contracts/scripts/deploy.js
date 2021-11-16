@@ -1,29 +1,31 @@
 const { TezosToolkit } = require("@taquito/taquito");
 const { importKey, InMemorySigner } = require("@taquito/signer");
 const fs = require("fs");
+require("dotenv").config();
+
+const FAUCET = JSON.parse(process.env.FAUCET);
+const { SANDBOX_URL, TESTNET_URL, ALICE_SECRET } = process.env;
 
 const deploy = async () => {
   const mode = process.argv[2] || "sandbox";
   console.log(">>> Deploy with mode:", mode);
 
   try {
-    const config = JSON.parse(
-      fs.readFileSync(`./config/${mode}.config.json`).toString()
+    const Tezos = new TezosToolkit(
+      mode === "sandbox" ? SANDBOX_URL : TESTNET_URL
     );
 
-    const Tezos = new TezosToolkit(config.url);
-
-    if (mode === "testnet") {
-      const { email, password, mnemonic, secret } = config.faucet;
-      await importKey(Tezos, email, password, mnemonic.join(" "), secret);
-    } else {
+    if (mode === "sandbox") {
       Tezos.setProvider({
-        signer: await InMemorySigner.fromSecretKey(config.alice.secret),
+        signer: await InMemorySigner.fromSecretKey(ALICE_SECRET),
       });
+    } else {
+      const { email, password, mnemonic, secret } = FAUCET;
+      await importKey(Tezos, email, password, mnemonic.join(" "), secret);
     }
 
     const code = fs.readFileSync("./build/counter.tz").toString();
-    console.log("Originate");
+    console.log("Originate...");
     const op = await Tezos.contract.originate({
       code,
       init: `0`,

@@ -31,10 +31,10 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
-    ipfs:
-      image: ipfs/go-ipfs:v0.8.0
-      ports:
-        - 5001:5001
+      ipfs:
+        image: ipfs/go-ipfs:v0.8.0
+        ports:
+          - 5001:5001
 
     steps:
       - uses: actions/checkout@master

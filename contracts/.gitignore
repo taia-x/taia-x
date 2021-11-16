@@ -1,0 +1,14 @@
+# Michelson builds
+builds
+
+# Logs
+logs
+*.log
+pip-log.txt
+npm-debug.log*
+
+# npm
+node_modules/
+package-lock.json
+yarn-error.log
+yarn.lock

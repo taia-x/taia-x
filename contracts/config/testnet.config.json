@@ -1,0 +1,27 @@
+ {
+  "url": "https://granadanet.api.tez.ie",
+  "faucet": {
+    "mnemonic": [
+      "excess",
+      "viable",
+      "nation",
+      "mango",
+      "essay",
+      "glance",
+      "rug",
+      "federal",
+      "pen",
+      "city",
+      "stem",
+      "much",
+      "current",
+      "task",
+      "veteran"
+    ],
+    "secret": "e4d5b4cbaaaf944ee71b0e61d0423b5931f917a0",
+    "amount": "47077207957",
+    "pkh": "tz1XmsuzEh5knbdCJQAmDEDZho69TmM5hpdK",
+    "password": "9EoZa6TDsD",
+    "email": "ekindwfj.svehmwbc@tezos.example.org"
+  }
+}

@@ -1,7 +1,8 @@
 import ipfshttpclient
-import logging
 
 from ipaddress import ip_address, ip_interface, IPv4Address, IPv6Address
+
+from.config import IPFS_ADDRESS, IPFS_PORT
 
 
 class IPFSClient:
@@ -22,8 +23,10 @@ class IPFSClient:
         self.address = address
         self.connection_str: str = f'/{self.protocol}/{self.address}/tcp/{self.port_number}/http'
 
-    def send_json(self, payload: dict):
+    def save_json(self, payload: dict) -> str:
         if self.connection_str:
             with ipfshttpclient.connect(self.connection_str) as client:
-                hash = client.add_json(payload)
-                print(hash)
+                return client.add_json(payload)
+                
+
+ipfs_client = IPFSClient(IPFS_ADDRESS, IPFS_PORT)

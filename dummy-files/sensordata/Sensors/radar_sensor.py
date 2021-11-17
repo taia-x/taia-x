@@ -17,7 +17,7 @@ class RadarSensor(SensorData):
 
     def __init__(self, frame, timestamp, location, rotation, altitude: float, azimuth: float, depth: float,
                  velocity: float):
-        SensorData.__init__(self, frame, timestamp, location, rotation)
+        super().__init__(frame, timestamp, location, rotation)
         self.altitude = altitude
         self.azimuth = azimuth
         self.depth = depth

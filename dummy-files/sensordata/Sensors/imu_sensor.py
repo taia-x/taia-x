@@ -14,7 +14,7 @@ class IMUSensor(SensorData):
     """
 
     def __init__(self, frame, timestamp, location, rotation, accelerometer: float, compass: float, gyroscope: float):
-        SensorData.__init__(self, frame, timestamp, location, rotation)
+        super().__init__(frame, timestamp, location, rotation)
         self.accelerometer = accelerometer
         self.compass = compass
         self.gyroscope = gyroscope

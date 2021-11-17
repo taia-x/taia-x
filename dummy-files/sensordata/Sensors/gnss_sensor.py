@@ -14,7 +14,7 @@ class GnssSensor(SensorData):
     """
 
     def __init__(self, frame, timestamp, location, rotation, altitude: float, latitude: float, longitude: float):
-        SensorData.__init__(self, frame, timestamp, location, rotation)
+        super().__init__(frame, timestamp, location, rotation)
         self.altitude = altitude
         self.latitude = latitude
         self.longitude = longitude

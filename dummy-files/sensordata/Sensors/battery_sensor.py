@@ -19,7 +19,7 @@ class BatterySensor(SensorData):
 
     def __init__(self, frame, timestamp, location, rotation, soc: float, u_out_inst: float, i_out_inst: float,
                  temp_max: float, temp_min: float):
-        SensorData.__init__(self, frame, timestamp, location, rotation)
+        super().__init__(frame, timestamp, location, rotation)
         self.soc = soc
         self.u_out_inst = u_out_inst
         self.i_out_inst = i_out_inst

@@ -1,10 +1,12 @@
 const { TezosToolkit } = require("@taquito/taquito");
-const { importKey, InMemorySigner } = require("@taquito/signer");
+const { importKey } = require("@taquito/signer");
 const fs = require("fs");
 require("dotenv").config();
 
+const SANDBOX_URL = "http://127.0.0.1:20000";
+const TESTNET_URL = "https://granadanet.api.tez.ie";
 const FAUCET = JSON.parse(process.env.FAUCET);
-const { SANDBOX_URL, TESTNET_URL, ALICE_SECRET } = process.env;
+const ALICE_SECRET = process.env.ALICE_SECRET;
 
 const deploy = async () => {
   const mode = process.argv[2] || "sandbox";
@@ -15,14 +17,11 @@ const deploy = async () => {
       mode === "sandbox" ? SANDBOX_URL : TESTNET_URL
     );
 
-    if (mode === "sandbox") {
-      Tezos.setProvider({
-        signer: await InMemorySigner.fromSecretKey(ALICE_SECRET),
-      });
-    } else {
-      const { email, password, mnemonic, secret } = FAUCET;
-      await importKey(Tezos, email, password, mnemonic.join(" "), secret);
-    }
+    // Signing on testnet mode needs different parameters as on sandbox mode
+    const { email, password, mnemonic, secret } = FAUCET;
+    mode === "sandbox"
+      ? await importKey(Tezos, ALICE_SECRET)
+      : await importKey(Tezos, email, password, mnemonic.join(" "), secret);
 
     const code = fs.readFileSync("./build/counter.tz").toString();
     console.log("Originate...");

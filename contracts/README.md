@@ -8,9 +8,26 @@
 
 ## Project setup
 
-```
-yarn install
-```
+- Install npm dependencies.
+
+  ```
+  yarn install
+  ```
+
+- Create `.env` file according `.env.template` by filling the necessary entries.
+
+  > A test faucet can be obtained from https://faucet.tzalpha.net/. It must be saved as json string to `FAUCET`.
+
+  > A secret (unencrypted: ...) can be obtained by running sandbox-info (Only alice is needed for now). It must be saved to `ALICE_KEY`.
+  >
+  > ```shell
+  > yarn run sandbox-info
+  > ```
+
+  ```
+  ALICE_SECRET=<ALICE_SECRET>
+  FAUCET={"mnemonic": ["...", "...", ...], "secret": "...", "amount": "...", "pkh": "...", "password": "...", "email": "..."}
+  ```
 
 ## Usage
 
@@ -28,11 +45,7 @@ yarn install
   yarn run start-sandbox
   ```
 
-- A secret (unencrypted: ...) can be obtained by running sandbox-info (Only alice is needed for now) inside `config/sandbox.config.js`.
-
-  ```shell
-  yarn run sandbox-info
-  ```
+- Alices secret must be available at `.env` file, as explained [above](#Project-setup).
 
 - Deploying contracts on local sandbox
 
@@ -42,9 +55,9 @@ yarn install
 
 ### Deploy on granada testnet
 
-- A test faucet can be obtained from https://faucet.tzalpha.net/. Once saved, it can be imported inside faucet key of `config/testnet.config.js`
+- A test faucet must be available at `.env` file, as explained [above](#Project-setup).
 
-- Deploying contracts on testnet (faucet must be obtained as explained at the bottom)
+- Deploying contracts on testnet
 
   ```shell
   yarn run deploy:testnet

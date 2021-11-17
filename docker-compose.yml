@@ -12,6 +12,7 @@ services:
     env_file:
       - ./backend/.env
     ports:
+      - 5678:5678
       - 8000:8000
     depends_on:
       - db

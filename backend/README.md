@@ -2,18 +2,25 @@
 
 ## Set up
 
-1. Set up a virtualenv in your local machine for the project
-2. Activate your virtualenv
-3. Install `requirements.txt` with the following command:
+run:
 ```
-$ pip install -r requirements.txt
+docker-compose up
 ```
 
+This will spawn a FastAPI, an IPFS and a postgres container.
+
+To see all routes supported by the api, open a browser and follow the link: [http://0.0.0.0:8000/docs](http://0.0.0.0:8000/docs)
+
 ## Testing
+
 ```
-pytest
+docker exec <CONTAINER_ID> pytest 
 ```
 
 ## Debugging
 
-To start the debugger follow these [instructions](https://fastapi.tiangolo.com/tutorial/debugging/#run-your-code-with-your-debugger)
+### VSCode
+
+Make sure to set `DEBUG=true` in your `.env` file.
+
+Go to the debugger tab in your vscode and click on the green button right from `Python: Remote Attach`

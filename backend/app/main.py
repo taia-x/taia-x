@@ -4,7 +4,7 @@ from fastapi import FastAPI
 
 from . import models
 from .db import SessionLocal, engine
-from .ipfs import IPFSClient
+from .core.ipfs import IPFSClient
 from .core.config import IPFS_ADDRESS, IPFS_PORT
 
 

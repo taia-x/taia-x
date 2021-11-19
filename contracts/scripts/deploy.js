@@ -28,7 +28,7 @@ const deploy = async () => {
     const storage = {
       admin: {
         admin: "tz1g4KeM3Riw3Nk2kkqEgodx6CacvLfvumsi",
-        pending_admin: "tz1g4KeM3Riw3Nk2kkqEgodx6CacvLfvumsi",
+        pending_admin: null,
         paused: true,
       },
       assets: {

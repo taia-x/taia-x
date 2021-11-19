@@ -31,7 +31,7 @@
 
 ## Usage
 
-- Compiling the smart contracts outputs michelson files to `/build/`. These files may either be deployed to a local sandbox or a testnet as explained below.
+- Compiling the smart contracts outputs michelson files to `/contracts/out/`. These files may either be deployed to a local sandbox or a testnet as explained below.
 
   ```shell
   yarn run compile

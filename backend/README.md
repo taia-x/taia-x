@@ -14,7 +14,7 @@ To see all routes supported by the api, open a browser and follow the link: [htt
 ## Testing
 
 ```
-docker exec <CONTAINER_ID> pytest 
+docker exec -ti <CONTAINER_ID> pytest 
 ```
 
 ## Debugging

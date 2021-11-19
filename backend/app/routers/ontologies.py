@@ -8,7 +8,7 @@ from ..models import get_or_create_ontology
 
 
 router = APIRouter(
-    prefix="/ontologies",
+    prefix="/ontology",
     tags=["ontologies"],
 )
 

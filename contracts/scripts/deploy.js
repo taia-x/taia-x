@@ -23,7 +23,7 @@ const deploy = async () => {
       ? await importKey(Tezos, ALICE_SECRET)
       : await importKey(Tezos, email, password, mnemonic.join(" "), secret);
 
-    const code = fs.readFileSync("./build/fa2_nft_asset.tz").toString();
+    const code = fs.readFileSync("./contracts/out/fa2_nft_asset.tz").toString();
     console.log("Originate...");
     const storage = {
       admin: {

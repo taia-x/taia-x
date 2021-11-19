@@ -9,10 +9,11 @@
     "dotenv": "^10.0.0"
   },
   "scripts": {
-    "start-sandbox": "docker run --rm --name example-sandbox --detach -p 20000:20000 tqtezos/flextesa:20210514 flobox start",
-    "stop-sandbox": "docker kill example-sandbox",
+    "start-sandbox": "docker run --rm --name taia-x-sandbox --detach -p 20000:20000 tqtezos/flextesa:20210514 flobox start",
+    "stop-sandbox": "docker kill taia-x-sandbox",
     "sandbox-info": "docker run --rm tqtezos/flextesa:20210514 flobox info",
-    "compile": "docker run --rm -v \"%CD%\":/cd -w /cd ligolang/ligo:0.28.0 compile-contract ./contracts/counter.ligo main > ./build/counter.tz",
+    "compile": "docker run --rm -v \"%CD%\":/cd -w /cd ligolang/ligo:0.29.0 compile-contract ./contracts/fa2_nft_asset.mligo nft_asset_main > ./build/fa2_nft_asset.tz",
+    "compile-storage": "docker run --rm -v \"%CD%\":/cd -w /cd ligolang/ligo:0.29.0 compile-storage ./contracts/fa2_nft_asset.mligo nft_asset_main ''",
     "deploy:sandbox": "node scripts/deploy sandbox",
     "deploy:testnet": "node scripts/deploy testnet"
   }

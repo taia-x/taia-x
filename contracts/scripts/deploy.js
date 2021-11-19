@@ -1,4 +1,4 @@
-const { TezosToolkit } = require("@taquito/taquito");
+const { TezosToolkit, MichelsonMap } = require("@taquito/taquito");
 const { importKey } = require("@taquito/signer");
 const fs = require("fs");
 require("dotenv").config();
@@ -23,11 +23,29 @@ const deploy = async () => {
       ? await importKey(Tezos, ALICE_SECRET)
       : await importKey(Tezos, email, password, mnemonic.join(" "), secret);
 
-    const code = fs.readFileSync("./build/counter.tz").toString();
+    const code = fs.readFileSync("./build/fa2_nft_asset.tz").toString();
     console.log("Originate...");
+    const storage = {
+      admin: {
+        admin: "tz1g4KeM3Riw3Nk2kkqEgodx6CacvLfvumsi",
+        pending_admin: "tz1g4KeM3Riw3Nk2kkqEgodx6CacvLfvumsi",
+        paused: true,
+      },
+      assets: {
+        ledger: new MichelsonMap(),
+        operators: new MichelsonMap(),
+        metadata: {
+          token_defs: [],
+          next_token_id: 0,
+          metadata: new MichelsonMap(),
+        },
+      },
+      metadata: new MichelsonMap(),
+    };
+
     const op = await Tezos.contract.originate({
       code,
-      init: `0`,
+      storage,
     });
 
     console.log("Awaiting confirmation...");

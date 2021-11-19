@@ -1,5 +1,7 @@
 # Taia-x Contracts
 
+[Implementation](contracts/src/fa2_nft_asset.mligo) of the NFT FA2 contract (a.k.a. ERC-721). The contract supports multiple "families" of NFT tokens that share the same token metadata.
+
 ## Prerequisites
 
 - [Docker](https://docs.docker.com/v17.12/install/)

@@ -59,4 +59,4 @@ jobs:
           POSTGRES_PASSWORD: password
           POSTGRES_HOST: localhost
           POSTGRES_DB: db
-          IPFS_ADDRESS: ipfs
+          IPFS_ADDRESS: localhost

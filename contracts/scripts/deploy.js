@@ -23,7 +23,7 @@ const deploy = async () => {
       ? await importKey(Tezos, ALICE_SECRET)
       : await importKey(Tezos, email, password, mnemonic.join(" "), secret);
 
-    const code = fs.readFileSync("./build/counter.tz").toString();
+    const code = fs.readFileSync("./contracts/out/counter.tz").toString();
     console.log("Originate...");
     const op = await Tezos.contract.originate({
       code,

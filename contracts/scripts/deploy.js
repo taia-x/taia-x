@@ -27,16 +27,15 @@ const deploy = async () => {
     console.log("Originate...");
     const storage = {
       admin: {
-        admin: "tz1g4KeM3Riw3Nk2kkqEgodx6CacvLfvumsi",
-        pending_admin: null,
-        paused: true,
+        admin: await Tezos.signer.publicKeyHash(), // contract admin set as originating account
+        paused: false,
       },
       assets: {
         ledger: new MichelsonMap(),
         operators: new MichelsonMap(),
         metadata: {
           token_defs: [],
-          next_token_id: 0,
+          next_token_id: 1,
           metadata: new MichelsonMap(),
         },
       },

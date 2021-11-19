@@ -1,0 +1,15 @@
+# logs
+logs
+*.log
+npm-debug.log*
+
+# npm
+node_modules/
+package-lock.json
+yarn-error.log
+yarn.lock
+
+# stuff
+.env
+contracts/out/*
+!contracts/out/.gitkeep 

@@ -1,6 +1,6 @@
-FROM node:14.17.1-alpine3.13
+FROM node:14.5.0-alpine
 
-WORKDIR /opt/taia-x/frontend
+WORKDIR /usr/src/frontend
 
 COPY package*.json ./  
 

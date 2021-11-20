@@ -5,11 +5,17 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 module.exports = {
   //mode: "jit",
   purge: ["./public/**/*.html", "./src/**/*.{js,jsx,ts,tsx,vue}"],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: "class", // false or 'media' or 'class'
   theme: {
     extend: {
       fontFamily: {
         sans: ["Inter var", ...defaultTheme.fontFamily.sans],
+        poppins: ["Poppins", ...defaultTheme.fontFamily.sans],
+        mono: ["Menlo", ...defaultTheme.fontFamily.mono],
+        source: ["Source Sans Pro", ...defaultTheme.fontFamily.sans],
+        "ubuntu-mono": ["Ubuntu Mono", ...defaultTheme.fontFamily.mono],
+        system: defaultTheme.fontFamily.sans,
+        flow: "Flow",
       },
       colors: {
         background: "#121212",

@@ -7,6 +7,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "Home",
     component: Home,
   },
+  {
+    path: "/explore",
+    name: "Explore",
+    component: Home,
+  },
 ];
 
 const router = createRouter({

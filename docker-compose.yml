@@ -1,19 +1,35 @@
-version: '3.4'
+version: "3.4"
 
 services:
-  
   server:
-    build: 
+    build:
       context: ./backend
       dockerfile: Dockerfile
     volumes:
       - ./backend/:/backend/
     entrypoint: ./docker-start.sh
+    container_name: taia-x-backend
     env_file:
       - ./backend/.env
     ports:
       - 5678:5678
       - 8000:8000
+    depends_on:
+      - db
+      - ipfs
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ~/.composer-docker/cache:/root/.composer/cache:delegated
+      - ./frontend/:/opt/taia-x/frontend:rw,delegated
+    container_name: taia-x-frontend
+    environment:
+      - CHOKIDAR_INTERVAL=1000
+    ports:
+      - 8080:8080
     depends_on:
       - db
       - ipfs
@@ -24,6 +40,7 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - ./backend/.env
+    container_name: taia-x-db
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
     ports:
@@ -34,8 +51,9 @@ services:
     image: ipfs/go-ipfs:v0.8.0
     ports:
       - 5001:5001 # ipfs api - expose if needed/wanted
-#     - 4001:4001 # ipfs swarm - expose if needed/wanted
-#     - 8080:8080 # ipfs gateway - expose if needed/wanted
+    #     - 4001:4001 # ipfs swarm - expose if needed/wanted
+    #     - 8080:8080 # ipfs gateway - expose if needed/wanted
+    container_name: taia-x-ipfs
     volumes:
       - ipfsf:/data/ipfs
 

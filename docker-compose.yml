@@ -25,14 +25,12 @@ services:
     volumes:
       - ~/.composer-docker/cache:/root/.composer/cache:delegated
       - ./frontend/:/opt/taia-x/frontend:rw,delegated
+      - /opt/taia-x/frontend/node_modules
     container_name: taia-x-frontend
     environment:
       - CHOKIDAR_INTERVAL=1000
     ports:
       - 8080:8080
-    depends_on:
-      - db
-      - ipfs
 
   db:
     image: postgres:13-alpine

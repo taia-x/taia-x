@@ -10,7 +10,6 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ["Inter var", ...defaultTheme.fontFamily.sans],
-        poppins: ["Poppins", ...defaultTheme.fontFamily.sans],
         mono: ["Menlo", ...defaultTheme.fontFamily.mono],
         source: ["Source Sans Pro", ...defaultTheme.fontFamily.sans],
         "ubuntu-mono": ["Ubuntu Mono", ...defaultTheme.fontFamily.mono],
@@ -27,13 +26,14 @@ module.exports = {
           lines: "#1D1E23",
         },
         gray: colors.gray,
-        teal: colors.teal,
+        cyan: colors.cyan,
+        rose: colors.rose,
+        orange: colors.orange,
+        "light-blue": colors.lightBlue,
       },
-
       animation: {
         pulse: "pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
-
       keyframes: {
         pulse: {
           "0%, 100%": {
@@ -55,6 +55,8 @@ module.exports = {
       ringColor: ["focus-visible"],
       ringOffsetWidth: ["focus-visible"],
       ringOffsetColor: ["focus-visible"],
+      borderStyle: ["hover"],
+      backgroundOpacity: ["hover"],
     },
   },
   plugins: [],

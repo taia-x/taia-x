@@ -37,12 +37,3 @@
   font-style: normal;
   src: url("../../../public/fonts/flow-circular.woff") format("woff");
 }
-
-@font-face {
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url("../../../public/fonts/Poppins-ExtraBold.ttf") format("truetype");
-  unicode-range: U+54, U+61, U+69, U+58, U+2D;
-}

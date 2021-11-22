@@ -2,7 +2,7 @@ import ipfshttpclient
 
 from ipaddress import ip_address, ip_interface, IPv4Address, IPv6Address
 
-from.config import IPFS_ADDRESS, IPFS_PORT
+from .config import IPFS_ADDRESS, IPFS_PORT
 
 
 class IPFSClient:

@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import AccountToggleContent from "@/components/AccountToggleContent";
+import AccountToggleContent from "@/components/AccountToggleContent.vue";
 import { ChevronDownIcon } from "@heroicons/vue/solid";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue";
 

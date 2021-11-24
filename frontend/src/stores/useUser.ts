@@ -3,8 +3,8 @@ import { tezosInterface } from "@/services/index";
 
 export const useUserStore = defineStore("user", {
   state: () => ({
-    address: "" as string | undefined,
-    balance: 0 as number | undefined,
+    address: "",
+    balance: 0,
   }),
   getters: {
     getAddress: (state) => state.address,

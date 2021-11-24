@@ -81,9 +81,9 @@ export default defineComponent({
       await user.$reset();
     };
 
-    const copyToClipboard = async () => {
+    const copyToClipboard = async (): Promise<void> => {
       try {
-        navigator.clipboard.writeText(props.address);
+        navigator.clipboard.writeText(props.address as string);
       } catch (e) {
         console.log(e);
       }

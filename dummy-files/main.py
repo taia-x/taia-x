@@ -66,12 +66,16 @@ def dummy_data(frame, timestamp, location, rotation):
     }
     temp_json = json.dumps(temp_dict, indent=2)
 
-    return temp_json
-
+    #return temp_json
+    return temp_dict
 
 def save_file(name, path1, frame, timestamp, location, rotation):
-    with open(f"{path1}/{name}.json", "w") as outfile:
-        outfile.write(dummy_data(frame, timestamp, location, rotation))
+    #with open(f"{path1}/{name}.json", "w") as outfile:
+        #outfile.write(dummy_data(frame, timestamp, location, rotation))
+    sensors = dummy_data(frame, timestamp, location, rotation)
+    for sensor, values in sensors.items():
+        with open(f"{path1}/{name}-{sensor}.json", "a") as outfile:
+            outfile.write(json.dumps(values, indent=2))
 
 
 def main(dir_path=None, dir_na=None, time_lapse=10):
@@ -81,7 +85,8 @@ def main(dir_path=None, dir_na=None, time_lapse=10):
         try:
             os.mkdir(dir_path + dir_na)
             for dt in range(time_lapse):
-                save_file(name + f"-{dt}s", dir_path + dir_na, 1, dt + timestamp, 2, 3)
+                #save_file(name + f"-{dt}s", dir_path + dir_na, 1, dt + timestamp, 2, 3)
+                save_file(name, dir_path + dir_na, 1, dt + timestamp, 2, 3)
         except FileExistsError:
             print("Directory exists, create new one..")
     else:
@@ -89,7 +94,7 @@ def main(dir_path=None, dir_na=None, time_lapse=10):
 
 
 if __name__ == "__main__":
-    directory_path = "./test-measurements/"
+    directory_path = "./test-measurements-sensorwise/"
     dt = datetime.datetime.today()
     dir_name = f"{dt.year}-{dt.month}-{dt.day}-{dt.hour}-{dt.minute}-{dt.second}"
     timelapse = 30  # 30 seconds

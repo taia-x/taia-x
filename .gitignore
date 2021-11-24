@@ -143,3 +143,7 @@ cython_debug/
 
 # Measurements
 test-measurements/
+test-measurements-sensorwise/
+
+# Editor files
+.DS_Store

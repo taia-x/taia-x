@@ -14,10 +14,10 @@ module.exports = {
         source: ["Source Sans Pro", ...defaultTheme.fontFamily.sans],
         "ubuntu-mono": ["Ubuntu Mono", ...defaultTheme.fontFamily.mono],
         system: defaultTheme.fontFamily.sans,
-        flow: "Flow",
       },
       colors: {
         background: "#121212",
+        purp: "#a65fec",
         custom: {
           secondary: "rgba(25, 27, 31, 0.6)",
           "secondary-notrans": "rgb(25, 27, 31)",
@@ -26,9 +26,8 @@ module.exports = {
           lines: "#1D1E23",
         },
         gray: colors.gray,
-        cyan: colors.cyan,
         rose: colors.rose,
-        orange: colors.orange,
+        teal: colors.teal,
         "light-blue": colors.lightBlue,
       },
       animation: {
@@ -57,6 +56,7 @@ module.exports = {
       ringOffsetColor: ["focus-visible"],
       borderStyle: ["hover"],
       backgroundOpacity: ["hover"],
+      fontWeight: ["hover", "focus"],
     },
   },
   plugins: [],

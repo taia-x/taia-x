@@ -1,0 +1,60 @@
+<template>
+  <div
+    class="flex items-center justify-between w-full px-6 py-4 mx-auto font-sans text-sm font-medium text-gray-600 border-b border-gray-200 "
+  >
+    <nav>
+      <router-link to="/" class="text-lg font-semibold leading-7 text-gray-700"
+        >Taia-X<span class="font-mono text-xs text-gray-600 font-extralight"
+          >&nbsp;A Blockchain Marketplace for Digital Twin Data</span
+        ></router-link
+      >
+    </nav>
+    <div class="flex items-center space-x-6">
+      <Navigation />
+      <div class="flex items-center space-x-2">
+        <SignInButton :address="address" />
+        <AccountToggle
+          :address="address"
+          :privateAddress="getPrivatizedAddress"
+          :balance="balance"
+        />
+        <SignUpButton
+          :address="address"
+          @update:isOpen="$emit('update:isOpen', true)"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, computed } from "vue";
+import Navigation from "@/components/Navigation.vue";
+import SignInButton from "@/components/SignInButton.vue";
+import SignUpButton from "@/components/SignUpButton.vue";
+import AccountToggle from "@/components/AccountToggle.vue";
+import { useUserStore } from "@/stores/useUser";
+import { storeToRefs } from "pinia";
+
+export default defineComponent({
+  components: {
+    Navigation,
+    SignInButton,
+    SignUpButton,
+    AccountToggle,
+  },
+  setup() {
+    const user = useUserStore();
+    const { address, balance } = storeToRefs(user);
+
+    const getPrivatizedAddress = computed(() => {
+      return `${address.value.substring(0, 5)}...${address.value.substring(
+        address.value.length - 5,
+        address.value.length
+      )}`;
+    });
+
+    return { address, balance, getPrivatizedAddress };
+  },
+});
+</script>

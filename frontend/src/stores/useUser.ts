@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { getBalance, getAddress } from "@/services/wallet-service";
+import { tezosInterface } from "@/services/index";
 
 export const useUserStore = defineStore("user", {
   state: () => ({
@@ -11,19 +11,17 @@ export const useUserStore = defineStore("user", {
     getBalance: (state) => state.balance,
   },
   actions: {
-    async initBalance() {
+    async initializeUser() {
       try {
-        this.balance = await getBalance();
+        const [address, balance] = await Promise.all([
+          tezosInterface.getAddress(),
+          tezosInterface.getBalance(),
+        ]);
+        this.address = address;
+        this.balance = balance;
       } catch (e) {
         console.log(e);
         this.balance = 0;
-      }
-    },
-    async initAddress() {
-      try {
-        this.address = await getAddress();
-      } catch (e) {
-        console.log(e);
         this.address = "";
       }
     },

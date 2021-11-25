@@ -35,12 +35,22 @@ def dummy_data(frame, timestamp, location, rotation):
 
 
 def save_file(name, path1, frame, timestamp, location, rotation):
-    # with open(f"{path1}/{name}.json", "w") as outfile:
-    # outfile.write(dummy_data(frame, timestamp, location, rotation))
     sensors = dummy_data(frame, timestamp, location, rotation)
     for sensor, values in sensors.items():
-        with open(f"{path1}/{name}-{sensor}.json", "a") as outfile:
-            outfile.write(json.dumps(values, indent=2))
+
+        # write first JSON object
+        if not os.path.exists(f"{path1}/{name}-{sensor}.json"):
+            with open(f"{path1}/{name}-{sensor}.json", "a") as outfile:
+                lst = [values]
+                json.dump(lst, outfile)
+        else:
+            # read file contents
+            with open(f"{path1}/{name}-{sensor}.json", "r") as outfile:
+                data = json.load(outfile)
+                data.append(values)
+            # write json object
+            with open(f"{path1}/{name}-{sensor}.json", "w") as outfile:
+                json.dump(data, outfile)
 
 
 def main(dir_path=None, dir_na=None, time_lapse=10):
@@ -51,6 +61,7 @@ def main(dir_path=None, dir_na=None, time_lapse=10):
             os.mkdir(dir_path + dir_na)
             for dt in range(time_lapse):
                 # save_file(name + f"-{dt}s", dir_path + dir_na, 1, dt + timestamp, 2, 3)
+                # set location and rotation to 2 and 3 respectively
                 save_file(name, dir_path + dir_na, 1, dt + timestamp, 2, 3)
         except FileExistsError:
             print("Directory exists, create new one..")

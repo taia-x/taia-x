@@ -10,13 +10,14 @@ class TestOntologiesRouter:
         assert response.status_code == 422
 
     def test_post_right_ontology(self):
-        ontology = {
-            "@id": "string",
-            "@type": "Interface",
-            "@context": "dtmi:dtdl:context;2",
-            "comment": "string"
+        payload = {
+            "name": "test_ontology",
+            "ontology": {
+                "@id": "string",
+                "@type": "Interface",
+                "@context": "dtmi:dtdl:context;2",
+                "comment": "string"
+            }
         }
-        response = client.post("/ontology/", json=ontology)
-        print(response.json())
-        print(json.dumps(ontology))
+        response = client.post("/ontology/", json=payload)
         assert response.status_code == 200

@@ -64,3 +64,9 @@ class DigitalTwinInterface(BaseModel):
     #TODO: make validations for extends and schemas
     extends: Optional[List[str]] = Field(max_items=2) #TODO: list of DTMI
     schemas: Optional[List[BaseContent]]
+
+
+class OntologyInput(BaseModel):
+    name: str = Field(max_length=128)
+    ontology: DigitalTwinInterface
+    

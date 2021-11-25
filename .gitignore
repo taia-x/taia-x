@@ -1,4 +1,4 @@
-# ----- Provider .gitignore -------
+# ----- backend .gitignore -------
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -141,8 +141,13 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+<<<<<<< HEAD
+# vscode settings
+.vscode/settings.json
+
 # Measurements
 test-measurements/
+
 test-measurements-sensorwise/
 
 # Editor files

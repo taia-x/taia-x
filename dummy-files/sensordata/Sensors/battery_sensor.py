@@ -25,3 +25,11 @@ class BatterySensor(SensorData):
         self.i_out_inst = i_out_inst
         self.temp_max = temp_max
         self.temp_min = temp_min
+
+    def get_dict(self) -> dict:
+        battery_dict = {"frame": self.frame, "timestamp": self.timestamp,
+                        "location": self.location, "rotation": self.rotation,
+                        "soc": self.soc, "u_out_inst": self.u_out_inst,
+                        "i_out_inst": self.i_out_inst, "temp_max": self.temp_max,
+                        "temp_min": self.temp_min}
+        return battery_dict

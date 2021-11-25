@@ -1,0 +1,32 @@
+{
+  "@id": "dtmi:taiax:radar;1",
+  "@type": "Interface",
+  "@context": "dtmi:dtdl:context;2",
+  "contents": [
+    {
+      "@type": "Telemetry",
+      "name": "radar",
+      "schema": {
+        "@type": "Object",
+        "fields": [
+          {
+            "name": "altitude",
+            "schema": "float"
+          },
+          {
+            "name": "azimuth",
+            "schema": "float"
+          },
+          {
+            "name": "depth",
+            "schema": "float"
+          },
+          {
+            "name": "velocity",
+            "schema": "float"
+          }
+        ]
+      }
+    }
+  ]
+}

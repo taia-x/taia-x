@@ -21,3 +21,10 @@ class CameraSensor(SensorData):
         self.height = height
         self.width = width
         self.raw_data = raw_data
+
+    def get_dict(self) -> dict:
+        camera_dict = {"frame": self.frame, "timestamp": self.timestamp,
+                       "location": self.location, "rotation": self.rotation,
+                       "fov": self.fov, "height": self.height,
+                       "width": self.width, "raw_data": self.raw_data}
+        return camera_dict

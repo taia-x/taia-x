@@ -22,3 +22,10 @@ class RadarSensor(SensorData):
         self.azimuth = azimuth
         self.depth = depth
         self.velocity = velocity
+
+    def get_dict(self) -> dict:
+        radar_dict = {"frame": self.frame, "timestamp": self.timestamp,
+                      "location": self.location, "rotation": self.rotation,
+                      "altitude": self.altitude, "azimuth": self.azimuth,
+                      "depth": self.depth, "velocity": self.velocity}
+        return radar_dict

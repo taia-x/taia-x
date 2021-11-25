@@ -18,3 +18,10 @@ class GnssSensor(SensorData):
         self.altitude = altitude
         self.latitude = latitude
         self.longitude = longitude
+
+    def get_dict(self) -> dict:
+        gnss_dict = {"frame": self.frame, "timestamp": self.timestamp,
+                     "location": self.location, "rotation": self.rotation,
+                     "altitude": self.altitude, "latitude": self.latitude,
+                     "longitude": self.longitude}
+        return gnss_dict

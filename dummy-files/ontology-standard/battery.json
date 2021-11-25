@@ -1,0 +1,36 @@
+{
+  "@id": "dtmi:taiax:battery;1",
+  "@type": "Interface",
+  "@context": "dtmi:dtdl:context;2",
+  "contents": [
+    {
+      "@type": "Telemetry",
+      "name": "battery_state",
+      "schema": {
+        "@type": "Object",
+        "fields": [
+          {
+            "name": "state_of_charge",
+            "schema": "float"
+          },
+          {
+            "name": "u_out_inst",
+            "schema": "float"
+          },
+          {
+            "name": "i_out_inst",
+            "schema": "float"
+          },
+          {
+            "name": "temp_max",
+            "schema": "float"
+          },
+          {
+            "name": "temp_min",
+            "schema": "float"
+          }
+        ]
+      }
+    }
+  ]
+}

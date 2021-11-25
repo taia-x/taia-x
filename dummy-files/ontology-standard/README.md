@@ -97,8 +97,12 @@ The following interface shows the structure of a gnss-sensor.
 }
 ```
 
+**Model versioning**
 
-References
+Interfaces are versioned by a single version positive integer number.
+
+
+**References**
 
 [Azu20] Azure: Digital Twins Definition Language (DTDL). Version 2. https://github.com/Azure/opendigitaltwins-dtdl/blob/master/DTDL/v2/dtdlv2.md, 22.11.2021.
 

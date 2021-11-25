@@ -1,5 +1,8 @@
-import TezosInterface from "./TezosInterface";
+import WalletInterface from "./WalletInterface";
+import IamInterface from "./IamInterface";
 
-const tezosInterface = new TezosInterface();
+const walletInterface = new WalletInterface();
+const { Tezos } = walletInterface;
+const iamInterface = new IamInterface(Tezos);
 
-export { tezosInterface };
+export { walletInterface, iamInterface };

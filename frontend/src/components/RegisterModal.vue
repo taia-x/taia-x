@@ -37,51 +37,7 @@
               >
                 Choose your role
               </DialogTitle>
-              <div class="mt-6 text-gray-700">
-                <ul
-                  class="grid grid-cols-1 gap-4 sm:grid-cols-1 lg:grid-cols-3"
-                >
-                  <li
-                    class="transition duration-300 ease-in-out border-2 border-gray-200 border-dashed rounded-lg  hover:border-transparent hover:bg-purple-100 hover:text-purple-800"
-                  >
-                    <a
-                      href="#"
-                      class="flex items-center justify-center w-full py-4 space-x-2 text-sm font-medium  group"
-                    >
-                      <LibraryIcon
-                        class="w-5 h-5 text-gray-600 transition duration-300 ease-in-out  group-hover:text-purple-600"
-                      />
-                      <span>Certifier</span>
-                    </a>
-                  </li>
-                  <li
-                    class="transition duration-300 ease-in-out border-2 border-gray-200 border-dashed rounded-lg  hover:border-transparent hover:bg-purple-100 hover:text-purple-800"
-                  >
-                    <a
-                      href="#"
-                      class="flex items-center justify-center w-full py-4 space-x-2 text-sm font-medium  group"
-                    >
-                      <BriefcaseIcon
-                        class="w-5 h-5 text-gray-600 transition duration-300 ease-in-out  group-hover:text-purple-600"
-                      />
-                      <span>Provider</span>
-                    </a>
-                  </li>
-                  <li
-                    class="transition duration-300 ease-in-out border-2 border-gray-200 border-dashed rounded-lg  hover:border-transparent hover:bg-purple-100 hover:text-purple-800"
-                  >
-                    <a
-                      href="#"
-                      class="flex items-center justify-center w-full py-4 space-x-2 text-sm font-medium  group"
-                    >
-                      <ShoppingBagIcon
-                        class="w-5 h-5 text-gray-600 transition duration-300 ease-in-out  group-hover:text-purple-600"
-                      />
-                      <span>Consumer</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
+              <RegisterModalContent />
             </div>
           </TransitionChild>
         </div>
@@ -92,11 +48,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import {
-  LibraryIcon,
-  BriefcaseIcon,
-  ShoppingBagIcon,
-} from "@heroicons/vue/outline";
+import RegisterModalContent from "@/components/RegisterModalContent.vue";
 import {
   Dialog,
   DialogOverlay,
@@ -112,9 +64,7 @@ export default defineComponent({
     DialogTitle,
     TransitionRoot,
     TransitionChild,
-    LibraryIcon,
-    BriefcaseIcon,
-    ShoppingBagIcon,
+    RegisterModalContent,
   },
   props: {
     isOpen: {

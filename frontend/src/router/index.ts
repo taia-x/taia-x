@@ -12,6 +12,16 @@ const routes: Array<RouteRecordRaw> = [
     name: "Explore",
     component: Home,
   },
+  {
+    path: "/ontologies",
+    name: "Explore",
+    component: Home,
+  },
+  {
+    path: "/certificates",
+    name: "Explore",
+    component: Home,
+  },
 ];
 
 const router = createRouter({

@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { tezosInterface } from "@/services/index";
+import { walletInterface } from "@/services/index";
 import { useUserStore } from "@/stores/useUser";
 
 export default defineComponent({
@@ -26,7 +26,7 @@ export default defineComponent({
     const { initializeUser } = user;
 
     const connect = async (): Promise<void> => {
-      await tezosInterface.connectWallet();
+      await walletInterface.connectWallet();
       await initializeUser();
     };
 

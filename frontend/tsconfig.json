@@ -24,5 +24,9 @@
     "tests/**/*.ts",
     "tests/**/*.tsx"
   ],
+  "typedocOptions": {
+    "entryPoints": ["src/**/*.ts"],
+    "out": "docs"
+  },
   "exclude": ["node_modules"]
 }

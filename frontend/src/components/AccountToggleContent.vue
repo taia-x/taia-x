@@ -49,7 +49,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { tezosInterface } from "@/services/index";
+import { walletInterface } from "@/services/index";
 import { useUserStore } from "@/stores/useUser";
 import { UserCircleIcon, LogoutIcon, UserIcon } from "@heroicons/vue/solid";
 
@@ -77,7 +77,7 @@ export default defineComponent({
     const user = useUserStore();
 
     const disconnect = async (): Promise<void> => {
-      await tezosInterface.disconnectWallet();
+      await walletInterface.disconnectWallet();
       await user.$reset();
     };
 

@@ -3,17 +3,25 @@ import { TezosToolkit } from "@taquito/taquito";
 import { AccountInfo, Network, NetworkType } from "@airgap/beacon-sdk";
 import { GRANADANET_NODE_URL } from "@/constants";
 
-let wallet: BeaconWallet | undefined;
+export let wallet: BeaconWallet | undefined;
 
-class TezosInterface {
+/**
+ * exposes an interface for interaction with the processes in the backend
+ */
+class WalletInterface {
   private network: Network;
-  private Tezos: TezosToolkit;
+  readonly Tezos: TezosToolkit;
 
   constructor() {
     this.network = { type: NetworkType.GRANADANET };
     this.Tezos = new TezosToolkit(GRANADANET_NODE_URL);
   }
 
+  /**
+   * function to check if wallet instance exists or otherwise instantiates wallet
+   *
+   * @returns beacon wallet instance
+   */
   async getWallet(): Promise<BeaconWallet> {
     if (!wallet) {
       wallet = new BeaconWallet({ name: "Taia-X" });
@@ -22,6 +30,9 @@ class TezosInterface {
     return wallet;
   }
 
+  /**
+   * function to connect to the wallet and perhaps request permissions for interaction with the frontend if not already done
+   */
   async connectWallet(): Promise<void> {
     try {
       const wallet = await this.getWallet();
@@ -34,6 +45,11 @@ class TezosInterface {
     }
   }
 
+  /**
+   * function to get the tezos address of the current tezos account
+   *
+   * @returns tezos acount address
+   */
   async getAddress(): Promise<string> {
     try {
       const wallet = await this.getWallet();
@@ -45,6 +61,11 @@ class TezosInterface {
     return "";
   }
 
+  /**
+   * function to get the balance of the current tezos account
+   *
+   * @returns tezos account balance
+   */
   async getBalance(): Promise<number> {
     try {
       if (typeof this.Tezos !== undefined && typeof wallet !== undefined) {
@@ -60,6 +81,9 @@ class TezosInterface {
     return 0;
   }
 
+  /**
+   * function to disconnect from wallet and clear active account
+   */
   async disconnectWallet(): Promise<void> {
     try {
       const wallet = await this.getWallet();
@@ -70,4 +94,4 @@ class TezosInterface {
   }
 }
 
-export default TezosInterface;
+export default WalletInterface;

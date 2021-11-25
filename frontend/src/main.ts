@@ -13,6 +13,9 @@ app.use(createPinia()).use(router).use(VWave);
 const user = useUserStore();
 const { initializeUser } = user;
 
+/**
+ * start app by initializing user first
+ */
 const startApp = async () => {
   try {
     await initializeUser();

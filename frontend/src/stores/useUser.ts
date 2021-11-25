@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
-import { tezosInterface } from "@/services/index";
+import { walletInterface } from "@/services/index";
 
 export const useUserStore = defineStore("user", {
+  // initial state of user
   state: () => ({
     address: "",
     balance: 0,
@@ -11,11 +12,14 @@ export const useUserStore = defineStore("user", {
     getBalance: (state) => state.balance,
   },
   actions: {
+    /**
+     * function to set address and balance of user in pinia store
+     */
     async initializeUser() {
       try {
         const [address, balance] = await Promise.all([
-          tezosInterface.getAddress(),
-          tezosInterface.getBalance(),
+          walletInterface.getAddress(),
+          walletInterface.getBalance(),
         ]);
         this.address = address;
         this.balance = balance;

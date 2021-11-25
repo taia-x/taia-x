@@ -144,7 +144,11 @@ cython_debug/
 <<<<<<< HEAD
 # vscode settings
 .vscode/settings.json
-=======
+
 # Measurements
 test-measurements/
->>>>>>> main
+
+test-measurements-sensorwise/
+
+# Editor files
+.DS_Store

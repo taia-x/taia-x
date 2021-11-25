@@ -1,5 +1,15 @@
 # Frontend Setup
 
+## Prerequisites
+
+- [Docker](https://docs.docker.com/v17.12/install/)
+  - if you want to run the frontend inside a docker container
+- [NodeJS](https://nodejs.org/en/)
+- [Temple Wallet](https://templewallet.com/)
+  - to be able to interact with smart contract
+
+> 🚨 Be aware, that the frontend is currently only tested with the Temple Wallet! Support for other wallets may work, but is not guaranteed at the moment.
+
 ## Recommended VSCode Extensions
 
 - [Vetur](https://marketplace.visualstudio.com/items?itemName=octref.vetur)
@@ -8,37 +18,58 @@
 - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 - [Tailwind CSS IntelliSence](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
 
-## Project setup
+## Development Environment Setup
+
+- install all necessary dependencies
 
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+- run a development server via npm script
+- the frontend will be accessible at http://localhost:8080/
 
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+- run a development server via Docker
+- the frontend will be accessible at http://localhost:8080/
+
+```
+docker run -p 8080:8080 taia-x-frontend
+```
+
+## Production Environment Setup
+
+- install all necessary dependencies
+
+```
+npm install
+```
+
+- compile, minify and build for production
 
 ```
 npm run build
 ```
 
-### Run your unit tests
+## Tests, Linting and Docs
+
+- run unit tests
 
 ```
 npm run test:unit
 ```
 
-### Lints and fixes files
+- lint and fix file formatting
 
 ```
 npm run lint
 ```
 
-### Generate Typedoc Documentation
+- generate typedoc documentation
+- to access the documentation, open `./docs/index.html` in a live-server
 
 ```
 npm run docs

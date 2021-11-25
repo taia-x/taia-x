@@ -95,13 +95,8 @@ The following interface shows the structure of a gnss-sensor.
     }
   ]
 }
-| **Property** | **Data type** | **Description** | **Content for v1** |
-| --- | --- | --- | --- |
-| @type | Internationalized Resource Identifier | This must be &quot;Component&quot; | Component |
-| name | String | The &quot;programming&quot; name of the property. The name may only contain the characters a-z, A-Z, 0-9, and underscore, and must match this regular expression ^[a-zA-Z](?:[a-zA-Z0-9\_]\*[a-zA-Z0-9])?$. | Semantic\_LIDAR |
-| schema | string | The data type of the component |
- |
 ```
+
 
 References
 

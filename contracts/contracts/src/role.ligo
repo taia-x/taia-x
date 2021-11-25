@@ -13,8 +13,8 @@ end
 
 type return is list(operation) * store
 
-// Function that checks if an account is an User role
-// Must be integrated into functions that can only be used by an User 
+// Function that checks if an account is a Customer role
+// Must be integrated into functions that can only be used by a Customer 
 function isCustomer (const addressOwner : address; var store : store) : bool is
   block {
     var isCustomer: bool := case Big_map.find_opt(addressOwner, store.users) of
@@ -29,8 +29,8 @@ function isCustomer (const addressOwner : address; var store : store) : bool is
     end;
   } with isCustomer;
 
-// Function that checks if an account is an Admin role
-// Must be integrated into functions that can only be used by an Admin 
+// Function that checks if an account is a Provider role
+// Must be integrated into functions that can only be used by a Provider 
 function isProvider (const addressOwner : address; var store : store) : bool is
   block {
     var isProvider: bool := case Big_map.find_opt(addressOwner, store.users) of
@@ -45,8 +45,8 @@ function isProvider (const addressOwner : address; var store : store) : bool is
     end;
   } with isProvider;
 
-// Function that checks if an account is an Certifier role
-// Must be integrated into functions that can only be used by an Admin 
+// Function that checks if an account is a Certifier role
+// Must be integrated into functions that can only be used by a Certifier 
 function isCertifier (const addressOwner : address; var store : store) : bool is
   block {
     var isCertifier: bool := case Big_map.find_opt(addressOwner, store.users) of
@@ -61,19 +61,19 @@ function isCertifier (const addressOwner : address; var store : store) : bool is
     end;
   } with isCertifier;
 
-// Add/Update an account with an Certifier role
+// Add/Update an account with a Certifier role
 function makeCertifier (var store : store) : return is
   block {
     const newUsers : big_map(address, role) = Big_map.update(Tezos.sender, Some(Certifier), store.users);
   } with ((nil : list (operation)), store with record [users = newUsers;]);
 
-// Add/Update an account with an Provider role
+// Add/Update an account with a Provider role
 function makeProvider (var store : store) : return is
   block {
     const newUsers : big_map(address, role) = Big_map.update(Tezos.sender, Some(Provider), store.users);
   } with ((nil : list (operation)), store with record [users = newUsers;]);
 
-// Add/Update an account with an Customer role
+// Add/Update an account with a Customer role
 function makeCustomer (var store : store) : return is
   block {
     const newUsers : big_map(address, role) = Big_map.update(Tezos.sender, Some(Customer), store.users);

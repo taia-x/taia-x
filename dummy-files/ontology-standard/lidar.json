@@ -1,0 +1,29 @@
+{
+  "@id": "dtmi:taiax:lidar;1",
+  "@type": "Interface",
+  "@context": "dtmi:dtdl:context;2",
+  "contents": [
+    {
+      "@type": "Telemetry",
+      "name": "lidar",
+      "comment": "raw_data tbd",
+      "schema": {
+        "@type": "Object",
+        "fields": [
+          {
+            "name": "channels",
+            "schema": "int"
+          },
+          {
+            "name": "horizontal_angle",
+            "schema": "float"
+          },
+          {
+            "name": "raw_data",
+            "schema": "int"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "@id": "dtmi:taiax:vehicle;1",
+  "@type": "Interface",
+  "@context": "dtmi:dtdl:context;2",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "vehicle_name",
+      "schema": "string"
+    },
+    {
+      "@type": "Component",
+      "name": "Battery_Sensor",
+      "schema": "dtmi:taiax:battery;1"
+    },
+    {
+      "@type": "Component",
+      "name": "Camera",
+      "schema": "dtmi:taiax:camera;1"
+    },
+    {
+      "@type": "Component",
+      "name": "GNSS-Sensor",
+      "schema": "dtmi:taiax:gnss;1"
+    },
+    {
+      "@type": "Component",
+      "name": "IMU-Sensor",
+      "schema": "dtmi:taiax:imu;1"
+    },
+    {
+      "@type": "Component",
+      "name": "LIDAR",
+      "schema": "dtmi:taiax:lidar;1"
+    },
+    {
+      "@type": "Component",
+      "name": "Radar",
+      "schema": "dtmi:taiax:radar;1"
+    },
+    {
+      "@type": "Component",
+      "name": "Semantic_LIDAR",
+      "schema": "dtmi:taiax:slidar;1"
+    }
+  ]
+}

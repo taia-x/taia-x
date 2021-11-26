@@ -18,6 +18,28 @@ services:
       - db
       - ipfs
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend/:/opt/taia-x/frontend:cached
+      - /opt/taia-x/frontend/node_modules
+    container_name: taia-x-frontend
+    environment:
+      - CHOKIDAR_INTERVAL=1000
+    ports:
+      - 8080:8080
+
+  blockchain:
+    image: tqtezos/flextesa:20210514
+    container_name: taia-x-blockchain
+    environment:
+      block_time: 5
+    command: "flobox start --keep-root"
+    ports:
+      - 20000:20000
+
   db:
     image: postgres:13-alpine
     volumes:

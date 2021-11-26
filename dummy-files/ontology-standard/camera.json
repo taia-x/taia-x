@@ -1,0 +1,33 @@
+{
+  "@id": "dtmi:taiax:camera;1",
+  "@type": "Interface",
+  "@context": "dtmi:dtdl:context;2",
+  "contents": [
+    {
+      "@type": "Telemetry",
+      "name": "camera",
+      "comment": "raw_data tbd",
+      "schema": {
+        "@type": "Object",
+        "fields": [
+          {
+            "name": "fov",
+            "schema": "float"
+          },
+          {
+            "name": "height",
+            "schema": "int"
+          },
+          {
+            "name": "width",
+            "schema": "int"
+          },
+          {
+            "name": "raw_data",
+            "schema": "int"
+          }
+        ]
+      }
+    }
+  ]
+}

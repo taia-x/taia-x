@@ -6,7 +6,7 @@ import { GRANADANET_NODE_URL } from "@/constants";
 export let wallet: BeaconWallet | undefined;
 
 /**
- * exposes an interface for interaction with the processes in the backend
+ * exposes an interface for interaction with the wallet
  */
 class WalletInterface {
   private network: Network;

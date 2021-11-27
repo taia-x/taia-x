@@ -2,7 +2,6 @@ import { TezosToolkit } from "@taquito/taquito";
 import { IAM_CONTRACT_ADDRESS } from "@/constants";
 
 /**
- * @class
  * exposes an interface for interaction with the role smart contract
  */
 class IamInterface {
@@ -17,7 +16,7 @@ class IamInterface {
   }
 
   /**
-   * function to call make<RoleName> entrypoint on the role smart contract
+   * function to call entrypoint on the role smart contract which assigns a specified role to a tezos address
    * @param address tezos account address
    * @param role name of role ("certifier" || "provider" || "consumer")
    */

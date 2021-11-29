@@ -1,0 +1,112 @@
+<mxfile host="65bd71144e">
+    <diagram id="53vZRzIDgZGgw-JT5D9q" name="Page-1">
+        <mxGraphModel dx="1033" dy="564" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="Certifier" style="shape=umlLifeline;perimeter=lifelinePerimeter;container=1;collapsible=0;recursiveResize=0;rounded=0;shadow=0;strokeWidth=1;" vertex="1" parent="1">
+                    <mxGeometry x="95" y="80" width="100" height="480" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="" style="points=[];perimeter=orthogonalPerimeter;rounded=0;shadow=0;strokeWidth=1;" vertex="1" parent="2">
+                    <mxGeometry x="45" y="70" width="10" height="380" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="Frontend" style="shape=umlLifeline;perimeter=lifelinePerimeter;container=1;collapsible=0;recursiveResize=0;rounded=0;shadow=0;strokeWidth=1;" vertex="1" parent="1">
+                    <mxGeometry x="275" y="80" width="100" height="480" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="" style="points=[];perimeter=orthogonalPerimeter;rounded=0;shadow=0;strokeWidth=1;" vertex="1" parent="6">
+                    <mxGeometry x="45" y="80" width="10" height="370" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="1. Register" style="verticalAlign=bottom;endArrow=block;entryX=0;entryY=0;shadow=0;strokeWidth=1;" edge="1" parent="1" source="3" target="7">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="250" y="160" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="10" value="2.Save Address" style="verticalAlign=bottom;endArrow=block;shadow=0;strokeWidth=1;" edge="1" parent="1" source="7" target="14">
+                    <mxGeometry x="-0.4993" relative="1" as="geometry">
+                        <mxPoint x="215" y="200" as="sourcePoint"/>
+                        <mxPoint x="155" y="200" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="590" y="180"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="12" value="IPFS" style="shape=umlLifeline;perimeter=lifelinePerimeter;container=1;collapsible=0;recursiveResize=0;rounded=0;shadow=0;strokeWidth=1;" vertex="1" parent="1">
+                    <mxGeometry x="460" y="80" width="100" height="480" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="" style="points=[];perimeter=orthogonalPerimeter;rounded=0;shadow=0;strokeWidth=1;" vertex="1" parent="12">
+                    <mxGeometry x="45" y="80" width="10" height="370" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="Smart Contract" style="shape=umlLifeline;perimeter=lifelinePerimeter;container=1;collapsible=0;recursiveResize=0;rounded=0;shadow=0;strokeWidth=1;" vertex="1" parent="1">
+                    <mxGeometry x="640" y="80" width="100" height="480" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="" style="points=[];perimeter=orthogonalPerimeter;rounded=0;shadow=0;strokeWidth=1;" vertex="1" parent="14">
+                    <mxGeometry x="45" y="80" width="10" height="370" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" value="4. Ok" style="verticalAlign=bottom;endArrow=block;shadow=0;strokeWidth=1;exitX=0;exitY=0.214;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="7" target="2">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="160" y="170.0000000000009" as="sourcePoint"/>
+                        <mxPoint x="330" y="170.0000000000009" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="17" value="3. Ok" style="verticalAlign=bottom;endArrow=none;shadow=0;strokeWidth=1;startArrow=classic;startFill=1;endFill=0;" edge="1" parent="1">
+                    <mxGeometry x="-0.4993" relative="1" as="geometry">
+                        <mxPoint x="330.25" y="220" as="sourcePoint"/>
+                        <mxPoint x="689.75" y="220" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="590.25" y="220"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="18" value="5. Register Ontology" style="verticalAlign=bottom;endArrow=open;endSize=8;shadow=0;strokeWidth=1;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="320" y="290" as="targetPoint"/>
+                        <mxPoint x="150" y="290" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="19" value="7. Save ontology JSON" style="verticalAlign=bottom;endArrow=open;endSize=8;shadow=0;strokeWidth=1;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="500" y="340" as="targetPoint"/>
+                        <mxPoint x="330" y="340" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="20" value="9. Register (CID, addr, description) " style="verticalAlign=bottom;endArrow=open;endSize=8;shadow=0;strokeWidth=1;" edge="1" parent="1" target="14">
+                    <mxGeometry x="-0.4437" y="-20" relative="1" as="geometry">
+                        <mxPoint x="500" y="390" as="targetPoint"/>
+                        <mxPoint x="330" y="390" as="sourcePoint"/>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="21" value="8. Return CID" style="verticalAlign=bottom;endArrow=none;endSize=8;shadow=0;strokeWidth=1;endFill=0;startArrow=classic;startFill=1;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="500" y="370" as="targetPoint"/>
+                        <mxPoint x="330" y="370" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="22" value="" style="points=[];perimeter=orthogonalPerimeter;rounded=0;shadow=0;strokeWidth=1;fillColor=#60a917;strokeColor=#2D7600;fontColor=#ffffff;" vertex="1" parent="1">
+                    <mxGeometry x="320" y="290" width="10" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" value="6. Ontology validation" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="265" y="305" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="24" value="10. Ok" style="verticalAlign=bottom;endArrow=none;shadow=0;strokeWidth=1;startArrow=classic;startFill=1;endFill=0;" edge="1" parent="1">
+                    <mxGeometry x="-0.4993" relative="1" as="geometry">
+                        <mxPoint x="330.25" y="440" as="sourcePoint"/>
+                        <mxPoint x="689.75" y="440" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="590.25" y="440"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="25" value="11. Ok" style="verticalAlign=bottom;endArrow=block;shadow=0;strokeWidth=1;exitX=0;exitY=0.214;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="320" y="459.99999999999994" as="sourcePoint"/>
+                        <mxPoint x="150" y="460" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

@@ -1,0 +1,28 @@
+{
+  "@id": "dtmi:taiax:imu;1",
+  "@type": "Interface",
+  "@context": "dtmi:dtdl:context;2",
+  "contents": [
+    {
+      "@type": "Telemetry",
+      "name": "imu",
+      "schema": {
+        "@type": "Object",
+        "fields": [
+          {
+            "name": "accelerometer",
+            "schema": "float"
+          },
+          {
+            "name": "compass",
+            "schema": "float"
+          },
+          {
+            "name": "gyroscope",
+            "schema": "float"
+          }
+        ]
+      }
+    }
+  ]
+}

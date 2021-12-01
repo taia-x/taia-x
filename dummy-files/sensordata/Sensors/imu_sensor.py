@@ -18,3 +18,10 @@ class IMUSensor(SensorData):
         self.accelerometer = accelerometer
         self.compass = compass
         self.gyroscope = gyroscope
+
+    def get_dict(self) -> dict:
+        imu_dict = {"frame": self.frame, "timestamp": self.timestamp,
+                    "location": self.location, "rotation": self.rotation,
+                    "accelerometer": self.accelerometer, "compass": self.compass,
+                    "gyroscope": self.gyroscope}
+        return imu_dict

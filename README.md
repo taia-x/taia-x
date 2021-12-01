@@ -27,7 +27,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/alvaro-alonso/taia-x">
+  <a href="https://github.com/taia-x/taia-x">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
@@ -36,14 +36,14 @@
   <p align="center">
     NFT-based Sharing Platform for Digital Twin Data on Tezos – a Project with GAIA-X
     <br />
-    <a href="https://github.com/alvaro-alonso/taia-x"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/taia-x/taia-x"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/alvaro-alonso/taia-x">View Demo</a>
+    <a href="https://github.com/taia-x/taia-x">View Demo</a>
     ·
-    <a href=https://github.com/alvaro-alonso/taia-x/issues">Report Bug</a>
+    <a href=https://github.com/taia-x/taia-x/issues">Report Bug</a>
     ·
-    <a href="https://github.com/alvaro-alonso/taia-x/issues">Request Feature</a>
+    <a href="https://github.com/taia-x/taia-x/issues">Request Feature</a>
   </p>
 </div>
 
@@ -90,8 +90,9 @@
 
 ### Built With
 
-* [React.js](https://reactjs.org/)
+* [Vue.js](https://vuejs.org/)
 * [Tezos](https://tezos.com/developer-portal/)
+* [FastAPI](https://fastapi.tiangolo.com/)
 * [Zokrates](https://zokrates.github.io/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -105,18 +106,36 @@ How to set up your project locally.
 
 ### Prerequisites
 
-list things you need to use the software and how to install them. ex:
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+To run the project locally you need to have install node.js and Docker
 
 ### Installation
 
+1. in the `backend` directory, create `.env`  file according `.env.template` by filling the necessary entries.
+2. in the `contracts` directory, create `.env`  file according `.env.template` by filling the necessary entries.
+3. start the local network by running:
+```
+$ docker-compose up
+```
+4. deploy the latest contracts to the local blockchain:
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
+  - go to the `contracts` directory and install the packages
+  ```
+  $ cd contracts
+  $ yarn install
+  ```
+  - compile the smart-contract:
+    - Windows:
+    ```
+    docker run --rm -v \"%CD%\":/cd -w /cd ligolang/ligo:0.28.0 compile-contract ./contracts/src/counter.ligo main > ./contracts/out/counter.tz
+    ```
+    - Linux and OSX:
+    ```
+    $ docker run --rm -v '$PWD':'$PWD' -w '$PWD' ligolang/ligo:0.28.0 compile-contract ./contracts/src/counter.ligo main > ./contracts/out/counter.tz
+    ```
+  - deploy the smart-contract to the blockchain:
+  ```
+  $ yarn run deploy:testnet
+  ```
 
 <!-- USAGE EXAMPLES -->
 ## Usage
@@ -172,7 +191,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 ## Contact
 
 
-Project Link: [https://github.com/alvaro-alonso/taia-x](https://github.com/alvaro-alonso/taia-x)
+Project Link: [https://github.com/taia-x/taia-x](https://github.com/taia-x/taia-x)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -192,13 +211,13 @@ Project Link: [https://github.com/alvaro-alonso/taia-x](https://github.com/alvar
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/alvaro-alonso/taia-x.svg?style=for-the-badge
-[contributors-url]: https://github.com/alvaro-alonso/taia-x/graphs/contributors
+[contributors-url]: https://github.com/taia-x/taia-x/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/alvaro-alonso/taia-x.svg?style=for-the-badge
-[forks-url]: https://github.com/alvaro-alonso/taia-x/network/members
+[forks-url]: https://github.com/taia-x/taia-x/network/members
 [stars-shield]: https://img.shields.io/github/stars/alvaro-alonso/taia-x.svg?style=for-the-badge
-[stars-url]: https://github.com/alvaro-alonso/taia-x/stargazers
+[stars-url]: https://github.com/taia-x/taia-x/stargazers
 [issues-shield]: https://img.shields.io/github/issues/alvaro-alonso/taia-x.svg?style=for-the-badge
-[issues-url]: https://github.com/alvaro-alonso/taia-x/issues
+[issues-url]: https://github.com/taia-x/taia-x/issues
 [license-shield]: https://img.shields.io/github/license/alvaro-alonso/taia-x.svg?style=for-the-badge
-[license-url]: https://github.com/alvaro-alonso/taia-x/blob/master/LICENSE.txt
+[license-url]: https://github.com/taia-x/taia-x/blob/master/LICENSE.txt
 [product-screenshot]: images/screenshot.png

@@ -1,4 +1,4 @@
-const { TezosToolkit } = require("@taquito/taquito");
+const { TezosToolkit, MichelsonMap } = require("@taquito/taquito");
 const { importKey } = require("@taquito/signer");
 const fs = require("fs");
 require("dotenv").config();
@@ -23,11 +23,11 @@ const deploy = async () => {
       ? await importKey(Tezos, ALICE_SECRET)
       : await importKey(Tezos, email, password, mnemonic.join(" "), secret);
 
-    const code = fs.readFileSync("./contracts/out/counter.tz").toString();
+    const code = fs.readFileSync("./contracts/out/role.tz").toString();
     console.log("Originate...");
     const op = await Tezos.contract.originate({
       code,
-      init: `0`,
+      storage: new MichelsonMap(),
     });
 
     console.log("Awaiting confirmation...");

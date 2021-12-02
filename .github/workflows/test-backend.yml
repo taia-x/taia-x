@@ -8,7 +8,6 @@ on:
 
 jobs:
   test-backend:
-    name: Run tests
 
     runs-on: ubuntu-18.04
 

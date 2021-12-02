@@ -1,4 +1,4 @@
-name: Test
+name: Tests
 
 on:
   push:
@@ -9,11 +9,11 @@ on:
 jobs:
   test-frontend:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x]
+        node-version: [16.13]
 
     steps:
     - uses: actions/checkout@v2
@@ -22,8 +22,9 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: |
+        cd frontend
         npm ci
         npm run lint
-        npm test
+        npm run test:unit
       env:
         CI: true

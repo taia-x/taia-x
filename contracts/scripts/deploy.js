@@ -23,11 +23,16 @@ const deploy = async () => {
       ? await importKey(Tezos, ALICE_SECRET)
       : await importKey(Tezos, email, password, mnemonic.join(" "), secret);
 
-    const code = fs.readFileSync("./contracts/out/role.tz").toString();
+    const storage = {
+      users: new MichelsonMap(),
+      datasets: new MichelsonMap(),
+    };
+
+    const code = fs.readFileSync("./contracts/out/main.tz").toString();
     console.log("Originate...");
     const op = await Tezos.contract.originate({
       code,
-      storage: new MichelsonMap(),
+      storage,
     });
 
     console.log("Awaiting confirmation...");

@@ -1,17 +1,7 @@
-// Allowed roles, you can add a new annotation right here, for example 'Dev' or 'Moderator'
-type role is Consumer | Certifier | Provider | NoRole 
+#if !ROLE
+#define ROLE
 
-type action is
-  | MakeConsumer 
-  | MakeCertifier 
-  | MakeProvider 
-  | RemoveRole 
-
-type store is record
-  users: big_map(address, role);
-end  
-
-type return is list(operation) * store
+#include "interface.ligo"
 
 // Function that checks if an account is a Consumer role
 // Must be integrated into functions that can only be used by a Consumer 
@@ -85,12 +75,4 @@ function removeRole (var store : store) : return is
     const newUsers : big_map(address, role) = Big_map.update(Tezos.sender, Some(NoRole), store.users);
   } with ((nil : list (operation)), store with record [users = newUsers;]);
 
-function main (const action: action; var store: store): return is
-  block {
-    skip
-  } with case action of
-    | MakeCertifier -> makeCertifier(store)
-    | MakeProvider -> makeProvider(store)
-    | MakeConsumer -> makeConsumer(store)
-    | RemoveRole -> removeRole(store)
-  end;
+#endif

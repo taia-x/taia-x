@@ -1,26 +1,25 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import Home from "../views/Home.vue";
+import Explorer from "../views/Explorer.vue";
+import Ontologies from "../views/Ontologies.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    name: "Home",
-    component: Home,
+    redirect: "/explore",
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    redirect: "/explore",
   },
   {
     path: "/explore",
-    name: "Explore",
-    component: Home,
+    name: "Explorer",
+    component: Explorer,
   },
   {
     path: "/ontologies",
-    name: "Explore",
-    component: Home,
-  },
-  {
-    path: "/certificates",
-    name: "Explore",
-    component: Home,
+    name: "Ontologies",
+    component: Ontologies,
   },
 ];
 

@@ -5,7 +5,7 @@
     class="flex items-center justify-center px-3 py-2 font-semibold text-gray-500 transition duration-300 ease-in-out bg-gray-100 rounded-md  hover:text-gray-900 text-md"
     @click.prevent="connect()"
   >
-    <span class="pl-1">Sign in</span>
+    <span>Sign in</span>
   </button>
 </template>
 

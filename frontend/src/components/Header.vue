@@ -1,9 +1,11 @@
 <template>
   <div
-    class="flex items-center justify-between w-full px-6 py-4 mx-auto font-sans text-sm font-medium text-gray-600 border-b border-gray-200 "
+    class="flex items-center justify-between w-full px-10 py-8 mx-auto font-sans text-sm font-medium text-gray-900 border-gray-200 "
   >
     <nav>
-      <router-link to="/" class="text-lg font-semibold leading-7 text-gray-700"
+      <router-link
+        to="/"
+        class="text-lg font-semibold leading-7 text-gray-700 transition duration-300 ease-in-out  hover:text-cyan-500"
         >Taia-X<span class="font-mono text-xs text-gray-600 font-extralight"
           >&nbsp;A Blockchain Marketplace for Digital Twin Data</span
         ></router-link

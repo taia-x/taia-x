@@ -34,6 +34,8 @@ class IamInterface {
         case "consumer":
           op = await contract.methods.makeConsumer(address).send();
           break;
+        default:
+          break;
       }
       if (op) {
         const result = await op.confirmation(3);

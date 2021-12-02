@@ -28,6 +28,7 @@ module.exports = {
         gray: colors.gray,
         rose: colors.rose,
         teal: colors.teal,
+        cyan: colors.cyan,
         "light-blue": colors.lightBlue,
       },
       animation: {
@@ -59,5 +60,5 @@ module.exports = {
       fontWeight: ["hover", "focus"],
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/forms")],
 };

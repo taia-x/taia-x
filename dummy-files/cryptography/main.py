@@ -7,6 +7,8 @@ from Crypto.PublicKey import ECC as ecc
 from Crypto.Hash import SHA256
 from Crypto.Signature import DSS
 
+BLOCK_SIZE = 65536  # # The size of each read from the file
+
 
 def keygen():
     sk = eddsa.PrivateKey.from_rand()
@@ -23,16 +25,16 @@ def keygen2():
     # Use Elliptic Curve Cryptography for key generation
     # NIST P-256
     key = ecc.generate(curve='P-256')
-    save_file(key)
+    save_keys(key)
     return None
 
 
-def save_file(key, dir_path="./keys"):
+def save_keys(key, dir_path="./keys"):
     i = 0
     if not os.path.exists(f"{dir_path}" + f"{i}"):
         os.mkdir(dir_path + f"{i}")
     else:
-
+        # Save in separate directories for each sensor
         while os.path.exists(f"{dir_path}" + f"{i}"):
             i = i + 1
         os.mkdir(f"{dir_path}" + f"{i}")
@@ -43,27 +45,41 @@ def save_file(key, dir_path="./keys"):
     with open(f"{dir_path}" + f"{i}/" + "pbk.pem", "wt") as f:
         pbk = key.public_key()
         f.write(pbk.export_key(format="PEM"))
-    print()
 
 
-def hash_measurements(dir_path):
-    hash_object = SHA256.new(data=b'First')
+def hash_measurements(file_path) -> bytes:
+    sha256 = hashlib.sha256()
+    with open(file_path, "rb", buffering=0) as f:
+        fb = f.read(BLOCK_SIZE)  # Read from the file. Take in the amount declared above
+        while len(fb) > 0:  # While there is still data being read from the file
+            sha256.update(fb)  # Update the hash
+            fb = f.read(BLOCK_SIZE)  # Read the next block from the file
+        print(sha256.hexdigest())  # Get the hexadecimal digest of the hash
+    return sha256.digest()
+
+
+def sign(file_path, pvk_path):
     # for file in os.listdir(dir_path):
-    # with open(file, "rb", buffering=0) as f:
-
-
-def sign(dir_path, file="p.pem"):
     # Instantiate a new signer object for the desired algorithm
-    with open(dir_path + file, "rt") as f:
+    with open(pvk_path, "rt") as f:
         key = ecc.import_key(f.read())
-    # in bytes
-    m = b'hi mom!'
-    h = SHA256.new(m)
+    file_digest = hash_measurements(file_path)
+    file_hash_obj = SHA256.new(file_digest)
 
     # The signature generation is randomized and carried out according to FIPS 186-3
     signer = DSS.new(key, 'fips-186-3')
-    signature = signer.sign(h)
-    print(signature)
+    signature = signer.sign(file_hash_obj)
+    return signature
+
+
+def verify_signature(signature, msghash, pbk_path):
+    pubkey = ecc.import_key(open(pbk_path).read())
+    verifier = DSS.new(pubkey, 'fips-186-3')
+    try:
+        verifier.verify(msghash, signature)
+        print("The message is authentic.")
+    except ValueError:
+        print("The message is not authentic")
 
 
 def main():
@@ -96,7 +112,14 @@ def main():
 
 
 if __name__ == "__main__":
-    path_test = "../test-measurements-sensorwise/2021-12-2-13-38-9/"
-    hash_measurements(path_test)
-    sign("./keys0/", "p.pem")
-    # main()
+    path_test = ""
+    key_path = ""
+    pbk_key_path = ""
+
+    # Verify the signature:
+    verify = False
+    if verify:
+        file_digest = hash_measurements(path_test)
+        h = SHA256.new(file_digest)
+        verify_signature(sign(path_test, key_path), h, pbk_key_path)
+    main()

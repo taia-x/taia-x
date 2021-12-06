@@ -1,51 +1,9 @@
 <template>
   <div class="flex flex-col w-full pt-10 pb-24">
     <div class="flex items-center w-full space-x-4">
-      <div class="relative w-full group">
-        <span class="absolute inset-y-0 left-0 flex items-center pl-4 group">
-          <SearchIcon class="w-5 h-5 text-gray-500" />
-        </span>
-        <input
-          type="text"
-          name="first-name"
-          id="first-name"
-          autocomplete="given-name"
-          placeholder="Search"
-          class="block w-full pl-12 transition duration-300 border-2 border-gray-300 rounded-md  h-11 focus:ring-cyan-500 focus:border-cyan-500"
-        />
-      </div>
-      <button
-        v-wave
-        class="
-          flex
-          items-center
-          justify-center
-          px-3
-          py-2
-          text-white
-          transition
-          duration-300
-          ease-in-out
-          transform
-          border-2 border-b-4
-          rounded-md
-          h-11
-          bg-cyan-500
-          hover:bg-cyan-600
-          text-md
-          whitespace-nowrap
-          border-cyan-700
-          hover:-translate-y-0.5
-          focus:outline-none
-          focus:ring-2
-          focus:ring-offset-2
-          focus:ring-cyan-500
-        "
-        @click.prevent="$emit('update:isCreateDatasetModalOpen', true)"
-      >
-        <PlusIcon class="w-5 h-5 transform -translate-x-1" />
-        <span>Create</span>
-      </button>
+      <SearchBar
+        @update:isOpen="$emit('update:isCreateDatasetModalOpen', $event)"
+      />
     </div>
     <div class="flex items-center mt-4 space-x-4">
       <button class="flex items-center space-x-2 group">
@@ -67,7 +25,7 @@
         >
       </button>
     </div>
-    <div class="grid grid-cols-4 gap-4 mt-16">
+    <div class="grid grid-cols-4 gap-6 mt-16">
       <button
         class="w-full transition duration-200 transform bg-gray-100 border-gray-300 rounded-lg  hover:scale-105 h-96 focus:outline-none focus:ring-2 focus:ring-cyan-500"
         v-for="i in [1, 2, 3, 4]"
@@ -121,15 +79,14 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { SearchIcon, PlusIcon } from "@heroicons/vue/solid";
 import { AdjustmentsIcon, SortAscendingIcon } from "@heroicons/vue/outline";
+import SearchBar from "@/components/SearchBar.vue";
 
 export default defineComponent({
   components: {
-    SearchIcon,
-    PlusIcon,
     AdjustmentsIcon,
     SortAscendingIcon,
+    SearchBar,
   },
 });
 </script>

@@ -39,9 +39,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style>
-body {
-  @apply font-sans;
-}
-</style>

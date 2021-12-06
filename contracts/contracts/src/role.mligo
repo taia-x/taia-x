@@ -1,86 +1,72 @@
-// #if !ROLE
-// #define ROLE
+#if !ROLE
+#define ROLE
 
-// include "interface.mligo"
-
-type role = Certifier | Provider | Consumer | NoRole 
-
-type action = MakeConsumer | MakeCertifier | MakeProvider | RemoveRole 
-
-type store = {
-    users : (address, role) big_map
-}
-
-
-type return = operation list * store
+#include "interface.mligo"
 
 // Function that checks if an account is a Consumer role
 // Must be integrated into functions that can only be used by a Consumer 
-let isConsumer(addressOwner,store  : address * store) : bool = 
-    let isconsumer_var : bool = match Big_map.find_opt(addressOwner, store.users) with
+let isConsumer(addressOwner, store : address * store) : bool = 
+    match Big_map.find_opt addressOwner store.users with
         | None -> False
-        | Some(userRole) ->
+        | Some(userRole) -> (
             match userRole with
             | Certifier -> False
             | Provider -> False
             | Consumer -> True
             | NoRole -> False
+        )
   
 
 // Function that checks if an account is a Provider role
 // Must be integrated into functions that can only be used by a Provider 
-let isProvider(addressOwner,store  : address * store) : bool = 
-    let isconsumer_var : bool = match Big_map.find_opt(addressOwner, store.users) with
+let isProvider(addressOwner, store : address * store) : bool = 
+    match Big_map.find_opt addressOwner store.users with
         | None -> False
-        | Some(userRole) ->
+        | Some(userRole) -> (
             match userRole with
             | Certifier -> False
             | Provider -> True
-            | Consumer -> Fasle
+            | Consumer -> False
             | NoRole -> False
+        )
   
 
 
 // Function that checks if an account is a Certifier role
 // Must be integrated into functions that can only be used by a Certifier 
-let isCertifier(addressOwner,store  : address * store) : bool = 
-    let isconsumer_var : bool = match Big_map.find_opt(addressOwner, store.users) with
+let isCertifier(addressOwner, store : address * store) : bool = 
+    match Big_map.find_opt addressOwner store.users with
         | None -> False
-        | Some(userRole) ->
+        | Some(userRole) -> (
             match userRole with
-            | Certifier -> False
-            | Provider -> Fasle
-            | Consumer -> Fasle
+            | Certifier -> True
+            | Provider -> False
+            | Consumer -> False
             | NoRole -> False
+        )
   
 
 // Add/Update an account with a Certifier role
 let makeCertifier (store : store) : return = 
-    let newUsers : big_map(address, role) = Big_map.update(Tezos.sender, Some(Certifier), store.users);
-    (([] : operation list), store with {users = newUsers;})
+    let users : (address, role) big_map = Big_map.update Tezos.sender (Some Certifier) store.users in
+    ([] : operation list), { store with users = users; }
 
 // Add/Update an account with a Provider role
 let makeProvider (store : store) : return = 
-    let newUsers : big_map(address, role) = Big_map.update(Tezos.sender, Some(Provider), store.users);
-    (([] : operation list), store with {users = newUsers;})
+    let users : (address, role) big_map = Big_map.update Tezos.sender (Some Provider) store.users in
+    ([] : operation list), { store with users = users; }
 
 // Add/Update an account with a Consumer role
 let makeConsumer (store : store) : return = 
-    let newUsers : big_map(address, role) = Big_map.update(Tezos.sender, Some(Consumer), store.users);
-    (([] : operation list), store with {users = newUsers;})
+    let users : (address, role) big_map = Big_map.update Tezos.sender (Some Consumer) store.users in
+    ([] : operation list), { store with users = users; }
 
 // Remove a role to some user
 let removeRole (store : store) : return = 
-    let newUsers : big_map(address, role) = Big_map.update(Tezos.sender, Some(NoRole), store.users);
-    (([] : operation list), store with {users = newUsers;})
+    let users : (address, role) big_map = Big_map.update Tezos.sender (Some NoRole) store.users in
+    ([] : operation list), { store with users = users; }
 
-let main (action,store: action*store): return =
-  match action with
-    | MakeCertifier -> makeCertifier(store)
-    | MakeProvider -> makeProvider(store)
-    | MakeConsumer -> makeConsumer(store)
-    | RemoveRole -> removeRole(store)
 
-// # End if
+#endif
 
 

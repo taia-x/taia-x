@@ -1,15 +1,20 @@
 import * as IPFS from 'ipfs-core'
+import {IPFS_GATEWAY_URL} from "@/constants";
+import path from 'path';
 
-const fs = require('fs/promises')
-const path = require('path')
+// const path = require('path')
 
 /**
  * Class for data upload to IPFS
  */
 class IpfsInterface
 {
+    ipfs
 
-    const ipfs = await IPFS.create()
+    async init()
+    {
+        this.ipfs = await IPFS.create();
+    }
 
     /**
      * A protected function meant to upload any data to ipfs
@@ -52,7 +57,7 @@ class IpfsInterface
      * @param {string} assetCid - IPFS URI for the NFT asset
      * @param {object} options
      * @param {?string} name - optional name to set in NFT metadata
-     * @param {?string} description - optional description to store in NFT metadata
+     * @param string description - optional description to store in NFT metadata
      * @returns {object} - NFT metadata object
      */
     async makeAssetMetadata(assetURI, options) {
@@ -66,17 +71,17 @@ class IpfsInterface
     }
 
     /**
-     * @param {string} cidOrURI either a CID string, or a URI string of the form `ipfs://${cid}`
-     * @returns the input string with the `ipfs://` prefix stripped off
+     * @param string cidOrURI either a CID string, or a URI string of the form `ipfs://${cid}`
+     * @returns string input string with the `ipfs://` prefix stripped off
      */
-     function stripIpfsUriPrefix(cidOrURI) {
+    stripIpfsUriPrefix(cidOrURI): string {
         if (cidOrURI.startsWith('ipfs://')) {
             return cidOrURI.slice('ipfs://'.length)
         }
         return cidOrURI
     }
 
-    function ensureIpfsUriPrefix(cidOrURI) {
+    ensureIpfsUriPrefix(cidOrURI) {
         let uri = cidOrURI.toString()
         if (!uri.startsWith('ipfs://')) {
             uri = 'ipfs://' + cidOrURI
@@ -93,8 +98,8 @@ class IpfsInterface
     * @param {string} ipfsURI - an ipfs:// uri or CID string
     * @returns - an HTTP url to view the IPFS object on the configured gateway.
     */
-    function makeGatewayURL(ipfsURI) {
-        return config.ipfsGatewayUrl + '/' + this.stripIpfsUriPrefix(ipfsURI)
+    makeGatewayURL(ipfsURI) {
+        return IPFS_GATEWAY_URL + '/' + this.stripIpfsUriPrefix(ipfsURI)
     }
 
     /**
@@ -102,10 +107,12 @@ class IpfsInterface
      * @param {string} cidOrURI - an ipfs:// URI or CID string
      * @returns {CID} a CID for the root of the IPFS path
      */
-    function extractCID(cidOrURI) {
-        // remove the ipfs:// prefix, split on '/' and return first path component (root CID)
-        const cidString = this.stripIpfsUriPrefix(cidOrURI).split('/')[0]
-        return new CID(cidString)
-    }
+    // function extractCID(cidOrURI) {
+    //     // remove the ipfs:// prefix, split on '/' and return first path component (root CID)
+    //     const cidString = this.stripIpfsUriPrefix(cidOrURI).split('/')[0]
+    //     return new CID(cidString)
+    // }
 
 }
+
+export default IpfsInterface;

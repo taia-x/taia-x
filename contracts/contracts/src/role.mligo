@@ -1,9 +1,18 @@
-#if !ROLE
-#define ROLE
+// #if !ROLE
+// #define ROLE
 
-include "interface.mligo"
+// include "interface.mligo"
+
+type role = Certifier | Provider | Consumer | NoRole 
+
+type action = MakeConsumer | MakeCertifier | MakeProvider | RemoveRole 
+
+type store = {
+    users : (address, role) big_map
+}
 
 
+type return = operation list * store
 
 // Function that checks if an account is a Consumer role
 // Must be integrated into functions that can only be used by a Consumer 
@@ -65,4 +74,13 @@ let removeRole (store : store) : return =
     let newUsers : big_map(address, role) = Big_map.update(Tezos.sender, Some(NoRole), store.users);
     (([] : operation list), store with {users = newUsers;})
 
-#endif
+let main (action,store: action*store): return =
+  match action with
+    | MakeCertifier -> makeCertifier(store)
+    | MakeProvider -> makeProvider(store)
+    | MakeConsumer -> makeConsumer(store)
+    | RemoveRole -> removeRole(store)
+
+// # End if
+
+

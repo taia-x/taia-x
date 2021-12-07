@@ -63,7 +63,7 @@ class IpfsInterface {
         fr.readAsText(new Blob(uint8array));
       });
 
-      return JSON.parse(await asText());
+      return JSON.parse(await asText);
     }
 
     const file = await readJsonFromAsyncIterable(this.ipfs.cat(cid));

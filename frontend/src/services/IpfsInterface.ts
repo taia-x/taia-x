@@ -1,5 +1,6 @@
 import { create as createIpfs } from "ipfs-core";
 import { IPFS_GATEWAY_URL } from "@/constants";
+import all from "it-all";
 
 async function* streamAsyncIterable(stream: any) {
   const reader = stream.getReader();
@@ -52,14 +53,21 @@ class IpfsInterface {
   }
 
   async getFile(cid: any) {
-    console.log(cid);
-    const result = [];
+    async function readJsonFromAsyncIterable(readable: any) {
+      const uint8array: any = await all(readable);
 
-    for await (const data of this.ipfs.get(cid)) {
-      result.push(data.toString());
+      const asText: any = new Promise((resolve, reject) => {
+        const fr = new FileReader();
+        fr.onload = () => resolve(fr.result);
+        fr.onerror = reject;
+        fr.readAsText(new Blob(uint8array));
+      });
+
+      return JSON.parse(await asText());
     }
 
-    console.log(result);
+    const file = await readJsonFromAsyncIterable(this.ipfs.cat(cid));
+    console.log("file", file);
   }
 
   /**

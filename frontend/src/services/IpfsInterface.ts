@@ -1,81 +1,79 @@
-import * as IPFS from "ipfs-core";
+import { create as createIpfs } from "ipfs-core";
 import { IPFS_GATEWAY_URL } from "@/constants";
-import path from "path";
 
-// const path = require('path')
+async function* streamAsyncIterable(stream: any) {
+  const reader = stream.getReader();
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) {
+        return;
+      }
+      yield value;
+    }
+  } finally {
+    reader.releaseLock();
+  }
+}
 
 /**
- * Class for data upload to IPFS
+ * exposes an interface for interaction with ipfs
  */
 class IpfsInterface {
-  ipfs: any;
+  private ipfs: any;
 
-  async init() {
-    this.ipfs = await IPFS.create();
+  /**
+   * function to initialize the ipfs instance
+   */
+  async init(): Promise<void> {
+    try {
+      this.ipfs = await createIpfs();
+    } catch (e) {
+      throw Error("Failed to initialize ipfs instance!");
+    }
   }
 
-  async postNftData(content: any, options: any) {
-    console.log(content);
-    console.log(options);
-    const filePath = options.path;
-    //const basename = path.basename(filePath);
-    console.log(filePath);
-    const ipfsPath = "/nft/" + filePath;
+  async writeFile(data: any, path: string) {
     const { cid: assetCid } = await this.ipfs.add({
-      path: ipfsPath,
-      content: JSON.stringify(content),
+      path,
+      content: JSON.stringify(data),
     });
-    console.log(ipfsPath);
-    console.log(assetCid);
-    // make the NFT metadata JSON
-    const assetURI = this.ensureIpfsUriPrefix(assetCid) + "/" + filePath;
-    //console.log(this.makeGatewayURL(assetURI));
-    const metadata = await this.makeAssetMetadata(assetURI, options);
 
-    // add the metadata to IPFS
-    const { cid: metadataCid } = await this.ipfs.add({
-      path: "/nft/metadata.json",
-      content: JSON.stringify(metadata),
-    });
-    const metadataURI =
-      this.ensureIpfsUriPrefix(metadataCid) + "/metadata.json";
+    const assetURI = path
+      ? this.ensureIpfsUriPrefix(assetCid) + "/" + path
+      : this.ensureIpfsUriPrefix(assetCid);
+
+    await this.getFile(assetCid);
 
     return {
-      metadataURI,
-      metadataGatewayURL: this.makeGatewayURL(metadataURI),
+      assetURI,
+      metadataGatewayURL: this.makeGatewayURL(assetURI),
     };
   }
 
-  /**
-   * Helper to construct metadata JSON for
-   * @param {string} assetCid - IPFS URI for the NFT asset
-   * @param {object} options
-   * @param {?string} name - optional name to set in NFT metadata
-   * @param string description - optional description to store in NFT metadata
-   * @returns {object} - NFT metadata object
-   */
-  async makeAssetMetadata(assetURI: any, options: any) {
-    const { name, description } = options;
-    assetURI = this.ensureIpfsUriPrefix(assetURI);
-    return {
-      name,
-      description,
-      image: assetURI,
-    };
+  async getFile(cid: any) {
+    console.log(cid);
+    const result = [];
+
+    for await (const data of this.ipfs.get(cid)) {
+      result.push(data.toString());
+    }
+
+    console.log(result);
   }
 
   /**
-   * @param string cidOrURI either a CID string, or a URI string of the form `ipfs://${cid}`
-   * @returns string input string with the `ipfs://` prefix stripped off
+   * @param cidOrURI either a CID string, or a URI string of the form `ipfs://${cid}`
+   * @returns input string with the `ipfs://` prefix stripped off
    */
-  stripIpfsUriPrefix(cidOrURI: any): string {
+  stripIpfsUriPrefix(cidOrURI: string): string {
     if (cidOrURI.startsWith("ipfs://")) {
       return cidOrURI.slice("ipfs://".length);
     }
     return cidOrURI;
   }
 
-  ensureIpfsUriPrefix(cidOrURI: any) {
+  ensureIpfsUriPrefix(cidOrURI: string): string {
     let uri = cidOrURI.toString();
     if (!uri.startsWith("ipfs://")) {
       uri = "ipfs://" + cidOrURI;
@@ -89,22 +87,32 @@ class IpfsInterface {
 
   /**
    * Return an HTTP gateway URL for the given IPFS object.
-   * @param {string} ipfsURI - an ipfs:// uri or CID string
-   * @returns - an HTTP url to view the IPFS object on the configured gateway.
+   * @param ipfsURI an ipfs:// uri or CID string
+   * @returns a url to view the IPFS object on the configured gateway.
    */
-  makeGatewayURL(ipfsURI: any) {
+  makeGatewayURL(ipfsURI: string): string {
     return IPFS_GATEWAY_URL + "/" + this.stripIpfsUriPrefix(ipfsURI);
   }
 
-  /**
-   *
-   * @param {string} cidOrURI - an ipfs:// URI or CID string
-   * @returns {CID} a CID for the root of the IPFS path
-   */
-  // function extractCID(cidOrURI) {
-  //     // remove the ipfs:// prefix, split on '/' and return first path component (root CID)
-  //     const cidString = this.stripIpfsUriPrefix(cidOrURI).split('/')[0]
-  //     return new CID(cidString)
+  // /**
+  //  * Helper to construct metadata JSON for
+  //  * @param string assetCid - IPFS URI for the NFT asset
+  //  * @param object options
+  //  * @returns metadata object of asset
+  //  */
+  // async makeAssetMetadata(metadata: any, path: string) {
+  //    const { cid: metadataCid } = await this.writeFile(metadata, path)
+  //   this.ipfs.add({
+  //     path: "/nft/metadata.json",
+  //     content: JSON.stringify(metadata),
+  //   });
+  //   const metadataURI =
+  //     this.ensureIpfsUriPrefix(metadataCid) + "/metadata.json";
+  //   return {
+  //     name,
+  //     description,
+  //     image: assetURI,
+  //   };
   // }
 }
 

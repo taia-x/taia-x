@@ -14,7 +14,7 @@
     <FileSelect v-else @fileSelected="onFileSelected($event)" />
     <button
       type="button"
-      class="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 transition duration-200 bg-white border border-gray-300 rounded-md shadow-sm  hover:bg-gray-50 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+      class="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 transition duration-200 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
       @click.prevent="saveToIpfs()"
     >
       Save
@@ -61,12 +61,10 @@ export default defineComponent({
 
     const saveToIpfs = async () => {
       try {
-        const uri = await ipfsInterface.postNftData(jsonObject.value, {
-          description: "Test",
-          name: "Testname",
-          path: "tesla",
-        });
-        console.log(uri);
+        const uri = await ipfsInterface.writeFile(
+          { description: "Test", name: "Testname", data: jsonObject.value },
+          "tesla"
+        );
       } catch (e) {
         console.log(e);
       }

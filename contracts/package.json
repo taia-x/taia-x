@@ -13,8 +13,7 @@
     "start-sandbox": "docker run --rm --name taia-x-sandbox --detach -p 20000:20000 tqtezos/flextesa:20210514 flobox start",
     "stop-sandbox": "docker kill taia-x-sandbox",
     "sandbox-info": "docker run --rm tqtezos/flextesa:20210514 flobox info",
-    "compile": "docker run --rm -v \"%CD%\":/cd -w /cd ligolang/ligo:0.29.0 compile contract ./contracts/src/taia_x_main.mligo --entry-point main > ./contracts/out/taia_x_main.tz",
-    "compile:land": "docker run --rm -v \"%CD%\":/cd -w /cd ligolang/ligo:0.29.0 compile contract ./contracts/src/land/land.mligo --entry-point main > ./contracts/out/land.tz",
+    "compile": "docker run --rm -v \"%CD%\":/cd -w /cd ligolang/ligo:0.30.0 compile contract ./contracts/src/taia_x_main.mligo --entry-point main > ./contracts/out/taia_x_main.tz",
     "deploy:sandbox": "node scripts/deploy sandbox",
     "deploy:testnet": "node scripts/deploy testnet"
   }

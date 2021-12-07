@@ -10,24 +10,24 @@
 
 
 type nft_entry_points =
-  //  | Fa2 of fa2_entry_points
+    | Fa2 of fa2_entry_points
     | Mint of mint_param
     | UpdateMetadata of string
     | Sell of sell_param
     | Buy of buy_param
     | WithdrawFromSale of withdraw_param
 
-// let fa2_main (param, storage : fa2_entry_points * nft_token_storage)
-//     : (operation  list) * nft_token_storage =
-//     match param with
-//     | Transfer txs_michelson -> fa2_transfer (txs_michelson, storage)
-//     | Balance_of pm -> fa2_balance (pm, storage)
-//     | Update_operators updates_michelson -> fa2_update_operators (updates_michelson, storage)
+let fa2_main (param, storage : fa2_entry_points * nft_token_storage)
+    : (operation  list) * nft_token_storage =
+    match param with
+     | Transfer txs_michelson -> fa2_transfer(txs_michelson, storage)
+     | Balance_of pm -> fa2_balance(pm, storage)
+     | Update_operators updates_michelson -> fa2_update_operators(updates_michelson, storage)
 
 let main (param, storage : nft_entry_points * nft_token_storage)
       : (operation  list) * nft_token_storage =
     match param with
-    // | Fa2 fa2 -> fa2_main (fa2, storage)
+    | Fa2 fa2 -> fa2_main (fa2, storage)
     | Mint p -> mint(p,storage)
     | UpdateMetadata p -> updateMetadata(p, storage)
     | Sell p -> sell(p, storage)

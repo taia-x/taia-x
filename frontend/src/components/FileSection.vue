@@ -12,6 +12,13 @@
       "
     />
     <FileSelect v-else @fileSelected="onFileSelected($event)" />
+    <button
+      type="button"
+      class="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 transition duration-200 bg-white border border-gray-300 rounded-md shadow-sm  hover:bg-gray-50 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+      @click.prevent="saveToIpfs()"
+    >
+      Save
+    </button>
   </div>
 </template>
 
@@ -19,6 +26,7 @@
 import { defineComponent, ref } from "vue";
 import FileSelect from "@/components/FileSelect.vue";
 import FileList from "@/components/FileList.vue";
+import { ipfsInterface } from "@/services/index";
 
 export default defineComponent({
   components: {
@@ -45,12 +53,26 @@ export default defineComponent({
       reader.onload = (e: any) => {
         jsonObject.value = JSON.parse(e.target.result);
         fileName.value = files[0].name;
+        console.log(jsonObject.value);
       };
 
       reader.readAsText(files[0]);
     };
 
-    return { jsonObject, fileName, onFileSelected };
+    const saveToIpfs = async () => {
+      try {
+        const uri = await ipfsInterface.postNftData(jsonObject.value, {
+          description: "Test",
+          name: "Testname",
+          path: "tesla",
+        });
+        console.log(uri);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    return { jsonObject, fileName, onFileSelected, saveToIpfs };
   },
 });
 </script>

@@ -34,3 +34,6 @@ let update_price_on_sale_flag_for_a_dataset (tokenId, isOnSale, price, datasets:
     let updated_dataset : dataset = {dataset with onSale = isOnSale; price = Some(price)} in
     let datasets_with_updated_dataset: datasets = Big_map.update tokenId (Some(updated_dataset)) datasets in
     datasets_with_updated_dataset
+
+let get_dataset_id (s : nft_token_storage) : token_id =
+    s.market.nextDatasetId

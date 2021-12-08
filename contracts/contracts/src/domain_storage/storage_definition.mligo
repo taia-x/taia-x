@@ -10,6 +10,7 @@ type marketplace_storage = {
   sales: sale set;
   datasets: datasets;
   datasetIds: token_id set;
+  nextDatasetId: token_id;
   owners: owners;
   users: users;
 }

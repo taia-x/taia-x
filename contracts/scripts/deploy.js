@@ -37,6 +37,7 @@ const deploy = async () => {
       sales: empty_sales,
       datasets: empty_datasets,
       datasetIds: empty_dataset_ids,
+      nextDatasetId: 0,
       owners: empty_owners,
       users: empty_users,
     };

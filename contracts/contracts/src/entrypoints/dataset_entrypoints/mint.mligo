@@ -1,5 +1,4 @@
 type mint_param = {
-    token_id: token_id;
     name: string;
     description: string option;
     owner: address;
@@ -16,7 +15,7 @@ let mint (mint_param, store : mint_param * nft_token_storage) : (operation  list
     //  then (failwith("A new token can only be minted by a provider") : (operation  list) * nft_token_storage)
     //  else
      
-    let token_id: token_id = mint_param.token_id in
+    let token_id: token_id = get_dataset_id (store) in
 
     let create_token_with_operator (p, s : mint_param * nft_token_storage) : (operation  list) * nft_token_storage =
         let new_owners: owners = add_token_to_owner (token_id, p.owner, s.market.owners) in
@@ -26,12 +25,13 @@ let mint (mint_param, store : mint_param * nft_token_storage) : (operation  list
             let new_dataset = ({ name=p.name; description=p.description; isOwned=true; owner=p.owner; price=(None : price option); onSale=false; id=token_id } : dataset) in
             let datasets_with_new_dataset = Big_map.add token_id new_dataset s.market.datasets in
             let datasets_ids_with_new_id = Set.add token_id s.market.datasetIds in
+            let next_dataset_id = token_id + 1n in
             match mint_param.operator with
-            | None -> ([] : operation list),  { s with ledger = ledger_with_minted_token; market = { s.market with datasets=datasets_with_new_dataset; datasetIds=datasets_ids_with_new_id; owners=new_owners; } }
+            | None -> ([] : operation list),  { s with ledger = ledger_with_minted_token; market = { s.market with datasets=datasets_with_new_dataset; datasetIds=datasets_ids_with_new_id; nextDatasetId=next_dataset_id; owners=new_owners; } }
             | Some(operator_address) ->
                 let update : update_operator = Add_operator({ owner = p.owner; operator = operator_address; token_id = token_id; }) in
                 let operators_with_minted_token_operator = update_operators (update, s.operators) in
-                ([] : operation list),  { s with ledger = ledger_with_minted_token; operators = operators_with_minted_token_operator; market = { s.market with datasets=datasets_with_new_dataset; datasetIds=datasets_ids_with_new_id; owners=new_owners; } }
+                ([] : operation list),  { s with ledger = ledger_with_minted_token; operators = operators_with_minted_token_operator; market = { s.market with datasets=datasets_with_new_dataset; datasetIds=datasets_ids_with_new_id; nextDatasetId=next_dataset_id; owners=new_owners; } }
         else
             (failwith("Error: cannot mint this token") : (operation  list) * nft_token_storage)
     in

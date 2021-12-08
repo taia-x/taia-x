@@ -34,5 +34,4 @@ let main (param, storage : nft_entry_points * nft_token_storage)
     | Buy p -> buy(p, storage)
     | Withdraw_from_sale p -> withdraw_from_sale(p, storage)
 
-
 #endif

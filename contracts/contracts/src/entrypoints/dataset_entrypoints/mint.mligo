@@ -1,6 +1,4 @@
 type mint_param = {
-    name: string;
-    description: string option;
     owner: address;
     operator: address option;
 }
@@ -22,7 +20,7 @@ let mint (mint_param, store : mint_param * nft_token_storage) : (operation  list
         let ledger_with_minted_token = Big_map.add token_id p.owner s.ledger in
         let ledger_and_owners_are_consistent : bool = check_ownership_is_consistent_in_ledger_and_owners (({owner=p.owner; token_id=token_id} : ownership), ledger_with_minted_token, new_owners) in
         if ledger_and_owners_are_consistent then
-            let new_dataset = ({ name=p.name; description=p.description; isOwned=true; owner=p.owner; price=(None : price option); onSale=false; id=token_id } : dataset) in
+            let new_dataset = ({ isOwned=true; owner=p.owner; price=(None : price option); onSale=false; id=token_id } : dataset) in
             let datasets_with_new_dataset = Big_map.add token_id new_dataset s.market.datasets in
             let datasets_ids_with_new_id = Set.add token_id s.market.datasetIds in
             let next_dataset_id = token_id + 1n in

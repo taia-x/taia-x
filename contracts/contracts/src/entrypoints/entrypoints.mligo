@@ -7,6 +7,7 @@
 #include "helpers/dataset_transfer_helpers.mligo"
 #include "dataset_entrypoints/buy.mligo"
 #include "dataset_entrypoints/update_metadata.mligo"
+#include "dataset_entrypoints/update_token_metadata.mligo"
 #include "dataset_entrypoints/sell.mligo"
 #include "dataset_entrypoints/withdraw_from_sale.mligo"
 #include "dataset_entrypoints/mint.mligo"

@@ -12,10 +12,10 @@
 type nft_entry_points =
     | Fa2 of fa2_entry_points
     | Mint of mint_param
-    | UpdateMetadata of string
+    | Update_metadata of string
     | Sell of sell_param
     | Buy of buy_param
-    | WithdrawFromSale of withdraw_param
+    | Withdraw_from_sale of withdraw_param
 
 let fa2_main (param, storage : fa2_entry_points * nft_token_storage)
     : (operation  list) * nft_token_storage =
@@ -29,10 +29,10 @@ let main (param, storage : nft_entry_points * nft_token_storage)
     match param with
     | Fa2 fa2 -> fa2_main (fa2, storage)
     | Mint p -> mint(p,storage)
-    | UpdateMetadata p -> updateMetadata(p, storage)
+    | Update_metadata p -> update_metadata(p, storage)
     | Sell p -> sell(p, storage)
     | Buy p -> buy(p, storage)
-    | WithdrawFromSale p -> withdraw_from_sale(p, storage)
+    | Withdraw_from_sale p -> withdraw_from_sale(p, storage)
 
 
 #endif

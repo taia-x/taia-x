@@ -7,7 +7,7 @@ from Crypto.PublicKey import ECC as ecc
 from Crypto.Hash import SHA256
 from Crypto.Signature import DSS
 
-BLOCK_SIZE = 65536  # # The size of each read from the file
+BLOCK_SIZE = 65536  # Size of each read from the file
 
 
 def keygen():
@@ -48,14 +48,14 @@ def save_keys(key, dir_path="./keys"):
 
 
 def hash_measurements(file_path) -> bytes:
-    sha256 = hashlib.sha256()
+    sha256_obj = hashlib.sha256()
     with open(file_path, "rb", buffering=0) as f:
         fb = f.read(BLOCK_SIZE)  # Read from the file. Take in the amount declared above
         while len(fb) > 0:  # While there is still data being read from the file
-            sha256.update(fb)  # Update the hash
+            sha256_obj.update(fb)  # Update the hash
             fb = f.read(BLOCK_SIZE)  # Read the next block from the file
-        print(sha256.hexdigest())  # Get the hexadecimal digest of the hash
-    return sha256.digest()
+        # print(sha256_obj.hexdigest())  # Get the hexadecimal digest of the hash
+    return sha256_obj.digest()
 
 
 def sign(file_path, pvk_path):
@@ -116,10 +116,13 @@ if __name__ == "__main__":
     key_path = ""
     pbk_key_path = ""
 
-    # Verify the signature:
-    verify = False
-    if verify:
-        file_digest = hash_measurements(path_test)
-        h = SHA256.new(file_digest)
-        verify_signature(sign(path_test, key_path), h, pbk_key_path)
-    main()
+    try:
+        if sys.stdin.isatty():
+            main()
+        else:
+            # Verify the signature:
+            file_digest = hash_measurements(path_test)
+            h = SHA256.new(file_digest)
+            verify_signature(sign(path_test, key_path), h, pbk_key_path)
+    except FileNotFoundError:
+        print("Give a valid file and keypair path!")

@@ -5,15 +5,12 @@
 #include "tzip-12/fa2_errors.mligo"
 #include "tzip-12/lib/fa2_operator_lib.mligo"
 
+#include "user_manager/user_manager_interface.mligo"
+#include "user_manager/user_manager_role_lib.mligo"
+
 #include "domain_storage/storage_definition.mligo"
 #include "entrypoints/entrypoints.mligo"
 
-
-type user_manager_entry_points =
-    | Make_certifier 
-    | Make_provider 
-    | Make_consumer
-    | Remove_role 
 
 type nft_entry_points =
     | Fa2 of fa2_entry_points
@@ -35,10 +32,7 @@ let fa2_main (param, storage : fa2_entry_points * nft_token_storage)
 let user_manager_main (param, storage : user_manager_entry_points * nft_token_storage)
     : (operation  list) * nft_token_storage =
     match param with
-    | Make_certifier -> update_role (Certifier, storage)
-    | Make_provider -> update_role (Provider, storage)
-    | Make_consumer -> update_role (Consumer, storage)
-    | Remove_role -> update_role (NoRole, storage)
+    | Update_roles updates_michelson -> user_manager_update_roles(updates_michelson, storage)
 
 let main (param, storage : nft_entry_points * nft_token_storage)
       : (operation  list) * nft_token_storage =

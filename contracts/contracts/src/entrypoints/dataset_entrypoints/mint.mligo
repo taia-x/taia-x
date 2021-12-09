@@ -10,7 +10,7 @@ Only a provider, defined in the storage (market/users), can execute this entrypo
 @return storage with new token, and operators
 *)
 let mint (mint_param, store : mint_param * nft_token_storage) : (operation  list) * nft_token_storage =
-    if not is_provider(Tezos.sender, store.market)
+    if not is_role(Tezos.sender, Provider, store.users)
     then (failwith("A new token can only be minted by a provider") : (operation  list) * nft_token_storage)
     else
      

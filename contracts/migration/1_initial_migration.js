@@ -16,7 +16,6 @@ module.exports = async (Tezos) => {
     datasetIds: empty_dataset_ids,
     nextDatasetId: 0,
     owners: empty_owners,
-    users: empty_users,
   };
 
   const metadata = new MichelsonMap();
@@ -63,6 +62,7 @@ module.exports = async (Tezos) => {
 
   return {
     market: market,
+    users: empty_users,
     ledger: empty_ledger,
     operators: empty_operators,
     metadata: metadata,

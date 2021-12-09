@@ -11,6 +11,7 @@
 #include "dataset_entrypoints/sell.mligo"
 #include "dataset_entrypoints/withdraw_from_sale.mligo"
 #include "dataset_entrypoints/mint.mligo"
+#include "role_entrypoints/update.mligo"
 #include "fa2_entrypoints/balance.mligo"
 #include "fa2_entrypoints/transfer.mligo"
 #include "fa2_entrypoints/update_operators.mligo"

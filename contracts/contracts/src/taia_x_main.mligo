@@ -9,8 +9,15 @@
 #include "entrypoints/entrypoints.mligo"
 
 
+type user_manager_entry_points =
+    | Make_certifier 
+    | Make_provider 
+    | Make_consumer
+    | Remove_role 
+
 type nft_entry_points =
     | Fa2 of fa2_entry_points
+    | User_manager of user_manager_entry_points
     | Mint of mint_param
     | Update_metadata of string
     | Update_token_metadata of update_token_metadata_param
@@ -25,10 +32,19 @@ let fa2_main (param, storage : fa2_entry_points * nft_token_storage)
      | Balance_of pm -> fa2_balance(pm, storage)
      | Update_operators updates_michelson -> fa2_update_operators(updates_michelson, storage)
 
+let user_manager_main (param, storage : user_manager_entry_points * nft_token_storage)
+    : (operation  list) * nft_token_storage =
+    match param with
+    | Make_certifier -> update_role (Certifier, storage)
+    | Make_provider -> update_role (Provider, storage)
+    | Make_consumer -> update_role (Consumer, storage)
+    | Remove_role -> update_role (NoRole, storage)
+
 let main (param, storage : nft_entry_points * nft_token_storage)
       : (operation  list) * nft_token_storage =
     match param with
     | Fa2 fa2 -> fa2_main (fa2, storage)
+    | User_manager user_manager -> user_manager_main(user_manager, storage)
     | Mint p -> mint(p,storage)
     | Update_metadata p -> update_metadata(p, storage)
     | Update_token_metadata p -> update_token_metadata(p, storage)

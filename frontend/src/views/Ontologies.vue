@@ -28,36 +28,16 @@
     <div class="grid grid-cols-4 gap-6 mt-16">
       <router-link
         class="flex flex-col justify-between w-full p-4 transition duration-200 transform bg-gray-100 border-gray-300 rounded-lg  hover:scale-105 h-96 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-        v-for="i in [1, 2, 3, 4]"
-        :key="i"
-        :index="i"
-        :to="'/ontologies/' + i"
+        v-for="(ontology, index) in ont"
+        :key="ontology.assetUri"
+        :index="index"
+        :to="
+          '/ontologies/' +
+          ontology.assetUri.substring(ontology.assetUri.indexOf('Qm'))
+        "
+        :ontology="ontology"
       >
-        <div class="w-full h-32 bg-gray-200 rounded-lg"></div>
-        <div
-          class="flex items-center justify-between text-sm font-medium text-gray-400 "
-        >
-          <span>33 ꜩ</span>
-          <span class="flex items-center space-x-1">
-            <HeartIcon class="w-5 h-5" />
-            <span>98</span>
-          </span>
-        </div>
       </router-link>
-      <button
-        class="w-full transition duration-200 transform bg-gray-100 rounded-lg  hover:scale-105 h-96 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-        style="animation-delay: 150ms; animation-fill-mode: backwards"
-        v-for="i in [1, 2, 3, 4]"
-        :key="i"
-        :index="i"
-      ></button>
-      <button
-        class="w-full overflow-hidden transition duration-200 transform bg-gray-100 rounded-lg  hover:scale-105 h-96 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-        style="animation-delay: 300ms; animation-fill-mode: backwards"
-        v-for="i in [1, 2, 3, 4]"
-        :key="i"
-        :index="i"
-      ></button>
     </div>
     <div class="flex items-center justify-between mt-16">
       <div class="flex items-center space-x-2">
@@ -91,21 +71,21 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import {
-  AdjustmentsIcon,
-  SortAscendingIcon,
-  HeartIcon,
-} from "@heroicons/vue/outline";
+import { AdjustmentsIcon, SortAscendingIcon } from "@heroicons/vue/outline";
 import SearchBar from "@/components/SearchBar.vue";
+import { useOntologiesStore } from "@/stores/useOntologies";
+import { storeToRefs } from "pinia";
 
 export default defineComponent({
   components: {
     AdjustmentsIcon,
     SortAscendingIcon,
     SearchBar,
-    HeartIcon,
   },
   setup() {
+    const ontologies = useOntologiesStore();
+    const { ont } = storeToRefs(ontologies);
+
     const data = JSON.parse(`
     {
       "@id": "dtmi:taiax:battery;1",
@@ -146,7 +126,7 @@ export default defineComponent({
 
     const code = JSON.stringify(data, null, 2);
 
-    return { code };
+    return { code, ont };
   },
 });
 </script>

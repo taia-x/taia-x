@@ -46,7 +46,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { iamInterface, walletInterface } from "@/services/index";
+import { tezosInterface, walletInterface } from "@/services/index";
 import { ROLE_CERTIFIER, ROLE_PROVIDER, ROLE_CONSUMER } from "@/constants";
 import {
   LibraryIcon,
@@ -71,7 +71,14 @@ export default defineComponent({
       try {
         await walletInterface.connectWallet();
         await initializeUser();
-        await iamInterface.assignRole(address.value, role);
+        await tezosInterface.manageRoles([
+          {
+            add_role: {
+              user: address.value,
+              role: { [role]: true },
+            },
+          },
+        ]);
       } catch (e) {
         await walletInterface.disconnectWallet();
         await user.$reset();

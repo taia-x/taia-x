@@ -1,7 +1,10 @@
 <template>
   <CodeBlock :code="code" class="mt-10" />
   <div class="flex items-center justify-end mt-3 text-gray-500">
-    <button class="z-10 flex items-center space-x-1 hover:text-gray-900">
+    <button
+      class="z-10 flex items-center space-x-1 hover:text-gray-900"
+      @click.prevent="highlightAll()"
+    >
       <span>Download</span>
       <DownloadIcon class="w-5 h-5" />
     </button>
@@ -24,12 +27,13 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from "vue";
+<script>
+import { defineComponent, onMounted, ref } from "vue";
 import CodeBlock from "@/components/CodeBlock.vue";
 import ToolTip from "@/components/Tooltip.vue";
 import { useRoute, useRouter } from "vue-router";
 import { DownloadIcon, ClipboardCopyIcon } from "@heroicons/vue/outline";
+import { highlightAll } from "prismjs";
 
 export default defineComponent({
   components: {
@@ -42,50 +46,59 @@ export default defineComponent({
     const route = useRoute();
     const router = useRouter();
     const isOpen = ref(false);
+    const code = ref("");
     console.log(route.params.id);
-    const data = JSON.parse(`
-    {
-      "@id": "dtmi:taiax:battery;1",
-      "@type": "Interface",
-      "@context": "dtmi:dtdl:context;2",
-      "contents": [
-        {
-          "@type": "Telemetry",
-          "name": "battery_state",
-          "schema": {
-            "@type": "Object",
-            "fields": [
-              {
-                "name": "state_of_charge",
-                "schema": "float"
-              },
-              {
-                "name": "u_out_inst",
-                "schema": "float"
-              },
-              {
-                "name": "i_out_inst",
-                "schema": "float"
-              },
-              {
-                "name": "temp_max",
-                "schema": "float"
-              },
-              {
-                "name": "temp_min",
-                "schema": "float"
-              }
-            ]
-          }
-        }
-      ]
-    }`);
 
-    const code = JSON.stringify(data, null, 2);
+    let data;
+    onMounted(async () => {
+      const result = await fetch("https://ipfs.io/ipfs/" + route.params.id);
+      data = await result.json();
+      console.log(data);
+      code.value = JSON.stringify(data, null, 2);
+    });
+    // const data = JSON.parse(`
+    // {
+    //   "@id": "dtmi:taiax:battery;1",
+    //   "@type": "Interface",
+    //   "@context": "dtmi:dtdl:context;2",
+    //   "contents": [
+    //     {
+    //       "@type": "Telemetry",
+    //       "name": "battery_state",
+    //       "schema": {
+    //         "@type": "Object",
+    //         "fields": [
+    //           {
+    //             "name": "state_of_charge",
+    //             "schema": "float"
+    //           },
+    //           {
+    //             "name": "u_out_inst",
+    //             "schema": "float"
+    //           },
+    //           {
+    //             "name": "i_out_inst",
+    //             "schema": "float"
+    //           },
+    //           {
+    //             "name": "temp_max",
+    //             "schema": "float"
+    //           },
+    //           {
+    //             "name": "temp_min",
+    //             "schema": "float"
+    //           }
+    //         ]
+    //       }
+    //     }
+    //   ]
+    // }`);
 
-    const copyToClipboard = async (): Promise<void> => {
+    // code.value = JSON.stringify(data, null, 2);
+
+    const copyToClipboard = async () => {
       try {
-        navigator.clipboard.writeText(code);
+        navigator.clipboard.writeText(code.value);
         isOpen.value = true;
         router.replace({ query: { fruit: "apple" } });
       } catch (e) {
@@ -93,7 +106,7 @@ export default defineComponent({
       }
     };
 
-    return { code, isOpen, copyToClipboard };
+    return { code, isOpen, copyToClipboard, highlightAll };
   },
 });
 </script>

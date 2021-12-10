@@ -6,6 +6,7 @@ import { createPinia } from "pinia";
 import "./assets/css/tailwind.css";
 import "./assets/css/fonts.css";
 import { useUserStore } from "@/stores/useUser";
+import initInterfaces from "@/services";
 
 const app = createApp(App);
 app.use(createPinia()).use(router).use(VWave);
@@ -18,9 +19,10 @@ const { initializeUser } = user;
  */
 const startApp = async () => {
   try {
+    await initInterfaces();
     await initializeUser();
   } catch (e) {
-    console.log(e);
+    throw new Error("Unable to initialize App!");
   }
   app.mount("#app");
 };

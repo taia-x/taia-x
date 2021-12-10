@@ -22,7 +22,7 @@
           <div class="relative flex-auto w-full">
             <pre
               class="flex min-h-full text-xs md:text-sm language-javascript"
-            ><div aria-hidden="true" class="flex-none hidden py-4 pr-4 text-right text-white text-opacity-50 select-none md:block" style="width:50px" id="codeblock"></div><code class="relative flex-auto block px-4 pt-4 pb-4 overflow-auto text-white"><div>{{code}}</div></code></pre>
+            ><div aria-hidden="true" class="flex-none hidden py-4 pr-4 text-right text-white text-opacity-50 select-none md:block" style="width:50px" id="codeblock"></div><code class="relative flex-auto block px-4 pt-4 pb-4 overflow-auto text-white"></code></pre>
           </div>
         </div>
       </div>
@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import { highlightAll } from "prismjs";
-import { defineComponent, onMounted } from "vue";
+import { highlightAll, highlightElement } from "prismjs";
+import { defineComponent, watchEffect } from "vue";
 
 export default defineComponent({
   props: {
@@ -42,17 +42,26 @@ export default defineComponent({
     },
   },
   setup(props) {
-    onMounted(() => {
+    watchEffect(() => {
       let lineNumber = 1;
-      [...props.code.match(/\n/g), "\n"].forEach(() => {
-        const span = document.createElement("span");
-        span.innerHTML = lineNumber;
-        const br = document.createElement("br");
-        document.getElementById("codeblock").appendChild(span);
-        document.getElementById("codeblock").appendChild(br);
-        lineNumber++;
-      });
-      highlightAll();
+      if (props.code) {
+        for (const item in [...props.code.match(/\n/g), "\n"]) {
+          const span = document.createElement("span");
+          span.innerHTML = lineNumber;
+          const br = document.createElement("br");
+          document.getElementById("codeblock").appendChild(span);
+          document.getElementById("codeblock").appendChild(br);
+          lineNumber++;
+        }
+        const div = document.createElement("div");
+        div.innerHTML = props.code;
+        document.getElementsByTagName("code")[0].appendChild(div);
+        highlightAll();
+      }
+    });
+
+    watchEffect(() => {
+      if (props.code.length) highlightAll();
     });
   },
 });

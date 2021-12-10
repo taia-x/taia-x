@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import Explorer from "../views/Explorer.vue";
-import SingleOntology from "../views/SingleOntology.vue";
+import Explorer from "@/views/Explorer.vue";
+import SingleOntology from "@/views/SingleOntology.vue";
+import SingleNFT from "@/views/SingleNFT.vue";
 import Ontologies from "../views/Ontologies.vue";
 
 const routes: Array<RouteRecordRaw> = [
@@ -26,6 +27,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/ontologies/:id",
     name: "SingleOntology",
     component: SingleOntology,
+  },
+  {
+    path: "/explore/:id",
+    name: "SingleNFT",
+    component: SingleNFT,
   },
 ];
 

@@ -1,7 +1,7 @@
 import { BeaconWallet } from "@taquito/beacon-wallet";
 import { TezosToolkit } from "@taquito/taquito";
 import { AccountInfo, Network, NetworkType } from "@airgap/beacon-sdk";
-import { GRANADANET_NODE_URL } from "@/constants";
+import { GRANADANET_NODE_URL, CUSTOM_NODE_URL } from "@/constants";
 
 export let wallet: BeaconWallet | undefined;
 
@@ -13,7 +13,7 @@ class WalletInterface {
   readonly Tezos: TezosToolkit;
 
   constructor() {
-    this.network = { type: NetworkType.GRANADANET };
+    this.network = { type: NetworkType.CUSTOM };
     this.Tezos = new TezosToolkit(GRANADANET_NODE_URL);
   }
 
@@ -39,7 +39,12 @@ class WalletInterface {
       if (await wallet?.client.getActiveAccount()) {
         return;
       }
-      await wallet.requestPermissions({ network: this.network });
+      await wallet.requestPermissions({
+        network: {
+          type: NetworkType.CUSTOM,
+          rpcUrl: CUSTOM_NODE_URL,
+        },
+      });
     } catch (e) {
       console.log(e);
     }

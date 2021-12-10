@@ -21,9 +21,9 @@
         class="flex items-center p-2 transition duration-150 ease-in-out rounded-lg  hover:bg-gray-100 group"
       >
         <div
-          class="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white transition duration-150 ease-in-out rounded-lg  bg-purple-50 group-hover:bg-purple-100 sm:h-12 sm:w-12"
+          class="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white transition duration-150 ease-in-out rounded-lg  bg-cyan-50 group-hover:bg-cyan-100 sm:h-12 sm:w-12"
         >
-          <UserIcon class="w-5 h-5 text-purple-700" />
+          <UserIcon class="w-5 h-5 text-cyan-700" />
         </div>
         <div class="ml-4">
           <p class="text-sm font-medium text-left text-gray-900">Profile</p>
@@ -34,9 +34,9 @@
         @click.prevent="disconnect()"
       >
         <div
-          class="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white transition duration-150 ease-in-out rounded-lg  bg-purple-50 group-hover:bg-purple-100 sm:h-12 sm:w-12"
+          class="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white transition duration-150 ease-in-out rounded-lg  bg-cyan-50 group-hover:bg-cyan-100 sm:h-12 sm:w-12"
         >
-          <LogoutIcon class="w-5 h-5 text-purple-700" />
+          <LogoutIcon class="w-5 h-5 text-cyan-700" />
         </div>
         <div class="ml-4">
           <p class="text-sm font-medium text-left text-gray-900">Logout</p>

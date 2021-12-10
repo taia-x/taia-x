@@ -38,7 +38,7 @@
                 Create Dataset
               </DialogTitle>
               <div class="mt-8">
-                <form>
+                <form action="#" method="POST">
                   <div class="sm:rounded-md">
                     <div class="space-y-6 bg-white">
                       <div>
@@ -50,8 +50,8 @@
                         </label>
                         <div class="flex w-full mt-1 rounded-md shadow-sm">
                           <input
-                            v-model="name"
                             type="text"
+                            v-model="name"
                             name="name"
                             id="name"
                             class="flex-1 block w-full border-gray-300 rounded-md  focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
@@ -69,21 +69,16 @@
                         </label>
                         <div class="mt-1">
                           <textarea
-                            v-model="description"
                             id="description"
                             name="description"
+                            v-model="description"
                             rows="3"
                             class="block w-full mt-1 border border-gray-300 rounded-md shadow-sm  focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
                             placeholder="Provide a description of your dataset..."
                           />
                         </div>
                       </div>
-
-                      <FileSection
-                        @filesSelected="onFileSelected($event)"
-                        @fileRemoved="removeFile($event)"
-                        :files="files"
-                      />
+                      <FileSection @filesSelected="onFileSelected($event)" />
                     </div>
                     <div class="w-full mt-6 space-x-2 text-right">
                       <button
@@ -96,7 +91,7 @@
                       <button
                         type="submit"
                         class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white transition duration-200 rounded-md shadow-sm  bg-cyan-500 hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-                        @click.prevent="mint()"
+                        @click.prevent="writeToIpfs()"
                       >
                         Save
                       </button>
@@ -122,9 +117,8 @@ import {
   TransitionChild,
 } from "@headlessui/vue";
 import FileSection from "@/components/FileSection.vue";
-import { ipfsInterface, tezosInterface } from "@/services";
-import { useUserStore } from "@/stores/useUser";
-import { storeToRefs } from "pinia";
+import { ipfsInterface } from "@/services";
+import { useOntologiesStore } from "@/stores/useOntologies";
 
 export default defineComponent({
   components: {
@@ -144,11 +138,10 @@ export default defineComponent({
   setup() {
     const name = ref("");
     const description = ref("");
-    const files: any = ref([]);
+    const files = ref([]);
     const image = ref("");
     const data = ref("");
-    const user = useUserStore();
-    const { address } = storeToRefs(user);
+    const ontologies = useOntologiesStore();
 
     const dataReader = new FileReader();
     const imageReader = new FileReader();
@@ -162,9 +155,9 @@ export default defineComponent({
     };
 
     const onFileSelected = (e: any): void => {
-      files.value =
-        Array.from(e.target?.files) || Array.from(e.dataTransfer?.files);
-      files.value.forEach((file: File) => {
+      const files: FileList = e.target?.files || e.dataTransfer?.files;
+      Object.entries(files).forEach(([key, value], index) => {
+        const file: File = files[index];
         const fileExtension: string = file.name.substr(file.name.indexOf("."));
         if (file.type === "application/json" && fileExtension === ".json") {
           dataReader.readAsText(file);
@@ -175,28 +168,28 @@ export default defineComponent({
       });
     };
 
-    const mint = async () => {
+    const writeToIpfs = async () => {
+      const metadata = {
+        name: name.value,
+        description: description.value,
+      };
       try {
-        const { metadataGatewayURL: assetUri } = await ipfsInterface.writeFile(
-          data.value
-        );
-        const { metadataGatewayURL: metadataUri } =
-          await ipfsInterface.writeFile({
-            name: name.value,
-            description: description.value,
-            assetUri,
+        const asset = await ipfsInterface.writeFile(data.value);
+        if (asset?.assetURI) {
+          const data = await ipfsInterface.writeFile({
+            ...metadata,
+            assetUri: asset.assetURI,
           });
-        await tezosInterface.mintNft(address.value, metadataUri);
+          const dataa = await fetch(data.metadataGatewayURL);
+          const ontology = await dataa.json();
+          ontologies.$patch((state) => (state.ont = [...state.ont, ontology]));
+        }
       } catch (e) {
-        throw new Error("Unable to mint nft!");
+        throw new Error("Unable to write to IPFS!");
       }
     };
 
-    const removeFile = (index: number) => {
-      files.value.splice(index, 1);
-    };
-
-    return { mint, name, description, onFileSelected, files, removeFile };
+    return { name, description, files, writeToIpfs, onFileSelected };
   },
 });
 </script>

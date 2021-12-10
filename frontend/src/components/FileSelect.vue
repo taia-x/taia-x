@@ -16,9 +16,9 @@
             id="file-upload"
             name="file-upload"
             type="file"
+            accept=".json"
             class="sr-only"
             @change="$emit('fileSelected', $event)"
-            accept=".json"
           />
         </label>
         <p class="pl-1">or drag and drop</p>
@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import { CloudUploadIcon } from "@heroicons/vue/outline";
 
 export default defineComponent({

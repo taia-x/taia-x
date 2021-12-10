@@ -7,15 +7,15 @@ module.exports = {
       app.use("/__open-in-editor", openInEditor("code"));
     },
   },
-  configureWebpack: {
-    performance: {
-      hints: false,
-    },
-    optimization: {
-      splitChunks: {
-        minSize: 10000,
-        maxSize: 250000,
-      },
-    },
-  },
+  // configureWebpack: {
+  //   performance: {
+  //     hints: false,
+  //   },
+  //   optimization: {
+  //     splitChunks: {
+  //       minSize: 10000,
+  //       maxSize: 250000,
+  //     },
+  //   },
+  // },
 };

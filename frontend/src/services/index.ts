@@ -6,7 +6,7 @@ let walletInterface: WalletInterface;
 let tezosInterface: TezosInterface;
 let ipfsInterface: IpfsInterface;
 
-const initInterfaces = async () => {
+const initInterfaces = async (): Promise<void> => {
   walletInterface = new WalletInterface();
   const { Tezos } = walletInterface;
   ipfsInterface = new IpfsInterface();

@@ -1,7 +1,7 @@
 import { BeaconWallet } from "@taquito/beacon-wallet";
 import { TezosToolkit } from "@taquito/taquito";
-import { AccountInfo, Network, NetworkType } from "@airgap/beacon-sdk";
-import { GRANADANET_NODE_URL, CUSTOM_NODE_URL } from "@/constants";
+import { AccountInfo, NetworkType } from "@airgap/beacon-sdk";
+import { CUSTOM_NODE_URL } from "@/constants";
 
 export let wallet: BeaconWallet | undefined;
 
@@ -9,12 +9,10 @@ export let wallet: BeaconWallet | undefined;
  * exposes an interface for interaction with the wallet
  */
 class WalletInterface {
-  private network: Network;
   readonly Tezos: TezosToolkit;
 
   constructor() {
-    this.network = { type: NetworkType.CUSTOM };
-    this.Tezos = new TezosToolkit(GRANADANET_NODE_URL);
+    this.Tezos = new TezosToolkit(CUSTOM_NODE_URL);
   }
 
   /**
@@ -46,7 +44,7 @@ class WalletInterface {
         },
       });
     } catch (e) {
-      console.log(e);
+      throw new Error("Unable to connect to wallet!");
     }
   }
 
@@ -61,7 +59,7 @@ class WalletInterface {
       const account = (await wallet?.client.getActiveAccount()) as AccountInfo;
       if (account) return account.address;
     } catch (e) {
-      console.log(e);
+      throw new Error("Unable to get tezos account address!");
     }
     return "";
   }
@@ -81,7 +79,7 @@ class WalletInterface {
         }
       }
     } catch (e) {
-      console.log(e);
+      throw new Error("Unable to get tezos account balance!");
     }
     return 0;
   }
@@ -94,7 +92,7 @@ class WalletInterface {
       const wallet = await this.getWallet();
       await wallet?.clearActiveAccount();
     } catch (e) {
-      console.log(e);
+      throw new Error("Unable to disconnect from wallet!");
     }
   }
 }

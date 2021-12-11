@@ -15,7 +15,7 @@ const user = useUserStore();
 const { initializeUser } = user;
 
 /**
- * start app by initializing user first
+ * start app by initializing user and interfaces first
  */
 const startApp = async () => {
   try {

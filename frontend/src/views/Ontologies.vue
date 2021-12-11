@@ -73,7 +73,7 @@
 import { defineComponent } from "vue";
 import { AdjustmentsIcon, SortAscendingIcon } from "@heroicons/vue/outline";
 import SearchBar from "@/components/SearchBar.vue";
-import { useOntologiesStore } from "@/stores/useOntologies";
+import { useOntologyStore } from "@/stores/useOntologies";
 import { storeToRefs } from "pinia";
 
 export default defineComponent({
@@ -83,50 +83,10 @@ export default defineComponent({
     SearchBar,
   },
   setup() {
-    const ontologies = useOntologiesStore();
-    const { ont } = storeToRefs(ontologies);
+    const ontologyStore = useOntologyStore();
+    const { ontologies } = storeToRefs(ontologyStore);
 
-    const data = JSON.parse(`
-    {
-      "@id": "dtmi:taiax:battery;1",
-      "@type": "Interface",
-      "@context": "dtmi:dtdl:context;2",
-      "contents": [
-        {
-          "@type": "Telemetry",
-          "name": "battery_state",
-          "schema": {
-            "@type": "Object",
-            "fields": [
-              {
-                "name": "state_of_charge",
-                "schema": "float"
-              },
-              {
-                "name": "u_out_inst",
-                "schema": "float"
-              },
-              {
-                "name": "i_out_inst",
-                "schema": "float"
-              },
-              {
-                "name": "temp_max",
-                "schema": "float"
-              },
-              {
-                "name": "temp_min",
-                "schema": "float"
-              }
-            ]
-          }
-        }
-      ]
-    }`);
-
-    const code = JSON.stringify(data, null, 2);
-
-    return { code, ont };
+    return { ontologies };
   },
 });
 </script>

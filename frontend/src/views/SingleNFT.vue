@@ -14,7 +14,7 @@
     >
       <span class="pl-4">Copy</span>
       <ClipboardCopyIcon class="w-5 h-5" />
-      <ToolTip :isOpen="isOpen" :text="'Copied!'" @closed="isOpen = false" />
+      <ToolTip :isOpen="isOpen" :text="'Copied!'" @close="isOpen = false" />
     </button>
   </div>
   <div class="flex flex-col pt-12">
@@ -29,8 +29,8 @@
 
 <script>
 import { defineComponent, onMounted, ref } from "vue";
-import CodeBlock from "@/components/CodeBlock.vue";
-import ToolTip from "@/components/Tooltip.vue";
+import CodeBlock from "@/components/Utils/CodeBlock.vue";
+import ToolTip from "@/components/Utils/Tooltip.vue";
 import { useRoute } from "vue-router";
 import { DownloadIcon, ClipboardCopyIcon } from "@heroicons/vue/outline";
 import { highlightAll } from "prismjs";

@@ -1,9 +1,7 @@
 <template>
   <div class="flex flex-col w-full pt-10 pb-24">
     <div class="flex items-center w-full space-x-4">
-      <SearchBar
-        @update:isOpen="$emit('update:isCreateDatasetModalOpen', $event)"
-      />
+      <SearchBar @update:isOpen="isCreateDatasetModalOpen = true" />
     </div>
     <!-- <div class="flex items-center mt-4 space-x-4">
       <button class="flex items-center space-x-2 group" @click.prevent="mint()">
@@ -69,12 +67,17 @@
       </div>
     </div>
   </div>
+  <CreateDatasetModal
+    :isOpen="isCreateDatasetModalOpen"
+    @update:isOpen="isCreateDatasetModalOpen = $event"
+  />
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
-import { AdjustmentsIcon, SortAscendingIcon } from "@heroicons/vue/outline";
+import { defineComponent, onMounted, ref } from "vue";
+//import { AdjustmentsIcon, SortAscendingIcon } from "@heroicons/vue/outline";
 import SearchBar from "@/components/SearchBar.vue";
+import CreateDatasetModal from "@/components/Explorer/CreateDatasetModal.vue";
 import { tezosInterface } from "@/services";
 import { useNftStore } from "@/stores/useNft";
 
@@ -82,29 +85,24 @@ export default defineComponent({
   components: {
     //AdjustmentsIcon,
     //SortAscendingIcon,
+    CreateDatasetModal,
     SearchBar,
   },
   setup() {
     const nfts = ref([]);
     const nftStore = useNftStore();
+    const isCreateDatasetModalOpen = ref(false);
 
-    const fetchNfts = async () => {
+    onMounted(async () => {
       try {
         nfts.value = await tezosInterface.fetchNfts();
         nftStore.$patch((state) => (state.nfts = [...nfts.value]));
       } catch (e) {
         throw new Error("Unable to fetch nfts!");
       }
-    };
+    });
 
-    fetchNfts();
-
-    return { nfts };
+    return { nfts, isCreateDatasetModalOpen };
   },
 });
 </script>
-
-function useNftStore() { throw new Error("Function not implemented."); }
-function useNftStore() { throw new Error("Function not implemented."); }
-function useNft() { throw new Error("Function not implemented."); } function
-useNftStore() { throw new Error("Function not implemented."); }

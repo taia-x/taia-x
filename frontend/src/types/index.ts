@@ -1,17 +1,3 @@
-export interface NftMetadata {
-  name: string;
-  description: string;
-  price: number;
-  tags: Array<string>;
-  image: string;
-  assetUri: string;
-}
-
-export interface OntologyMetadata {
-  name: string;
-  description: string;
-}
-
 export interface NFT {
   owner: string;
   id: number;

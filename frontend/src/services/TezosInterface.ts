@@ -63,8 +63,8 @@ class TezosInterface {
         const nfts: Array<NFT> = await Promise.all(
           tokenIds.map(async (tokenId) => {
             const [tokenRaw, metadata] = await Promise.all([
-              storage.market.datasets.get(tokenId.toString()),
-              storage.token_metadata.get(tokenId.toString()),
+              storage.market.datasets.get(tokenId.toString()), // get dataset for a token id
+              storage.token_metadata.get(tokenId.toString()), // get metadata for a token id
             ]);
             const nft: NFT = {
               owner: tokenRaw.owner,
@@ -75,7 +75,7 @@ class TezosInterface {
               metadataUri: Buffer.from(
                 metadata.token_info.get("token_metadata_uri").substring(12),
                 "hex"
-              ).toString(),
+              ).toString(), // convert bytes to string and strip off some hex numbers which are not needed
             };
             return nft;
           })

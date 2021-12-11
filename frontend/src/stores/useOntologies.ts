@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
 
-export const useOntologiesStore = defineStore("ontologies", {
+export const useOntologyStore = defineStore("ontologies", {
   // initial state of user
   state: () => ({
-    ont: [] as Array<any>,
+    ontologies: [] as Array<any>,
   }),
   getters: {
-    getOntologies: (state) => state.ont,
+    getOntologies: (state) => state.ontologies,
   },
 });

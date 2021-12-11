@@ -14,7 +14,7 @@
     >
       <span class="pl-4">Copy</span>
       <ClipboardCopyIcon class="w-5 h-5" />
-      <ToolTip :isOpen="isOpen" :text="'Copied!'" @closed="isOpen = false" />
+      <ToolTip :isOpen="isOpen" :text="'Copied!'" @close="isOpen = false" />
     </button>
   </div>
   <div class="flex flex-col pt-12">
@@ -29,8 +29,8 @@
 
 <script>
 import { defineComponent, onMounted, ref } from "vue";
-import CodeBlock from "@/components/CodeBlock.vue";
-import ToolTip from "@/components/Tooltip.vue";
+import CodeBlock from "@/components/Utils/CodeBlock.vue";
+import ToolTip from "@/components/Utils/Tooltip.vue";
 import { useRoute, useRouter } from "vue-router";
 import { DownloadIcon, ClipboardCopyIcon } from "@heroicons/vue/outline";
 import { highlightAll } from "prismjs";
@@ -56,45 +56,6 @@ export default defineComponent({
       console.log(data);
       code.value = JSON.stringify(data, null, 2);
     });
-    // const data = JSON.parse(`
-    // {
-    //   "@id": "dtmi:taiax:battery;1",
-    //   "@type": "Interface",
-    //   "@context": "dtmi:dtdl:context;2",
-    //   "contents": [
-    //     {
-    //       "@type": "Telemetry",
-    //       "name": "battery_state",
-    //       "schema": {
-    //         "@type": "Object",
-    //         "fields": [
-    //           {
-    //             "name": "state_of_charge",
-    //             "schema": "float"
-    //           },
-    //           {
-    //             "name": "u_out_inst",
-    //             "schema": "float"
-    //           },
-    //           {
-    //             "name": "i_out_inst",
-    //             "schema": "float"
-    //           },
-    //           {
-    //             "name": "temp_max",
-    //             "schema": "float"
-    //           },
-    //           {
-    //             "name": "temp_min",
-    //             "schema": "float"
-    //           }
-    //         ]
-    //       }
-    //     }
-    //   ]
-    // }`);
-
-    // code.value = JSON.stringify(data, null, 2);
 
     const copyToClipboard = async () => {
       try {

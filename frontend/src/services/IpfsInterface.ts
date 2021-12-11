@@ -1,6 +1,5 @@
 import { create as createIpfs } from "ipfs-core";
 import { IPFS_GATEWAY_URL } from "@/constants";
-import { NftMetadata, OntologyMetadata } from "@/types";
 
 /**
  * exposes an interface for interaction with ipfs
@@ -19,6 +18,11 @@ class IpfsInterface {
     }
   }
 
+  /**
+   * write json stringified object to ipfs
+   * @param content the content to upload to ipfs
+   * @returns gatewayUrl to access the file on ipfs
+   */
   async writeFile(content: any) {
     const { cid: assetCid } = await this.ipfs.add({
       content: JSON.stringify(content),
@@ -26,13 +30,11 @@ class IpfsInterface {
 
     const assetURI = this.ensureIpfsUriPrefix(assetCid);
 
-    return {
-      assetURI,
-      metadataGatewayURL: this.makeGatewayURL(assetURI),
-    };
+    return { gatewayUrl: this.makeGatewayURL(assetURI) };
   }
 
   /**
+   * stript ipfs uri prefix
    * @param cidOrURI either a CID string, or a URI string of the form `ipfs://${cid}`
    * @returns input string with the `ipfs://` prefix stripped off
    */
@@ -44,6 +46,7 @@ class IpfsInterface {
   }
 
   /**
+   * ensures to have an IPFS prefix before CID
    * @param cidOrURI either a CID string, or a URI string of the form `ipfs://${cid}`
    * @returns ipfs uri
    */
@@ -60,9 +63,9 @@ class IpfsInterface {
   }
 
   /**
-   * Return an HTTP gateway URL for the given IPFS object.
+   * constructs an HTTP gateway url for the given IPFS uri
    * @param ipfsURI an ipfs:// uri or CID string
-   * @returns a url to view the IPFS object on the configured gateway.
+   * @returns a ipfs gateway url
    */
   makeGatewayURL(ipfsURI: string): string {
     return IPFS_GATEWAY_URL + "/" + this.stripIpfsUriPrefix(ipfsURI);

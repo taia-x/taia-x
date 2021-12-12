@@ -27,7 +27,7 @@ let mint (mint_param, store : mint_param * nft_token_storage) : (operation  list
             let datasets_with_new_dataset = Big_map.add token_id new_dataset s.market.datasets in
             let datasets_ids_with_new_id = Set.add token_id s.market.datasetIds in
             
-            let new_token_metadata_info = Map.literal [(("token_metadata_uri" : string), (Bytes.pack p.token_metadata_uri))] in
+            let new_token_metadata_info = Map.literal [(("" : string), (Bytes p.token_metadata_uri))] in
             let new_token_metadata = ({ token_id=token_id; token_info=new_token_metadata_info; }) in
             let token_metadata_with_new_token_metadata = Big_map.add token_id new_token_metadata s.token_metadata in
 

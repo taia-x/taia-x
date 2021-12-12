@@ -5,10 +5,11 @@ from cryptography.merkletree import merkle
 from os import listdir
 
 
-def root(dir_p):
+def root(dir_p) -> bytes:
     for ind in dir_l:
         h = Hash(dir_p + ind)
         vehicle_m_tree.update(record=h)
+    # print(vehicle_m_tree.rootHash)
     return vehicle_m_tree.rootHash
 
 

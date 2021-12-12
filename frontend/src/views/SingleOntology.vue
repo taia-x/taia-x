@@ -1,5 +1,5 @@
 <template>
-  <CodeBlock :code="code" class="mt-10" />
+  <Terminal :code="code" class="mt-10" />
   <div class="flex items-center justify-end mt-3 text-gray-500">
     <button
       class="z-10 flex items-center space-x-1 hover:text-gray-900"
@@ -29,7 +29,7 @@
 
 <script>
 import { defineComponent, onMounted, ref } from "vue";
-import CodeBlock from "@/components/Utils/CodeBlock.vue";
+import Terminal from "@/components/Utils/Terminal.vue";
 import ToolTip from "@/components/Utils/Tooltip.vue";
 import { useRoute, useRouter } from "vue-router";
 import { DownloadIcon, ClipboardCopyIcon } from "@heroicons/vue/outline";
@@ -37,7 +37,7 @@ import { highlightAll } from "prismjs";
 
 export default defineComponent({
   components: {
-    CodeBlock,
+    Terminal,
     ToolTip,
     DownloadIcon,
     ClipboardCopyIcon,

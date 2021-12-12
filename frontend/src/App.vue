@@ -11,17 +11,20 @@
     :isOpen="isRegisterModalOpen"
     @update:isOpen="isRegisterModalOpen = $event"
   />
+  <AlertWrapper />
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import Header from "@/components/Header/Header.vue";
 import RegisterModal from "@/components/RegisterModal.vue";
+import AlertWrapper from "@/components/Utils/AlertWrapper.vue";
 
 export default defineComponent({
   components: {
     RegisterModal,
     Header,
+    AlertWrapper,
   },
   setup() {
     const isRegisterModalOpen = ref(false);

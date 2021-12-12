@@ -52,13 +52,13 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props, context) {
+  setup(props, { emit }) {
     const { isOpen } = toRefs(props);
 
     watchEffect(() => {
-      if (isOpen === true) {
+      if (isOpen.value === true) {
         setTimeout(function () {
-          context.emit("close");
+          emit("closed");
         }, 1000); // close tooltip after 1 second
       }
     });

@@ -24,3 +24,10 @@ interface Role {
   provider?: boolean;
   consumer?: boolean;
 }
+
+export interface Alert {
+  id: number;
+  message: string;
+  type: "info" | "warning" | "success" | "error";
+  visible: boolean;
+}

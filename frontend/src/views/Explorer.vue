@@ -3,26 +3,26 @@
     <div class="flex items-center w-full space-x-4">
       <SearchBar @update:isOpen="isCreateDatasetModalOpen = true" />
     </div>
-    <!-- <div class="flex items-center mt-4 space-x-4">
-      <button class="flex items-center space-x-2 group" @click.prevent="mint()">
+    <div class="flex items-center mt-4 space-x-4">
+      <button class="flex items-center space-x-2 group" @click.prevent="add()">
         <SortAscendingIcon
-          class="w-6 h-6 text-gray-400 transition duration-200 group-hover:text-gray-500"
+          class="w-6 h-6 text-gray-400 transition duration-200  group-hover:text-gray-500"
         />
         <span
-          class="text-gray-400 transition duration-200 group-hover:text-gray-900"
+          class="text-gray-400 transition duration-200  group-hover:text-gray-900"
           >Name</span
         >
       </button>
       <button class="flex items-center space-x-2 group">
         <AdjustmentsIcon
-          class="w-6 h-6 text-gray-400 transition duration-200 group-hover:text-gray-500"
+          class="w-6 h-6 text-gray-400 transition duration-200  group-hover:text-gray-500"
         />
         <span
-          class="text-gray-400 transition duration-200 group-hover:text-gray-900"
+          class="text-gray-400 transition duration-200  group-hover:text-gray-900"
           >Filter</span
         >
       </button>
-    </div> -->
+    </div>
     <div class="grid grid-cols-4 gap-6 mt-16">
       <router-link
         class="w-full transition duration-200 transform border-gray-300 rounded-lg  bg-gray-50 hover:scale-105 h-96 focus:outline-none focus:ring-2 focus:ring-cyan-500"
@@ -75,7 +75,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref } from "vue";
-//import { AdjustmentsIcon, SortAscendingIcon } from "@heroicons/vue/outline";
+import { AdjustmentsIcon, SortAscendingIcon } from "@heroicons/vue/outline";
 import SearchBar from "@/components/SearchBar.vue";
 import CreateDatasetModal from "@/components/Explorer/CreateDatasetModal.vue";
 import { tezosInterface } from "@/services";
@@ -83,8 +83,8 @@ import { useNftStore } from "@/stores/useNft";
 
 export default defineComponent({
   components: {
-    //AdjustmentsIcon,
-    //SortAscendingIcon,
+    AdjustmentsIcon,
+    SortAscendingIcon,
     CreateDatasetModal,
     SearchBar,
   },

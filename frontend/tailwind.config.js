@@ -5,14 +5,19 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 module.exports = {
   //mode: "jit",
   purge: ["./public/**/*.html", "./src/**/*.{js,jsx,ts,tsx,vue}"],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: "class", // false or 'media' or 'class'
   theme: {
     extend: {
       fontFamily: {
         sans: ["Inter var", ...defaultTheme.fontFamily.sans],
+        mono: ["Menlo", ...defaultTheme.fontFamily.mono],
+        source: ["Source Sans Pro", ...defaultTheme.fontFamily.sans],
+        "ubuntu-mono": ["Ubuntu Mono", ...defaultTheme.fontFamily.mono],
+        system: defaultTheme.fontFamily.sans,
       },
       colors: {
         background: "#121212",
+        purp: "#a65fec",
         custom: {
           secondary: "rgba(25, 27, 31, 0.6)",
           "secondary-notrans": "rgb(25, 27, 31)",
@@ -21,13 +26,13 @@ module.exports = {
           lines: "#1D1E23",
         },
         gray: colors.gray,
+        rose: colors.rose,
         teal: colors.teal,
+        "light-blue": colors.lightBlue,
       },
-
       animation: {
         pulse: "pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
-
       keyframes: {
         pulse: {
           "0%, 100%": {
@@ -49,6 +54,9 @@ module.exports = {
       ringColor: ["focus-visible"],
       ringOffsetWidth: ["focus-visible"],
       ringOffsetColor: ["focus-visible"],
+      borderStyle: ["hover"],
+      backgroundOpacity: ["hover"],
+      fontWeight: ["hover", "focus"],
     },
   },
   plugins: [],

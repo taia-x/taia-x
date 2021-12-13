@@ -26,8 +26,14 @@
 
   ```
   ALICE_SECRET=<ALICE_SECRET>
-  FAUCET={"mnemonic": ["...", "...", ...], "secret": "...", "amount": "...", "pkh": "...", "password": "...", "email": "..."}
+  FAUCET={"mnemonic": ["...", "...", ...], "secret": "...", "amount": "...", "pkh": "...", "password": "...", "email": "..."
   ```
+- Replace the value of `compile` in `contracts/package.json` as follows:
+  - Linux or OSX: ```docker run --rm -v '$PWD':'$PWD' -w '$PWD' ligolang/ligo:0.29.0 compile contract ./contracts/src/main.mligo --entry-point main > ./contracts/out/main.tz```
+  - Windows: ```docker run --rm -v '%CD%':/cd -w /cd ligolang/ligo:0.29.0 compile contract ./contracts/src/main.mligo --entry-point main > ./contracts/out/main.tz```
+
+
+  
 
 ## Usage
 

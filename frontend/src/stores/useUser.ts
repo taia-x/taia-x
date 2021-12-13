@@ -1,29 +1,31 @@
 import { defineStore } from "pinia";
-import { getBalance, getAddress } from "@/services/wallet-service";
+import { walletInterface } from "@/services/index";
 
 export const useUserStore = defineStore("user", {
+  // initial state of user
   state: () => ({
-    address: "" as string | undefined,
-    balance: 0 as number | undefined,
+    address: "",
+    balance: 0,
   }),
   getters: {
     getAddress: (state) => state.address,
     getBalance: (state) => state.balance,
   },
   actions: {
-    async initBalance() {
+    /**
+     * function to set address and balance of user in pinia store
+     */
+    async initializeUser() {
       try {
-        this.balance = await getBalance();
+        const [address, balance] = await Promise.all([
+          walletInterface.getAddress(),
+          walletInterface.getBalance(),
+        ]);
+        this.address = address;
+        this.balance = balance;
       } catch (e) {
         console.log(e);
         this.balance = 0;
-      }
-    },
-    async initAddress() {
-      try {
-        this.address = await getAddress();
-      } catch (e) {
-        console.log(e);
         this.address = "";
       }
     },

@@ -5,8 +5,9 @@ from cryptography.merkletree import merkle
 from os import listdir
 
 
-def root(dir_p) -> bytes:
-    for ind in dir_l:
+def root(dir_p, dir_list) -> bytes:
+    vehicle_m_tree = merkle.initMerkleTree()
+    for ind in dir_list:
         h = Hash(dir_p + ind)
         vehicle_m_tree.update(record=h)
     # print(vehicle_m_tree.rootHash)
@@ -27,7 +28,7 @@ def main():
 
     if subparser_name == "root":
         directory_path = input("\nDir Path:\n")
-        root_hash = root(directory_path)
+        root_hash = root(directory_path, )
         print(root_hash)
     else:
         raise NotImplementedError(
@@ -37,10 +38,9 @@ def main():
 
 
 if __name__ == "__main__":
-    vehicle_m_tree = merkle.initMerkleTree()
-    dir_path = "./test-measurements-sensorwise/2021-12-2-13-38-9/"
+    dir_path = ""
     dir_l = listdir(dir_path)
     if sys.stdin.isatty():
         main()
     else:
-        root(dir_path)
+        root(dir_path, dir_l)

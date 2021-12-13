@@ -65,7 +65,7 @@ def sign(file_path, pvk_path):
         key = ecc.import_key(f.read())
     file_digest = hash_measurements(file_path)
     file_hash_obj = SHA256.new(file_digest)
-
+    print(key)
     # The signature generation is randomized and carried out according to FIPS 186-3
     signer = DSS.new(key, 'fips-186-3')
     signature = signer.sign(file_hash_obj)

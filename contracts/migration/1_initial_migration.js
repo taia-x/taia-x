@@ -1,4 +1,6 @@
 const { MichelsonMap } = require("@taquito/taquito");
+const { char2Bytes } = require("@taquito/utils");
+
 const web3 = require("web3");
 
 module.exports = async (Tezos) => {
@@ -25,14 +27,10 @@ module.exports = async (Tezos) => {
   const empty_operators = new MichelsonMap();
 
   // Set TZIP-16 contract metadata, with a JSON Blob
-  metadata.set(
-    "",
-    web3.utils
-      .asciiToHex(
-        "sha256://0x19faf07472cc91927ff455a82c0d51a682164b3b18125e6a5b1763a14f09a60c/https:%2F%2Ftezosdataset.io%2Fmetadata%2Fcontract_metadata.json"
-      )
-      .slice(2)
-  );
+  // metadata.set(
+  //   "",
+  //   char2Bytes("ipfs://QmfGSjEWPwqZnZzpYGRrFu2UcmTHSuFUz3Jb98qL4pJ321")
+  // );
 
   // Set TZIP-16 token metadata with a JSON Blob
   // token_info.set(

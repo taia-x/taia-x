@@ -13,3 +13,4 @@ yarn.lock
 .env
 contracts/out/*
 !contracts/out/.gitkeep 
+!contracts/**/lib

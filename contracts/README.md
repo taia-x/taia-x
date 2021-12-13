@@ -28,12 +28,10 @@
   ALICE_SECRET=<ALICE_SECRET>
   FAUCET={"mnemonic": ["...", "...", ...], "secret": "...", "amount": "...", "pkh": "...", "password": "...", "email": "..."
   ```
+
 - Replace the value of `compile` in `contracts/package.json` as follows:
-  - Linux or OSX: ```docker run --rm -v '$PWD':'$PWD' -w '$PWD' ligolang/ligo:0.29.0 compile contract ./contracts/src/main.mligo --entry-point main > ./contracts/out/main.tz```
-  - Windows: ```docker run --rm -v '%CD%':/cd -w /cd ligolang/ligo:0.29.0 compile contract ./contracts/src/main.mligo --entry-point main > ./contracts/out/main.tz```
-
-
-  
+  - Linux or OSX: `docker run --rm -v '$PWD':'$PWD' -w '$PWD' ligolang/ligo:0.29.0 compile contract ./contracts/src/taia_x_main.mligo --entry-point main > ./contracts/out/taia_x_main.tz`
+  - Windows: `docker run --rm -v '%CD%':/cd -w /cd ligolang/ligo:0.29.0 compile contract ./contracts/src/taia_x_main.mligo --entry-point main > ./contracts/out/taia_x_main.tz`
 
 ## Usage
 
@@ -75,3 +73,4 @@
 | ------------------------------------------------- | ----------------------------------------------------------------------------- |
 | Starting and Using a Sandbox                      | https://assets.tqtezos.com/docs/setup/2-sandbox/#starting-and-using-a-sandbox |
 | Ligo CLI Commands (e.g. for compiling a contract) | https://ligolang.org/docs/api/cli-commands                                    |
+| Tezos Academy (Ligo Tutorial)                     | https://tezosacademy.io/                                                      |

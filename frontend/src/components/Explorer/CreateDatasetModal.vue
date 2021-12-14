@@ -66,6 +66,7 @@ import Modal from "@/components/Utils/Modal.vue";
 import inputFiles from "@/composables/inputFiles";
 import { ipfsInterface, tezosInterface } from "@/services";
 import { useUserStore } from "@/stores/useUser";
+import { useAlertStore } from "@/stores/useAlerts";
 import { storeToRefs } from "pinia";
 
 export default defineComponent({
@@ -79,11 +80,12 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
+  setup(_, { emit }) {
     const name = ref("");
     const description = ref("");
     const { files, image, data, onFileSelected, removeFile } = inputFiles();
     const user = useUserStore();
+    const alerts = useAlertStore();
     const { address } = storeToRefs(user);
 
     const mint = async () => {
@@ -97,6 +99,12 @@ export default defineComponent({
           assetUri,
         });
         await tezosInterface.mintNft(address.value, metadataUri);
+        emit("update:isOpen", false);
+        // setTimeout(
+        //   () => alerts.createAlert("Successfully minted NFT!", "success"),
+        //   5000
+        // );
+        alerts.createAlert("Successfully minted NFT!", "success");
       } catch (e) {
         throw new Error("Unable to mint nft!");
       }

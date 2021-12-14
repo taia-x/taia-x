@@ -31,6 +31,7 @@ class IpfsInterface {
     });
 
     const assetURI = this.ensureIpfsUriPrefix(assetCid);
+    console.log(assetURI);
 
     return { assetURI, gatewayUrl: this.makeGatewayURL(assetURI) };
   }

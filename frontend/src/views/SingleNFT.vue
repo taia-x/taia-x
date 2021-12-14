@@ -190,7 +190,7 @@
         <button
           v-wave
           class="flex items-center justify-center w-32 px-3 py-2 text-base text-white transition duration-300 ease-in-out transform rounded-md  h-11 bg-cyan-500 hover:bg-cyan-600 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-          @click.prevent="$emit('update:isOpen', true)"
+          @click.prevent="buy()"
         >
           <ShoppingBagIcon class="w-5 h-5 transform -translate-x-1" />
           <span>Buy</span>
@@ -249,6 +249,7 @@ import { useNftStore } from "@/stores/useNft";
 import { storeToRefs } from "pinia";
 import { ipfsInterface } from "@/services";
 import { StarIcon } from "@heroicons/vue/solid";
+import { tezosInterface } from "@/services";
 
 export default defineComponent({
   components: {
@@ -287,11 +288,20 @@ export default defineComponent({
       }
     };
 
+    const buy = async () => {
+      try {
+        await tezosInterface.buy(1000000, route.params.id);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
     return {
       code,
       isOpen,
       copyToClipboard,
       highlightAll,
+      buy,
       route,
       data,
     };

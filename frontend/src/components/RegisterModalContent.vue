@@ -54,6 +54,7 @@ import {
   ShoppingBagIcon,
 } from "@heroicons/vue/outline";
 import { useUserStore } from "@/stores/useUser";
+import { useAlertStore } from "@/stores/useAlerts";
 import { storeToRefs } from "pinia";
 
 export default defineComponent({
@@ -62,8 +63,9 @@ export default defineComponent({
     BriefcaseIcon,
     ShoppingBagIcon,
   },
-  setup() {
+  setup(_, { emit }) {
     const user = useUserStore();
+    const alerts = useAlertStore();
     const { address } = storeToRefs(user);
     const { initializeUser } = user;
 
@@ -79,6 +81,8 @@ export default defineComponent({
             },
           },
         ]);
+        emit("update:isOpen", false);
+        alerts.createAlert(`Successfully registered as ${role}!`, "success");
       } catch (e) {
         await walletInterface.disconnectWallet();
         await user.$reset();

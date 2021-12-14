@@ -1,5 +1,4 @@
 import { ContractAbstraction, TezosToolkit, Wallet } from "@taquito/taquito";
-import { Tzip16Module, tzip16 } from "@taquito/tzip16";
 import { CONTRACT } from "@/constants";
 import { NFT, AddRoleData, RemoveRoleData } from "@/types";
 import { char2Bytes, bytes2Char } from "@taquito/utils";
@@ -39,7 +38,7 @@ class TezosInterface {
     try {
       const op = await this.contract.methods.user_manager(roleData).send();
       if (op) {
-        const result = await op.confirmation(3);
+        const result = await op.confirmation(1);
         if (result.completed) {
           console.log("Transaction correctly processed!");
           console.log(`Block: ${result.block.header.level}`);
@@ -97,11 +96,12 @@ class TezosInterface {
         .mint(
           "tz1ittpFnVsKxx1M8YPKt7VJEaZfwiBZ6jo7",
           address,
+          1000000,
           char2Bytes(metadataUri)
         )
         .send();
       if (op) {
-        const result = await op.confirmation(3);
+        const result = await op.confirmation(1);
         if (result.completed) {
           console.log("Transaction correctly processed!");
           console.log(`Block: ${result.block.header.level}`);
@@ -112,6 +112,29 @@ class TezosInterface {
       }
     } catch (e) {
       throw new Error(`Unable to mint token for address ${address}!`);
+    }
+  }
+
+  /**
+   * buy nft token on tezos blockchain
+   * @param address tezos account address
+   * @param metadataUri ipfs metadata uri formatted as https://ipfs.io/{CID}
+   */
+  async buy(price: number, tokenId: number): Promise<void> {
+    try {
+      const op = await this.contract.methods.buy(price, tokenId).send();
+      if (op) {
+        const result = await op.confirmation(1);
+        if (result.completed) {
+          console.log("Transaction correctly processed!");
+          console.log(`Block: ${result.block.header.level}`);
+          console.log(`Chain ID: ${result.block.chain_id}`);
+        } else {
+          console.log("An error has occurred");
+        }
+      }
+    } catch (e) {
+      throw new Error(`Unable to buy token with token_id ${tokenId}!`);
     }
   }
 }

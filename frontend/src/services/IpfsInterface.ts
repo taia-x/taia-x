@@ -23,14 +23,16 @@ class IpfsInterface {
    * @param content the content to upload to ipfs
    * @returns gatewayUrl to access the file on ipfs
    */
-  async writeFile(content: any): Promise<{ gatewayUrl: string }> {
+  async writeFile(
+    content: any
+  ): Promise<{ assetURI: string; gatewayUrl: string }> {
     const { cid: assetCid } = await this.ipfs.add({
       content: JSON.stringify(content),
     });
 
     const assetURI = this.ensureIpfsUriPrefix(assetCid);
 
-    return { gatewayUrl: this.makeGatewayURL(assetURI) };
+    return { assetURI, gatewayUrl: this.makeGatewayURL(assetURI) };
   }
 
   /**

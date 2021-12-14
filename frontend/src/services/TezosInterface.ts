@@ -1,6 +1,8 @@
 import { ContractAbstraction, TezosToolkit, Wallet } from "@taquito/taquito";
+import { Tzip16Module, tzip16 } from "@taquito/tzip16";
 import { CONTRACT } from "@/constants";
 import { NFT, AddRoleData, RemoveRoleData } from "@/types";
+import { char2Bytes, bytes2Char } from "@taquito/utils";
 
 /**
  * exposes an interface for interaction with the role smart contract
@@ -72,10 +74,7 @@ class TezosInterface {
               isOwned: tokenRaw.isOwned,
               onSale: tokenRaw.onSale,
               price: tokenRaw.price,
-              metadataUri: Buffer.from(
-                metadata.token_info.get("token_metadata_uri").substring(12),
-                "hex"
-              ).toString(), // convert bytes to string and strip off some hex numbers which are not needed
+              metadataUri: bytes2Char(metadata.token_info.get("")), // convert bytes to string and strip off some hex numbers which are not needed
             };
             return nft;
           })
@@ -95,7 +94,11 @@ class TezosInterface {
   async mintNft(address: string, metadataUri: string): Promise<void> {
     try {
       const op = await this.contract.methods
-        .mint("tz1ittpFnVsKxx1M8YPKt7VJEaZfwiBZ6jo7", address, metadataUri)
+        .mint(
+          "tz1ittpFnVsKxx1M8YPKt7VJEaZfwiBZ6jo7",
+          address,
+          char2Bytes(metadataUri)
+        )
         .send();
       if (op) {
         const result = await op.confirmation(3);

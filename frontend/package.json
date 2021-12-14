@@ -16,6 +16,7 @@
     "@tailwindcss/forms": "^0.3.4",
     "@taquito/beacon-wallet": "^10.2.1",
     "@taquito/taquito": "^10.2.1",
+    "@taquito/tzip16": "^11.0.2",
     "core-js": "^3.6.5",
     "ipfs-core": "^0.12.2",
     "pinia": "^2.0.2",

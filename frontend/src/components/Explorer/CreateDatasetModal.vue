@@ -88,10 +88,10 @@ export default defineComponent({
 
     const mint = async () => {
       try {
-        const { gatewayUrl: assetUri } = await ipfsInterface.writeFile(
+        const { assetURI: assetUri } = await ipfsInterface.writeFile(
           data.value
         );
-        const { gatewayUrl: metadataUri } = await ipfsInterface.writeFile({
+        const { assetURI: metadataUri } = await ipfsInterface.writeFile({
           name: name.value,
           description: description.value,
           assetUri,

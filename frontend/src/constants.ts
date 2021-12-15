@@ -4,7 +4,7 @@ export const FLORENCENET_NODE_URL = "https://florencenet.api.tez.ie";
 export const HANGZHOUNET_NODE_URL = "https://hangzhounet.api.tez.ie/";
 export const CUSTOM_NODE_URL = "";
 
-export const IAM_CONTRACT_ADDRESS = "KT1ETmh3g2AkdhgoeXSK1prK3dyCCCmtsA2u";
+export const IAM_CONTRACT_ADDRESS = "KT1Di1xLne5cxhTWDCZqWjk5EP9S8XzT5FzK";
 
 export const ROLE_CERTIFIER = "certifier";
 export const ROLE_PROVIDER = "provider";

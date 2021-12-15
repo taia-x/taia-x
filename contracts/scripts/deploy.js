@@ -41,6 +41,7 @@ const deploy = async () => {
     console.log(">>> Gas used:", op.consumedGas);
     console.log(">>> Storage:", await contract.storage());
     console.log(">>> Operation hash:", op.hash);
+    console.log(">>> Contract address:", op.contractAddress);
   } catch (error) {
     console.error(error);
   }

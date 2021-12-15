@@ -5,8 +5,9 @@ Buy a dataset from the on_sale list, and transfer it to the buyer.
 Several checks are carried out: the dataset must be on sale, owned by someone and must exist. The amount sent must match the dataset price
 @return storage with modified operators and on_sale lists
 *)
-let buy(buy_parameters, storage : buy_param * nft_token_storage) : (operation  list) * nft_token_storage =
+let buy(_buy_parameters, storage : buy_param * nft_token_storage ) : (operation  list) * nft_token_storage =
     let buyer: address = Tezos.sender in
+    let buy_parameters : sale = ({ token_id = 0n ;price = 1000000mutez }) in
     let token_is_on_sale : bool = Set.mem buy_parameters storage.market.sales in
     if token_is_on_sale then
         if not (buy_parameters.price = Tezos.amount) then

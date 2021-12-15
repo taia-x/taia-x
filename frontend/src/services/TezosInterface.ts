@@ -122,7 +122,9 @@ class TezosInterface {
    */
   async buy(price: number, tokenId: number): Promise<void> {
     try {
-      const op = await this.contract.methods.buy(price, tokenId).send();
+      const op = await this.contract.methods
+        .buy(price, tokenId)
+        .send({ amount: price / 1000000 });
       if (op) {
         const result = await op.confirmation(1);
         if (result.completed) {

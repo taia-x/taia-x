@@ -1,8 +1,18 @@
 import WalletInterface from "./WalletInterface";
-import IamInterface from "./IamInterface";
+import TezosInterface from "./TezosInterface";
+import IpfsInterface from "./IpfsInterface";
 
-const walletInterface = new WalletInterface();
-const { Tezos } = walletInterface;
-const iamInterface = new IamInterface(Tezos);
+let walletInterface: WalletInterface;
+let tezosInterface: TezosInterface;
+let ipfsInterface: IpfsInterface;
 
-export { walletInterface, iamInterface };
+const initInterfaces = async (): Promise<void> => {
+  walletInterface = new WalletInterface();
+  const { Tezos } = walletInterface;
+  ipfsInterface = new IpfsInterface();
+  ipfsInterface.init();
+  tezosInterface = await TezosInterface.initialize(Tezos);
+};
+
+export { walletInterface, tezosInterface, ipfsInterface };
+export default initInterfaces;

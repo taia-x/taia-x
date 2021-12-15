@@ -1,26 +1,37 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import Home from "../views/Home.vue";
+import Explorer from "@/views/Explorer.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    name: "Home",
-    component: Home,
+    redirect: "/explore",
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    redirect: "/explore",
   },
   {
     path: "/explore",
-    name: "Explore",
-    component: Home,
+    name: "Explorer",
+    component: Explorer,
   },
   {
     path: "/ontologies",
-    name: "Explore",
-    component: Home,
+    name: "Ontologies",
+    component: () =>
+      import(/* webpackChunkName: "ontologies" */ "@/views/Ontologies.vue"), // lazy loading
   },
   {
-    path: "/certificates",
-    name: "Explore",
-    component: Home,
+    path: "/ontologies/:id",
+    name: "SingleOntology",
+    component: () =>
+      import(/* webpackChunkName: "ontology" */ "@/views/SingleOntology.vue"), // lazy loading
+  },
+  {
+    path: "/explore/:id",
+    name: "SingleNFT",
+    component: () =>
+      import(/* webpackChunkName: "nft" */ "@/views/SingleNFT.vue"), // lazy loading
   },
 ];
 

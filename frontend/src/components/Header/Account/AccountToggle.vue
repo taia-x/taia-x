@@ -21,7 +21,7 @@
       leave-to-class="transform scale-95 opacity-0"
     >
       <PopoverPanel
-        class="absolute right-0 z-10 flex flex-col w-screen max-w-xs p-4 px-4 mt-1 bg-white border border-gray-200 rounded-lg shadow-md  bg-opacity-80 backdrop-filter backdrop-blur"
+        class="absolute right-0 z-10 flex flex-col w-screen max-w-xs p-4 px-4 mt-1 bg-white border border-gray-200 rounded-lg shadow-md "
       >
         <AccountToggleContent
           :address="address"
@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import AccountToggleContent from "@/components/AccountToggleContent.vue";
+import AccountToggleContent from "@/components/Header/Account/AccountToggleContent.vue";
 import { ChevronDownIcon } from "@heroicons/vue/solid";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue";
 

@@ -7,6 +7,7 @@
 - [NodeJS](https://nodejs.org/en/)
 - [Temple Wallet](https://templewallet.com/)
   - to be able to interact with smart contract
+- [IPFS](https://docs.ipfs.io)
 
 > 🚨 Be aware, that the frontend is currently only tested with the Temple Wallet! Support for other wallets may work, but is not guaranteed at the moment.
 
@@ -23,6 +24,7 @@
 - install all necessary dependencies
 
 ```
+npm install ipfs-core
 npm install
 ```
 

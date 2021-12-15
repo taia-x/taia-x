@@ -1,9 +1,8 @@
-version: '3.4'
+version: "3.4"
 
 services:
-  
   server:
-    build: 
+    build:
       context: ./backend
       dockerfile: Dockerfile
     volumes:
@@ -56,8 +55,8 @@ services:
     image: ipfs/go-ipfs:v0.8.0
     ports:
       - 5001:5001 # ipfs api - expose if needed/wanted
-#     - 4001:4001 # ipfs swarm - expose if needed/wanted
-#     - 8080:8080 # ipfs gateway - expose if needed/wanted
+      #     - 4001:4001 # ipfs swarm - expose if needed/wanted
+      - 8081:8080 # ipfs gateway - expose if needed/wanted
     volumes:
       - ipfsf:/data/ipfs
 

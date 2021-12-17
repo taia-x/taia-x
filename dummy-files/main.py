@@ -70,7 +70,7 @@ def main(dir_path=None, dir_na=None, time_lapse=10):
 
 
 if __name__ == "__main__":
-    directory_path = "./test-measurements-sensorwise/"
+    directory_path = "./test-measurements/"
     dt = datetime.datetime.today()
     dir_name = f"{dt.year}-{dt.month}-{dt.day}-{dt.hour}-{dt.minute}-{dt.second}"
     timelapse = 30  # 30 seconds

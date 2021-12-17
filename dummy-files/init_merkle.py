@@ -1,3 +1,4 @@
+import os
 import sys
 import argparse
 from cryptography.main import hash_measurements as Hash
@@ -5,13 +6,17 @@ from cryptography.merkletree import merkle
 from os import listdir
 
 
-def root(dir_p, dir_list) -> bytes:
+def root(dir_p, root_type="hex"):
+    dir_list = listdir(dir_p)
     vehicle_m_tree = merkle.initMerkleTree()
     for ind in dir_list:
         h = Hash(dir_p + ind)
         vehicle_m_tree.update(record=h)
-    # print(vehicle_m_tree.rootHash)
-    return vehicle_m_tree.rootHash
+    print(vehicle_m_tree.rootHash)
+    if root_type == "bytes":
+        return vehicle_m_tree.rootHash
+    elif root_type == "hex":
+        return vehicle_m_tree.rootHash.hex()
 
 
 def main():
@@ -27,9 +32,12 @@ def main():
     subparser_name = args.subparser_name
 
     if subparser_name == "root":
-        directory_path = input("\nDir Path:\n")
-        root_hash = root(directory_path, )
-        print(root_hash)
+        directory_path = input("\nDir Path: (format is (...)/test-measurements/(...)/ )\n")
+        root_hash = root(directory_path, "hex")
+        if not os.path.exists(f"{directory_path}roothash.txt"):
+            with open(f"{directory_path}roothash.txt", "w") as f:
+                f.write(root_hash)
+
     else:
         raise NotImplementedError(
             "Sub-command not implemented: {}".format(subparser_name)
@@ -38,9 +46,12 @@ def main():
 
 
 if __name__ == "__main__":
-    dir_path = ""
-    dir_l = listdir(dir_path)
     if sys.stdin.isatty():
         main()
     else:
-        root(dir_path, dir_l)
+        dir_path = ""
+        dir_l = listdir(dir_path)
+        r = root(dir_path, "hex")
+        if not os.path.exists(f"{dir_path}roothash.txt"):
+            with open(f"{dir_path}roothash.txt", "w") as outfile:
+                outfile.write(r)

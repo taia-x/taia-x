@@ -18,7 +18,7 @@ def sign(root_hash, pvk_path):
     # The signature generation is randomized and carried out according to FIPS 186-3
     signer = DSS.new(key, 'fips-186-3', encoding='der')
     signature = signer.sign(file_hash_obj)
-    print(signature.hex())
+    # print(signature.hex())
     return signature
 
 
@@ -27,7 +27,7 @@ def verify_signature(signature, msghash, pbk_path):
     verifier = DSS.new(pubkey, 'fips-186-3', encoding='der')
     der_seq = DerSequence().decode(signature, strict=True)
     # Extra cryptographic information:
-    print("from pubkey:\n", pubkey.public_key())
+    # print("from pubkey:\n", pubkey.public_key())
     r_prime, s_prime = Integer(der_seq[0]), Integer(der_seq[1])
     try:
         verifier.verify(msghash, signature)
@@ -38,24 +38,33 @@ def verify_signature(signature, msghash, pbk_path):
             # The key will be encoded in a PEM envelope (ASCII).
             f.write("Signature: ")
             f.write(signature.hex())
-            f.write("\nPubkey: ")
-            f.write(pubkey.public_key())
+            f.write(f"\nPubkey X-Point in {pubkey.public_key().curve} curve: ")
+            x = str(pubkey.public_key().pointQ.x)
+            f.write(x)
+            f.write(f"\nPubkey Y-Point in {pubkey.public_key().curve} curve: ")
+            y = str(pubkey.public_key().pointQ.y)
+            f.write(y)
             f.write("\nMessage hex: ")
             f.write(msghash_hex)
+            print("Check the signature_file/signature.txt file!")
     except ValueError:
         print("The message is not authentic")
 
 
 if __name__ == "__main__":
-    key_path = "./cryptography/keys0/p.pem"
-    pbk_key_path = "./cryptography/keys0/pbk.pem"
+    key_path = ""
+    pbk_key_path = ""
 
     try:
-        dirpath = "./test-measurements/2021-12-17-1-8-27/"
+        dirpath = ""
         dir_l = listdir(dirpath)
+        if key_path == "":
+            raise NotImplementedError
         root_hash = root(dirpath, root_type="bytes")
         h = SHA256.new(root_hash)
         # Verify the signature:
         verify_signature(sign(root_hash, key_path), h, pbk_key_path)
     except FileNotFoundError:
+        print("Give a valid file and keypair path!")
+    except NotImplementedError:
         print("Give a valid file and keypair path!")

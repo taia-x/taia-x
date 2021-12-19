@@ -1,5 +1,11 @@
-import { create as createIpfs } from "ipfs-core";
+import { create } from "ipfs-http-client";
 import { IPFS_GATEWAY_URL } from "@/constants";
+
+type ipfsOptions = {
+  host: string;
+  port: number;
+  protocol: "http" | "https";
+};
 
 /**
  * exposes an interface for interaction with ipfs
@@ -8,70 +14,40 @@ class IpfsInterface {
   private ipfs: any;
 
   /**
-   * function to initialize the ipfs instance
+   * constructor to set ipfs instance
+   * @param options ipfs options for api node
    */
-  async init(): Promise<void> {
-    try {
-      this.ipfs = await createIpfs();
-    } catch (e) {
-      throw Error("Failed to initialize ipfs instance!");
-    }
+  constructor(options: ipfsOptions) {
+    this.ipfs = create(options);
   }
 
   /**
-   * write json stringified object to ipfs
+   * write json file to ipfs
    * @param content the content to upload to ipfs
-   * @returns gatewayUrl to access the file on ipfs
+   * @returns cid to access the file on ipfs
    */
-  async writeFile(
-    content: any
-  ): Promise<{ assetURI: string; gatewayUrl: string }> {
-    const { cid: assetCid } = await this.ipfs.add({
-      content: JSON.stringify(content),
-    });
-
-    const assetURI = this.ensureIpfsUriPrefix(assetCid);
-    console.log(assetURI);
-
-    return { assetURI, gatewayUrl: this.makeGatewayURL(assetURI) };
-  }
-
-  /**
-   * stript ipfs uri prefix
-   * @param cidOrURI either a CID string, or a URI string of the form `ipfs://${cid}`
-   * @returns input string with the `ipfs://` prefix stripped off
-   */
-  stripIpfsUriPrefix(cidOrURI: string): string {
-    if (cidOrURI.startsWith("ipfs://")) {
-      return cidOrURI.slice("ipfs://".length);
+  async writeFile(content: any): Promise<string> {
+    try {
+      const { path } = await this.ipfs.add(
+        Buffer.from(JSON.stringify(content))
+      );
+      const cid = `ipfs://${path}`;
+      return cid;
+    } catch (e: any) {
+      throw new Error(e.toString());
     }
-    return cidOrURI;
-  }
-
-  /**
-   * ensures to have an IPFS prefix before CID
-   * @param cidOrURI either a CID string, or a URI string of the form `ipfs://${cid}`
-   * @returns ipfs uri
-   */
-  ensureIpfsUriPrefix(cidOrURI: string): string {
-    let uri = cidOrURI.toString();
-    if (!uri.startsWith("ipfs://")) {
-      uri = "ipfs://" + cidOrURI;
-    }
-    // Avoid the Nyan Cat bug (https://github.com/ipfs/go-ipfs/pull/7930)
-    if (uri.startsWith("ipfs://ipfs/")) {
-      uri = uri.replace("ipfs://ipfs/", "ipfs://");
-    }
-    return uri;
   }
 
   /**
    * constructs an HTTP gateway url for the given IPFS uri
-   * @param ipfsURI an ipfs:// uri or CID string
-   * @returns a ipfs gateway url
+   * @param ipfsURI an ipfs:// uri
+   * @returns gateway url to access ifps content via fetch request
    */
   makeGatewayURL(ipfsURI: string): string {
-    return IPFS_GATEWAY_URL + "/" + this.stripIpfsUriPrefix(ipfsURI);
+    if (ipfsURI.startsWith("ipfs://")) {
+      return IPFS_GATEWAY_URL + "/" + ipfsURI.slice("ipfs://".length);
+    }
+    return ipfsURI;
   }
 }
 

@@ -11,9 +11,10 @@
       }}<span class="ml-1 text-lg font-medium">ꜩ</span></span
     >
     <button
-      class="mt-2 font-semibold text-center text-gray-500 transition duration-150 select-none  hover:text-gray-700"
+      class="relative mt-2 font-semibold text-center text-gray-500 transition duration-150 select-none  hover:text-gray-700"
       @click.prevent="copyToClipboard()"
     >
+      <Tooltip :isOpen="isOpen" :text="'Copied!'" @closed="isOpen = false" />
       {{ privateAddress }}
     </button>
     <div class="grid w-full gap-2 pt-4 mt-4 border-t">
@@ -48,10 +49,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { walletInterface } from "@/services/index";
 import { useUserStore } from "@/stores/useUser";
 import { UserCircleIcon, LogoutIcon, UserIcon } from "@heroicons/vue/solid";
+import Tooltip from "@/components/Utils/Tooltip.vue";
 
 export default defineComponent({
   props: {
@@ -72,9 +74,11 @@ export default defineComponent({
     UserCircleIcon,
     LogoutIcon,
     UserIcon,
+    Tooltip,
   },
   setup(props) {
     const user = useUserStore();
+    const isOpen = ref(false);
 
     const disconnect = async (): Promise<void> => {
       await walletInterface.disconnectWallet();
@@ -83,13 +87,14 @@ export default defineComponent({
 
     const copyToClipboard = async (): Promise<void> => {
       try {
+        isOpen.value = true;
         navigator.clipboard.writeText(props.address as string);
       } catch (e) {
         console.log(e);
       }
     };
 
-    return { disconnect, copyToClipboard };
+    return { disconnect, copyToClipboard, isOpen };
   },
 });
 </script>

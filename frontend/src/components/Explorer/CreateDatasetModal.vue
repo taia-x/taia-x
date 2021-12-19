@@ -1,5 +1,9 @@
 <template>
-  <Modal :isOpen="isOpen" @update:isOpen="$emit('update:isOpen', $event)">
+  <Modal
+    :isOpen="isOpen"
+    @update:isOpen="$emit('update:isOpen', $event)"
+    @close="cancel()"
+  >
     <template #title>Create Dataset</template>
     <template #content
       ><div>
@@ -44,14 +48,18 @@
       <button
         type="button"
         class="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 transition duration-200 bg-white border border-gray-300 rounded-md shadow-sm  hover:bg-gray-50 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-        @click.prevent="$emit('update:isOpen', false)"
+        @click.prevent="
+          $emit('update:isOpen', false);
+          cancel();
+        "
       >
         Cancel
       </button>
       <button
         type="submit"
-        class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white transition duration-200 rounded-md shadow-sm  bg-cyan-500 hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+        class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white transition duration-200 rounded-md shadow-sm  disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400 bg-cyan-500 hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
         @click.prevent="mint()"
+        :disabled="!isFormValid"
       >
         Save
       </button>
@@ -60,7 +68,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import FileSection from "@/components/Utils/FileUpload/FileSection.vue";
 import Modal from "@/components/Utils/Modal.vue";
 import inputFiles from "@/composables/inputFiles";
@@ -88,27 +96,52 @@ export default defineComponent({
     const alerts = useAlertStore();
     const { address } = storeToRefs(user);
 
+    // firstly writes artifact to ipfs, then writes metadata with link to artifact to ipfs and then mints token
     const mint = async () => {
       try {
-        const { assetURI: assetUri } = await ipfsInterface.writeFile(
-          data.value
-        );
-        const { assetURI: metadataUri } = await ipfsInterface.writeFile({
-          name: name.value,
-          description: description.value,
-          assetUri,
-        });
-        await tezosInterface.mintNft(address.value, metadataUri);
-        emit("update:isOpen", false);
-        // setTimeout(
-        //   () => alerts.createAlert("Successfully minted NFT!", "success"),
-        //   5000
-        // );
-        alerts.createAlert("Successfully minted NFT!", "success");
-      } catch (e) {
-        throw new Error("Unable to mint nft!");
+        if (address.value) {
+          const artifactCid = await ipfsInterface.writeFile(data.value); // artifact to ipfs
+          // metadata to ipfs
+          const metadataCid = await ipfsInterface.writeFile({
+            name: name.value,
+            description: description.value,
+            artifactUri: artifactCid,
+          });
+          // mint token via wallet
+          await tezosInterface.mintNft({
+            operator: "tz1ittpFnVsKxx1M8YPKt7VJEaZfwiBZ6jo7",
+            address: address.value,
+            price: 1000000,
+            metadataUri: metadataCid,
+          });
+          // closes modal, notifies user and resets values
+          emit("update:isOpen", false);
+          alerts.createAlert("Successfully minted NFT!", "success");
+          cancel();
+        } else {
+          alerts.createAlert("Login to execute transaction!", "warning");
+        }
+      } catch (e: any) {
+        alerts.createAlert("Something went wrong!", "error");
+        throw new Error(e.toString());
       }
     };
+
+    // reset modal inputs
+    const cancel = () => {
+      name.value = "";
+      description.value = "";
+      files.value = [];
+    };
+
+    // checks if each input field contains values
+    const isFormValid = computed(() => {
+      return (
+        name.value.length > 0 &&
+        description.value.length > 0 &&
+        files.value.length > 0
+      );
+    });
 
     return {
       name,
@@ -116,6 +149,8 @@ export default defineComponent({
       files,
       image,
       data,
+      isFormValid,
+      cancel,
       onFileSelected,
       removeFile,
       mint,

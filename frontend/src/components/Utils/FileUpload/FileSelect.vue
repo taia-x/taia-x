@@ -1,7 +1,7 @@
 <template>
   <div
     class="flex justify-center px-6 pt-5 pb-6 mt-1 border-2 border-gray-300 border-dashed rounded-md "
-    @drop.prevent="$emit('fileSelected')"
+    @drop.prevent="$emit('fileSelected', $event)"
     @dragover.prevent
   >
     <div class="space-y-1 text-center">

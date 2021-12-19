@@ -7,6 +7,13 @@ export interface NFT {
   metadataUri: string;
 }
 
+export interface MintParams {
+  operator: string;
+  address: string;
+  price: number;
+  metadataUri: string;
+}
+
 export interface AddRoleData {
   add_role: UserRoleMapping;
 }

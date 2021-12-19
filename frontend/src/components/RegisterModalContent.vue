@@ -69,10 +69,12 @@ export default defineComponent({
     const { address } = storeToRefs(user);
     const { initializeUser } = user;
 
+    // assigns a role to a user with transaction on contract
     const assignRole = async (role: string) => {
       try {
         await walletInterface.connectWallet();
         await initializeUser();
+        // calls entrypoint on contract
         await tezosInterface.manageRoles([
           {
             add_role: {
@@ -81,6 +83,7 @@ export default defineComponent({
             },
           },
         ]);
+        // closes modal and notifies user
         emit("update:isOpen", false);
         alerts.createAlert(`Successfully registered as ${role}!`, "success");
       } catch (e) {

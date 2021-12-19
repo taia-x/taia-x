@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 
 export const useNftStore = defineStore("nfts", {
-  // initial state of user
+  // initial state of nfts
   state: () => ({
     nfts: [] as Array<any>,
   }),

@@ -9,7 +9,7 @@
     leave="transform ease-in duration-300 transition"
     leave-from="opacity-100"
     leave-to="opacity-0"
-    class="flex items-center p-4 space-x-4 transition-all duration-300 ease-out bg-white border border-gray-300 shadow-xl  rota rounded-2xl w-96"
+    class="z-50 flex items-center p-4 space-x-4 transition-all duration-300 ease-out bg-white border border-gray-300 shadow-xl  rota rounded-2xl w-96"
   >
     <TransitionChild
       as="button"

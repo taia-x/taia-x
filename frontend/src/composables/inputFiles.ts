@@ -24,8 +24,9 @@ const inputFiles = () => {
    * @param e input file event
    */
   const onFileSelected = (e: any): void => {
-    files.value =
-      Array.from(e.target?.files) || Array.from(e.dataTransfer?.files);
+    files.value = e?.target?.files
+      ? Array.from(e.target.files)
+      : Array.from(e.dataTransfer.files);
     files.value.forEach((file: File) => {
       const fileExtension: string = file.name.substr(file.name.indexOf("."));
       if (file.type === "application/json" && fileExtension === ".json") {

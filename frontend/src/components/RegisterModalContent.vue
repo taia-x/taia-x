@@ -46,7 +46,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { iamInterface, walletInterface } from "@/services/index";
+import { tezosInterface, walletInterface } from "@/services/index";
 import { ROLE_CERTIFIER, ROLE_PROVIDER, ROLE_CONSUMER } from "@/constants";
 import {
   LibraryIcon,
@@ -54,6 +54,7 @@ import {
   ShoppingBagIcon,
 } from "@heroicons/vue/outline";
 import { useUserStore } from "@/stores/useUser";
+import { useAlertStore } from "@/stores/useAlerts";
 import { storeToRefs } from "pinia";
 
 export default defineComponent({
@@ -62,16 +63,29 @@ export default defineComponent({
     BriefcaseIcon,
     ShoppingBagIcon,
   },
-  setup() {
+  setup(_, { emit }) {
     const user = useUserStore();
+    const alerts = useAlertStore();
     const { address } = storeToRefs(user);
     const { initializeUser } = user;
 
+    // assigns a role to a user with transaction on contract
     const assignRole = async (role: string) => {
       try {
         await walletInterface.connectWallet();
         await initializeUser();
-        await iamInterface.assignRole(address.value, role);
+        // calls entrypoint on contract
+        await tezosInterface.manageRoles([
+          {
+            add_role: {
+              user: address.value,
+              role: { [role]: true },
+            },
+          },
+        ]);
+        // closes modal and notifies user
+        emit("update:isOpen", false);
+        alerts.createAlert(`Successfully registered as ${role}!`, "success");
       } catch (e) {
         await walletInterface.disconnectWallet();
         await user.$reset();

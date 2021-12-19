@@ -92,6 +92,7 @@
 
 * [Vue.js](https://vuejs.org/)
 * [Tezos](https://tezos.com/developer-portal/)
+* [Github Actions](https://github.com/features/actions)
 * [FastAPI](https://fastapi.tiangolo.com/)
 * [Zokrates](https://zokrates.github.io/)
 
@@ -146,7 +147,19 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+### Running Github Actions locally
 
+Install [act](https://github.com/nektos/act#installation) following one of the options in the docs
+
+To see the github actions available:
+```
+act -l
+```
+
+To run a specific action:
+```
+act -j GITHUB_ACTION_NAME
+```
 
 <!-- ROADMAP -->
 ## Roadmap

@@ -36,7 +36,7 @@
       <h1
         class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl"
       >
-        {{ data.name }}
+        {{ token?.metadata.name }}
       </h1>
       <span class="mt-1 text-xl text-gray-400"># {{ route.params.id }}</span>
     </div>
@@ -91,7 +91,9 @@
       <div>
         <h3 class="sr-only">Description</h3>
         <div class="space-y-6">
-          <p class="text-base text-gray-900">{{ data.description }}</p>
+          <p class="text-base text-gray-900">
+            {{ token?.metadata.description }}
+          </p>
         </div>
       </div>
 
@@ -121,7 +123,7 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, watchEffect, ref } from "vue";
 import Terminal from "@/components/Utils/Terminal.vue";
 import ToolTip from "@/components/Utils/Tooltip.vue";
 import { useRoute } from "vue-router";
@@ -131,10 +133,10 @@ import {
   ShoppingBagIcon,
 } from "@heroicons/vue/outline";
 import { highlightAll } from "prismjs";
-import { useNftStore } from "@/stores/useNft";
-import { storeToRefs } from "pinia";
 import { ipfsInterface } from "@/services";
 import { StarIcon } from "@heroicons/vue/solid";
+import { useQuery, useResult } from "@vue/apollo-composable";
+import { getSingleTokenMetadata } from "@/services/graphql/queries";
 
 export default defineComponent({
   components: {
@@ -149,20 +151,29 @@ export default defineComponent({
     const route = useRoute();
     const isOpen = ref(false);
     const code = ref("");
-    const data = ref({});
-    const nftStore = useNftStore();
-    const { nfts } = storeToRefs(nftStore);
+    const token = ref(null);
 
-    // fetches metadata for nft from ipfs based on route parameter
-    onMounted(async () => {
-      const metadata = await fetch(
-        ipfsInterface.makeGatewayURL(nfts.value[route.params.id].metadataUri)
-      );
-      data.value = await metadata.json();
-      const asset = await fetch(
-        ipfsInterface.makeGatewayURL(data.value.assetUri)
-      );
-      code.value = JSON.stringify(await asset.json(), null, 2);
+    // fetches single token metadata based on route param
+    const { result } = useQuery(getSingleTokenMetadata, () => ({
+      id: Number(route.params.id) + 1,
+    }));
+
+    // gets token metadata when result is loaded
+    const token_metadata = useResult(
+      result,
+      null,
+      (data) => data.token_metadata_by_pk
+    );
+
+    // render ui when token_metadata contains values
+    watchEffect(async () => {
+      if (token_metadata.value) {
+        token.value = token_metadata.value;
+        const asset = await fetch(
+          ipfsInterface.makeGatewayURL(token_metadata.value.metadata.assetUri)
+        );
+        code.value = JSON.stringify(await asset.json(), null, 2);
+      }
     });
 
     // copies content of artifact json to clipboard
@@ -181,7 +192,7 @@ export default defineComponent({
       copyToClipboard,
       highlightAll,
       route,
-      data,
+      token,
     };
   },
 });

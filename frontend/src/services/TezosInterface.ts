@@ -53,39 +53,6 @@ class TezosInterface {
   }
 
   /**
-   * fetch nft token from tezos blockchain
-   */
-  async fetchNfts(): Promise<any> {
-    try {
-      const storage: any = await this.contract.storage();
-      const datasetIds = storage["market"].datasetIds;
-      if (datasetIds) {
-        const tokenIds: number[] = datasetIds.map((token: any) => token.c[0]);
-        const nfts: Array<NFT> = await Promise.all(
-          tokenIds.map(async (tokenId) => {
-            const [tokenRaw, metadata] = await Promise.all([
-              storage.market.datasets.get(tokenId.toString()), // get dataset for a token id
-              storage.token_metadata.get(tokenId.toString()), // get metadata for a token id
-            ]);
-            const nft: NFT = {
-              owner: tokenRaw.owner,
-              id: tokenRaw.id.c[0],
-              isOwned: tokenRaw.isOwned,
-              onSale: tokenRaw.onSale,
-              price: tokenRaw.price,
-              metadataUri: bytes2Char(metadata.token_info.get("")), // convert bytes to string and strip off some hex numbers which are not needed
-            };
-            return nft;
-          })
-        );
-        return nfts;
-      }
-    } catch (e: any) {
-      throw new Error(e.toString());
-    }
-  }
-
-  /**
    * mint nft token on tezos blockchain
    * @param address tezos account address
    * @param metadataUri ipfs metadata uri formatted as ipfs//{CID}
@@ -113,3 +80,36 @@ class TezosInterface {
 }
 
 export default TezosInterface;
+
+// /**
+//  * fetch nft token from tezos blockchain
+//  */
+// async fetchNfts(): Promise<any> {
+//   try {
+//     const storage: any = await this.contract.storage();
+//     const datasetIds = storage["market"].datasetIds;
+//     if (datasetIds) {
+//       const tokenIds: number[] = datasetIds.map((token: any) => token.c[0]);
+//       const nfts: Array<NFT> = await Promise.all(
+//         tokenIds.map(async (tokenId) => {
+//           const [tokenRaw, metadata] = await Promise.all([
+//             storage.market.datasets.get(tokenId.toString()), // get dataset for a token id
+//             storage.token_metadata.get(tokenId.toString()), // get metadata for a token id
+//           ]);
+//           const nft: NFT = {
+//             owner: tokenRaw.owner,
+//             id: tokenRaw.id.c[0],
+//             isOwned: tokenRaw.isOwned,
+//             onSale: tokenRaw.onSale,
+//             price: tokenRaw.price,
+//             metadataUri: bytes2Char(metadata.token_info.get("")), // convert bytes to string and strip off some hex numbers which are not needed
+//           };
+//           return nft;
+//         })
+//       );
+//       return nfts;
+//     }
+//   } catch (e: any) {
+//     throw new Error(e.toString());
+//   }
+// }

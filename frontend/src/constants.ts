@@ -1,5 +1,5 @@
+// Tezos
 export const CUSTOM_NODE_URL = "https://granadanet.api.tez.ie";
-
 export const CONTRACT = "KT1Di1xLne5cxhTWDCZqWjk5EP9S8XzT5FzK";
 
 // first
@@ -13,11 +13,17 @@ export const CONTRACT = "KT1Di1xLne5cxhTWDCZqWjk5EP9S8XzT5FzK";
 // fifth
 // export const CONTRACT = "KT1McMTJQ9Y2ZzZZp3183Hjzz2iRxEjn4q7W";
 
+// Roles
 export const ROLE_CERTIFIER = "certifier";
 export const ROLE_PROVIDER = "provider";
 export const ROLE_CONSUMER = "consumer";
 
+// IPFS
 export const IPFS_API_PROTOCOL = "http";
 export const IPFS_API_HOST = "localhost";
 export const IPFS_API_PORT = 5001;
 export const IPFS_GATEWAY_URL = "https://ipfs.io/ipfs";
+
+// GraphQL
+export const HTTP_METADATA_API = "http://localhost:33080/v1/graphql";
+export const WS_METADATA_API = "ws://localhost:33080/v1/graphql";

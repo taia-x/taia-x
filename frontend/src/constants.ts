@@ -1,5 +1,5 @@
 // Tezos
-export const CUSTOM_NODE_URL = "https://granadanet.api.tez.ie";
+export const CUSTOM_NODE_URL = "https://rpczero.tzbeta.net/";
 export const CONTRACT = "KT1Di1xLne5cxhTWDCZqWjk5EP9S8XzT5FzK";
 
 // first

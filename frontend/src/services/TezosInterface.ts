@@ -62,7 +62,7 @@ class TezosInterface {
     try {
       const op = await this.contract.methods
         .mint(operator, address, price, char2Bytes(metadataUri))
-        .send();
+        .send({ amount: 1 });
       if (op) {
         const result = await op.confirmation(1);
         if (result.completed) {

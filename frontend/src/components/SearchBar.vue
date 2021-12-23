@@ -36,7 +36,7 @@
       hover:-translate-y-0.5
       focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500
     "
-    @click.prevent="$emit('update:isOpen', true)"
+    @click.prevent="$emit('create:clicked')"
   >
     <PlusIcon class="w-5 h-5 transform -translate-x-1" />
     <span>Create</span>

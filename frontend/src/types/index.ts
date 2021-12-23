@@ -46,9 +46,18 @@ interface Format {
 }
 
 interface Attribute {
-  name: "rarity";
-  type: "string" | "integer";
-  value: string | number;
+  name: string;
+  value: string;
+}
+
+interface Level {
+  name: string;
+  value: number;
+}
+
+interface Stat {
+  name: string;
+  value: number;
 }
 
 export interface TokenMetadata {
@@ -63,7 +72,9 @@ export interface TokenMetadata {
   collection_id?: number;
   formats?: Array<Format>;
   attributes?: Array<Attribute>;
-  displayUri: string;
+  levels?: Array<Level>;
+  stats?: Array<Stat>;
+  displayUri?: string;
   artifactUri: string;
   thumbnailUri?: string;
 }

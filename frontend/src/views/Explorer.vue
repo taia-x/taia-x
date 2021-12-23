@@ -1,7 +1,10 @@
 <template>
   <div class="flex flex-col w-full pt-10 pb-24">
     <div class="flex items-center w-full space-x-4">
-      <SearchBar @update:isOpen="isCreateDatasetModalOpen = true" />
+      <SearchBar
+        @update:isOpen="isCreateDatasetModalOpen = true"
+        @create:clicked="$router.push('/create')"
+      />
     </div>
     <!-- <div class="flex items-center mt-4 space-x-4">
       <button class="flex items-center space-x-2 group" @click.prevent="add()">

@@ -55,6 +55,7 @@ module.exports = {
       cursor: ["disabled"],
       fontWeight: ["hover", "focus"],
     },
+    translate: ({ after }) => after(["group-hover"]),
   },
   plugins: [require("@tailwindcss/forms")],
 };

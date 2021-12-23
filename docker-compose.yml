@@ -1,22 +1,6 @@
 version: "3.4"
 
 services:
-  server:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    volumes:
-      - ./backend/:/backend/
-    entrypoint: ./docker-start.sh
-    env_file:
-      - ./backend/.env
-    ports:
-      - 5678:5678
-      - 8000:8000
-    depends_on:
-      - db
-      - ipfs
-
   frontend:
     build:
       context: ./frontend
@@ -30,36 +14,25 @@ services:
     ports:
       - 8080:8080
 
-  blockchain:
+  sandbox:
     image: tqtezos/flextesa:20210514
-    container_name: taia-x-blockchain
+    container_name: taia-x-sandbox
     environment:
-      block_time: 5
+      block_time: 1
+      flextesa_node_cors_origin: "*"
     command: "flobox start --keep-root"
     ports:
       - 20000:20000
-
-  db:
-    image: postgres:13-alpine
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    env_file:
-      - ./backend/.env
-    environment:
-      POSTGRES_HOST_AUTH_METHOD: trust
-    ports:
-      - 5432:5432
 
   # to build a ipfs cluster: https://github.com/ipfs/ipfs-cluster/blob/master/docker-compose.yml
   ipfs:
     image: ipfs/go-ipfs:v0.8.0
     ports:
       - 5001:5001 # ipfs api - expose if needed/wanted
-      #     - 4001:4001 # ipfs swarm - expose if needed/wanted
       - 8081:8080 # ipfs gateway - expose if needed/wanted
+      # - 4001:4001 # ipfs swarm - expose if needed/wanted
     volumes:
       - ipfsf:/data/ipfs
 
 volumes:
-  postgres_data:
   ipfsf:

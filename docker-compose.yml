@@ -14,11 +14,12 @@ services:
     ports:
       - 8080:8080
 
-  blockchain:
+  sandbox:
     image: tqtezos/flextesa:20210514
-    container_name: taia-x-blockchain
+    container_name: taia-x-sandbox
     environment:
-      block_time: 5
+      block_time: 1
+      flextesa_node_cors_origin: "*"
     command: "flobox start --keep-root"
     ports:
       - 20000:20000

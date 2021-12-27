@@ -36,10 +36,10 @@
   <p align="center">
     NFT-based Sharing Platform for Digital Twin Data on Tezos – a Project with GAIA-X
     <br />
-    <a href="https://github.com/taia-x/taia-x"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/taia-x/taia-x/wiki"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/taia-x/taia-x">View Demo</a>
+    <a href="#">View Demo</a>
     ·
     <a href=https://github.com/taia-x/taia-x/issues">Report Bug</a>
     ·

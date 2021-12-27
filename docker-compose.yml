@@ -86,6 +86,60 @@ services:
     depends_on:
       - sandbox
       - db_tzkt
+  
+  indexer:
+    build: ./dipdup
+    networks:
+      - taia-x
+    depends_on:
+      - sandbox
+      - db_tzkt
+      - api_tzkt
+      - db_dipdup
+      - hasura
+    restart: "no"
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
+      - ADMIN_SECRET=${ADMIN_SECRET:-changeme}
+
+  db_dipdup:
+    image: postgres:13
+    networks:
+      - taia-x
+    restart: always
+    ports:
+      - 127.0.0.1:5433:5432
+    #volumes:
+    #  - db:/var/lib/postgres/data
+    environment:
+      - POSTGRES_USER=dipdup
+      - POSTGRES_DB=dipdup
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  hasura:
+    image: hasura/graphql-engine:v2.0.1
+    networks:
+      - taia-x
+    ports:
+      - 127.0.0.1:42000:8080
+    depends_on:
+      - sandbox
+      - db_tzkt
+      - api_tzkt
+      - db_dipdup
+    restart: always
+    environment:
+      - HASURA_GRAPHQL_DATABASE_URL=postgres://dipdup:${POSTGRES_PASSWORD:-changeme}@db_dipdup:5432/dipdup
+      - HASURA_GRAPHQL_ENABLE_CONSOLE=true
+      - HASURA_GRAPHQL_DEV_MODE=false
+      - HASURA_GRAPHQL_ENABLED_LOG_TYPES=startup, http-log, webhook-log, websocket-log, query-log
+      - HASURA_GRAPHQL_ADMIN_SECRET=${ADMIN_SECRET:-changeme}
+      - HASURA_GRAPHQL_UNAUTHORIZED_ROLE=user
 
 volumes:
   ipfsf:

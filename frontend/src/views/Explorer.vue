@@ -30,25 +30,18 @@
       <router-link
         class="w-full transition duration-200 transform border-gray-300 rounded-lg  bg-gray-50 hover:scale-105 h-96 focus:outline-none focus:ring-2 focus:ring-cyan-500"
         v-for="(nft, index) in nfts"
-        :key="nft.token_id"
+        :key="nft.id"
         :index="index"
-        :to="'/explore/' + nft.token_id"
-        :nft="nft"
+        :to="'/explore/' + nft.id"
       >
         <div class="flex flex-col p-4">
           <div class="grid grid-cols-2 gap-2">
             <span class="text-sm font-medium">owner</span>
-            <span class="text-sm truncate">{{ nft.owner }}</span>
+            <span class="text-sm truncate">{{ nft.creator_id }}</span>
             <span class="text-sm font-medium">id</span>
-            <span class="text-sm truncate">{{ nft.token_id }}</span>
-            <span class="text-sm font-medium">isOwned</span>
-            <span class="text-sm truncate">{{ nft.isOwned }}</span>
-            <span class="text-sm font-medium">onSale</span>
-            <span class="text-sm truncate">{{ nft.onSale }}</span>
-            <span class="text-sm font-medium">price</span>
-            <span class="text-sm truncate">{{ nft.price || "-" }}</span>
+            <span class="text-sm truncate">{{ nft.id }}</span>
             <span class="text-sm font-medium">metadata</span>
-            <span class="text-sm truncate">{{ nft.metadataUri }}</span>
+            <span class="text-sm truncate">{{ nft.artifact_uri }}</span>
           </div>
         </div>
       </router-link>
@@ -99,7 +92,7 @@ export default defineComponent({
       limit: 12,
     }));
     // stores result in nfts when result is loaded
-    const nfts = useResult(result, null, (data) => data.token_metadata);
+    const nfts = useResult(result, null, ({token}) => token);
 
     return { nfts, isCreateDatasetModalOpen };
   },

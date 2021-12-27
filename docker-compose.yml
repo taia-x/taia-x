@@ -16,23 +16,79 @@ services:
 
   sandbox:
     image: tqtezos/flextesa:20210514
+    networks:
+      - taia-x
     container_name: taia-x-sandbox
     environment:
       block_time: 1
       flextesa_node_cors_origin: "*"
-    command: "flobox start --keep-root"
+    command: "flobox start"
     ports:
       - 20000:20000
 
   # to build a ipfs cluster: https://github.com/ipfs/ipfs-cluster/blob/master/docker-compose.yml
   ipfs:
     image: ipfs/go-ipfs:v0.8.0
+    networks:
+      - taia-x
     ports:
-      - 5001:5001 # ipfs api - expose if needed/wanted
-      - 8081:8080 # ipfs gateway - expose if needed/wanted
+      - 5001:5001 # ipfs api
+      - 8081:8080 # ipfs gateway
       # - 4001:4001 # ipfs swarm - expose if needed/wanted
     volumes:
       - ipfsf:/data/ipfs
 
+  db_tzkt:
+    container_name: tzkt-db
+    networks:
+      - taia-x
+    restart: always
+    image: postgres:13
+    depends_on:
+      - sandbox
+    environment:
+      POSTGRES_USER: tzkt
+      POSTGRES_PASSWORD: qwerty
+      POSTGRES_DB: tzkt_db
+    #volumes:
+    #  - postgres:/var/lib/postgresql/data
+    expose:
+      - 5432
+    ports:
+      - 0.0.0.0:5432:5432
+
+  api_tzkt:
+    container_name: tzkt-api
+    networks:
+      - taia-x
+    restart: always
+    image: bakingbad/tzkt-api:latest
+    depends_on:
+      - sandbox
+      - db_tzkt
+    environment:
+      TZKT_API_KESTREL__ENDPOINTS__HTTP__URL: http://0.0.0.0:5000
+      TZKT_API_ConnectionStrings__DefaultConnection: host=db_tzkt;port=5432;database=tzkt_db;username=tzkt;password=qwerty;
+    expose:
+      - 5000
+    ports:
+      - 0.0.0.0:5000:5000
+
+  sync_tzkt:
+    container_name: tzkt-sync
+    networks:
+      - taia-x
+    restart: always
+    image: bakingbad/tzkt-sync:latest
+    environment:
+      TZKT_TezosNode__Endpoint: http://sandbox:20000
+      TZKT_ConnectionStrings__DefaultConnection: host=db_tzkt;port=5432;database=tzkt_db;username=tzkt;password=qwerty;
+    depends_on:
+      - sandbox
+      - db_tzkt
+
 volumes:
   ipfsf:
+
+networks:
+  taia-x:

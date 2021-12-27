@@ -36,7 +36,7 @@
       <h1
         class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl"
       >
-        {{ token?.metadata.name }}
+        {{ token?.name }}
       </h1>
       <span class="mt-1 text-xl text-gray-400"># {{ route.params.id }}</span>
     </div>
@@ -92,7 +92,7 @@
         <h3 class="sr-only">Description</h3>
         <div class="space-y-6">
           <p class="text-base text-gray-900">
-            {{ token?.metadata.description }}
+            {{ token?.description }}
           </p>
         </div>
       </div>
@@ -155,14 +155,14 @@ export default defineComponent({
 
     // fetches single token metadata based on route param
     const { result } = useQuery(getSingleTokenMetadata, () => ({
-      id: Number(route.params.id) + 1,
+      id: Number(route.params.id),
     }));
 
     // gets token metadata when result is loaded
     const token_metadata = useResult(
       result,
       null,
-      (data) => data.token_metadata_by_pk
+      ({token_by_pk}) => token_by_pk
     );
 
     // render ui when token_metadata contains values
@@ -170,7 +170,7 @@ export default defineComponent({
       if (token_metadata.value) {
         token.value = token_metadata.value;
         const asset = await fetch(
-          ipfsInterface.makeGatewayURL(token_metadata.value.metadata.assetUri)
+          ipfsInterface.makeGatewayURL(token_metadata.value.artifact_uri)
         );
         code.value = JSON.stringify(await asset.json(), null, 2);
       }

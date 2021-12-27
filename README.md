@@ -93,7 +93,9 @@
 * [Vue.js](https://vuejs.org/)
 * [Tezos](https://tezos.com/developer-portal/)
 * [Github Actions](https://github.com/features/actions)
-* [FastAPI](https://fastapi.tiangolo.com/)
+* [TzKT](https://github.com/baking-bad/tzkt)
+* [DipDup](https://github.com/dipdup-net/dipdup-py)
+* [Hasura](https://github.com/hasura/graphql-engine)
 * [Zokrates](https://zokrates.github.io/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -223,14 +225,14 @@ Project Link: [https://github.com/taia-x/taia-x](https://github.com/taia-x/taia-
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/alvaro-alonso/taia-x.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/alvaro-alonso/taia-x.svg
 [contributors-url]: https://github.com/taia-x/taia-x/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/alvaro-alonso/taia-x.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/alvaro-alonso/taia-x.svg
 [forks-url]: https://github.com/taia-x/taia-x/network/members
-[stars-shield]: https://img.shields.io/github/stars/alvaro-alonso/taia-x.svg?style=for-the-badge
+[stars-shield]: https://img.shields.io/github/stars/alvaro-alonso/taia-x.svg
 [stars-url]: https://github.com/taia-x/taia-x/stargazers
-[issues-shield]: https://img.shields.io/github/issues/alvaro-alonso/taia-x.svg?style=for-the-badge
+[issues-shield]: https://img.shields.io/github/issues/alvaro-alonso/taia-x.svg
 [issues-url]: https://github.com/taia-x/taia-x/issues
-[license-shield]: https://img.shields.io/github/license/alvaro-alonso/taia-x.svg?style=for-the-badge
+[license-shield]: https://img.shields.io/github/license/alvaro-alonso/taia-x.svg
 [license-url]: https://github.com/taia-x/taia-x/blob/master/LICENSE.txt
 [product-screenshot]: images/screenshot.png

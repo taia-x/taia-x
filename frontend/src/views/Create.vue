@@ -151,6 +151,10 @@ import FileSection from "@/components/Utils/FileUpload/FileSection.vue";
 import inputFiles from "@/composables/inputFiles";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronUpIcon } from "@heroicons/vue/solid";
+import { ipfsInterface, tezosInterface } from "@/services";
+import { useUserStore } from "@/stores/useUser";
+import { useAlertStore } from "@/stores/useAlerts";
+import { storeToRefs } from "pinia";
 
 export default defineComponent({
   components: {
@@ -164,6 +168,9 @@ export default defineComponent({
     const name = ref("");
     const description = ref("");
     const { files, image, data, onFileSelected, removeFile } = inputFiles();
+    const user = useUserStore();
+    const alerts = useAlertStore();
+    const { address } = storeToRefs(user);
 
     // reset modal inputs
     const cancel = () => {
@@ -181,6 +188,37 @@ export default defineComponent({
       );
     });
 
+    // firstly writes artifact to ipfs, then writes metadata with link to artifact to ipfs and then mints token
+    const mint = async () => {
+      try {
+        if (address.value) {
+          const artifactCid = await ipfsInterface.writeFile(data.value); // artifact to ipfs
+          // metadata to ipfs
+          const metadataCid = await ipfsInterface.writeFile({
+            name: name.value,
+            description: description.value,
+            artifactUri: artifactCid,
+          });
+          // mint token via wallet
+          await tezosInterface.mintNft({
+            operator: "tz1ittpFnVsKxx1M8YPKt7VJEaZfwiBZ6jo7",
+            address: address.value,
+            price: 1000000,
+            metadataUri: metadataCid,
+          });
+          // closes modal, notifies user and resets values
+          emit("update:isOpen", false);
+          alerts.createAlert("Successfully minted NFT!", "success");
+          cancel();
+        } else {
+          alerts.createAlert("Login to execute transaction!", "warning");
+        }
+      } catch (e: any) {
+        alerts.createAlert("Something went wrong!", "error");
+        throw new Error(e.toString());
+      }
+    };
+
     return {
       name,
       description,
@@ -191,6 +229,7 @@ export default defineComponent({
       cancel,
       onFileSelected,
       removeFile,
+      mint,
     };
   },
 });

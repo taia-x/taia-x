@@ -10,7 +10,7 @@
     "web3": "^1.6.1"
   },
   "scripts": {
-    "start-sandbox": "docker run --rm --name taia-x-sandbox --detach -p 20000:20000 -e flextesa_node_cors_origin=*  tqtezos/flextesa:20210514 flobox start",
+    "start-sandbox": "docker run --rm --name taia-x-sandbox --detach -p 127.0.0.1:20000:20000 -e flextesa_node_cors_origin=*  tqtezos/flextesa:20210514 flobox start",
     "stop-sandbox": "docker kill taia-x-sandbox",
     "sandbox-info": "docker run --rm tqtezos/flextesa:20210514 flobox info",
     "compile": "docker run --rm -v \"%CD%\":/cd -w /cd ligolang/ligo:0.31.0 compile contract ./contracts/src/taia_x_main.mligo --entry-point main > ./contracts/out/taia_x_main.tz",

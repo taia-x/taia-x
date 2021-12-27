@@ -1,32 +1,29 @@
 import gql from "graphql-tag";
 
 export const getTokenMetadata = gql`
-  query ($offset: Int, $limit: Int) {
-    token_metadata(
-      order_by: { updated_at: desc }
-      offset: $offset
-      limit: $limit
-      where: { metadata: { _has_key: "assetUri" } }
-    ) {
-      id
-      metadata
-      token_id
-      created_at
-      link
-      updated_at
-    }
+  query GetAllTokenMetadata($offset: Int = 0, $limit: Int = 12) {
+  token(where: {metadata: {_is_null: false}}, limit: $limit, order_by: {timestamp: desc}, offset: $offset) {
+    id
+    artifact_uri
+    metadata
+    name
+    description
+    timestamp
+    creator_id
   }
+}
 `;
 
 export const getSingleTokenMetadata = gql`
-  query ($id: bigint = 1) {
-    token_metadata_by_pk(id: $id) {
-      id
-      metadata
-      token_id
-      created_at
-      link
-      updated_at
-    }
+  query GetSingleTokenMetadata($id: bigint = 1) {
+  token_by_pk(id: $id) {
+    artifact_uri
+    creator_id
+    description
+    id
+    metadata
+    name
+    timestamp
   }
+}
 `;

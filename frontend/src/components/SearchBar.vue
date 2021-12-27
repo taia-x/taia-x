@@ -52,5 +52,6 @@ export default defineComponent({
     SearchIcon,
     PlusIcon,
   },
+  emits: ["create:clicked"],
 });
 </script>

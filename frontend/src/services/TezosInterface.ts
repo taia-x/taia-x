@@ -59,10 +59,14 @@ class TezosInterface {
    */
   async mintNft(mintParams: MintParams): Promise<void> {
     const { operator, address, price, metadataUri } = mintParams;
+    console.log(operator);
+    console.log(address);
+    console.log(price);
+    console.log(metadataUri);
     try {
       const op = await this.contract.methods
-        .mint(operator, address, price, char2Bytes(metadataUri))
-        .send({ amount: 1 });
+        .mint(operator, address, char2Bytes(metadataUri))
+        .send();
       if (op) {
         const result = await op.confirmation(1);
         if (result.completed) {
@@ -74,6 +78,7 @@ class TezosInterface {
         }
       }
     } catch (e: any) {
+      console.log(e);
       throw new Error(e.toString());
     }
   }

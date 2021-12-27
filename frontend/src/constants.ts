@@ -1,6 +1,6 @@
 export const CUSTOM_NODE_URL = "http://localhost:20000"; // Testnet: "https://granadanet.api.tez.ie";
 
-export const CONTRACT = "KT18yBTZzQj4TrL7i5BCsbwi1yPBsnW3naGJ";
+export const CONTRACT = "KT1L7cHr7aoc89jZh9A4tku4f6KDn4yWkbxM";
 
 // first
 // export const CONTRACT = "KT1MADr7Y4BKqHVU35oUeuvNqh5tNbHc6b3y";
@@ -22,8 +22,8 @@ export const ROLE_CONSUMER = "consumer";
 export const IPFS_API_PROTOCOL = "http";
 export const IPFS_API_HOST = "localhost";
 export const IPFS_API_PORT = 5001;
-export const IPFS_GATEWAY_URL = "https://ipfs.io/ipfs";
+export const IPFS_GATEWAY_URL = "http://localhost:8081/ipfs";
 
 // GraphQL
-export const HTTP_METADATA_API = "http://localhost:33080/v1/graphql";
-export const WS_METADATA_API = "ws://localhost:33080/v1/graphql";
+export const HTTP_METADATA_API = "http://localhost:42000/v1/graphql";
+export const WS_METADATA_API = "ws://localhost:42000/v1/graphql";

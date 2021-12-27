@@ -36,12 +36,12 @@
   <p align="center">
     NFT-based Sharing Platform for Digital Twin Data on Tezos – a Project with GAIA-X
     <br />
-    <a href="https://github.com/taia-x/taia-x"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/taia-x/taia-x/wiki"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/taia-x/taia-x">View Demo</a>
+    <a href="#">View Demo</a>
     ·
-    <a href=https://github.com/taia-x/taia-x/issues">Report Bug</a>
+    <a href="https://github.com/taia-x/taia-x/issues">Report Bug</a>
     ·
     <a href="https://github.com/taia-x/taia-x/issues">Request Feature</a>
   </p>
@@ -113,32 +113,63 @@ To run the project locally you need to have install node.js and Docker
 
 ### Installation
 
-1. in the `backend` directory, create `.env`  file according `.env.template` by filling the necessary entries.
-2. in the `contracts` directory, create `.env`  file according `.env.template` by filling the necessary entries.
-3. start the local network by running:
+1. In the `./contracts` directory run:
+
+```bash
+$ yarn install
 ```
+
+2. Create `.env` file according `.env.template` by filling the necessary entries.
+
+- A test faucet can be obtained from https://faucet.tzalpha.net/. It must be saved as json string to `FAUCET` in the `.env` file.
+- The secret can be obtained by running `yarn run sandbox-info` and copy the value from alice which starts with `edsk`. This value must be saved to `ALICE_KEY` in the `.env` file.
+
+```bash
+ALICE_SECRET=<ALICE_SECRET>
+FAUCET={"mnemonic": ["...", "...", ...], "secret": "...", "amount": "...", "pkh": "...", "password": "...", "email": "..."
+```
+
+3. Compile the smart contracts, depending on your operating system:
+
+- Linux or OSX: `docker run --rm -v $PWD:$PWD -w $PWD ligolang/ligo:0.29.0 compile contract ./contracts/src/taia_x_main.mligo --entry-point main > ./contracts/out/taia_x_main.tz`
+- Windows: `docker run --rm -v '%CD%':/cd -w /cd ligolang/ligo:0.29.0 compile contract ./contracts/src/taia_x_main.mligo --entry-point main > ./contracts/out/taia_x_main.tz`
+
+4. Enter the root folder and run the sandbox via:
+
+```bash
+$ docker compose build sandbox
+$ docker-compose up sandbox
+```
+
+5. In the `./contracts` folder deploy the contract to the sandbox via:
+
+```bash
+$ yarn run deploy:sandbox
+```
+
+6. Copy the contract address from the console output and assign it to the variable `CONTRACT` in `./frontend/src/constants.ts`
+
+```js
+export const CONTRACT = "<contract address>"
+```
+
+7. Set the same contract address in `./dipdup/dipdup.yml`:
+
+```yml
+contracts:
+  taia_x_sandbox:
+    address: <contract address>
+    typename: taia_x_fa2
+```
+
+8. In the root folder build and run the rest of the docker containers:
+
+```bash
+$ docker compose build
 $ docker-compose up
 ```
-4. deploy the latest contracts to the local blockchain:
 
-  - go to the `contracts` directory and install the packages
-  ```
-  $ cd contracts
-  $ yarn install
-  ```
-  - compile the smart-contract:
-    - Windows:
-    ```
-    docker run --rm -v \"%CD%\":/cd -w /cd ligolang/ligo:0.28.0 compile-contract ./contracts/src/counter.ligo main > ./contracts/out/counter.tz
-    ```
-    - Linux and OSX:
-    ```
-    $ docker run --rm -v '$PWD':'$PWD' -w '$PWD' ligolang/ligo:0.28.0 compile-contract ./contracts/src/counter.ligo main > ./contracts/out/counter.tz
-    ```
-  - deploy the smart-contract to the blockchain:
-  ```
-  $ yarn run deploy:testnet
-  ```
+9. Stop all containers by running `docker compose down` from the root folder.
 
 <!-- USAGE EXAMPLES -->
 ## Usage

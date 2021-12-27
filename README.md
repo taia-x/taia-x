@@ -41,7 +41,7 @@
     <br />
     <a href="#">View Demo</a>
     ·
-    <a href=https://github.com/taia-x/taia-x/issues">Report Bug</a>
+    <a href="https://github.com/taia-x/taia-x/issues">Report Bug</a>
     ·
     <a href="https://github.com/taia-x/taia-x/issues">Request Feature</a>
   </p>

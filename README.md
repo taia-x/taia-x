@@ -169,7 +169,7 @@ $ docker compose build
 $ docker-compose up
 ```
 
-9. Stop containers via `docker compose down`
+9. Stop all containers by running `docker compose down` from the root folder.
 
 <!-- USAGE EXAMPLES -->
 ## Usage

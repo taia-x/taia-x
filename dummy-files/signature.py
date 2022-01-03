@@ -1,4 +1,5 @@
 import os
+import base58
 from os import listdir
 from Crypto.PublicKey import ECC
 from Crypto.Hash import SHA256
@@ -36,8 +37,11 @@ def verify_signature(signature, msghash, pbk_path):
         msghash_hex = msghash.hexdigest()
         with open(f"./signature_file/" + "signature.txt", "wt") as f:
             # The key will be encoded in a PEM envelope (ASCII).
-            f.write("Signature: ")
-            f.write(signature.hex())
+            f.write("Signature base 58: ")
+            signature58 = base58.b58encode(signature)
+            f.write(str(signature58))
+            f.write("\nSignature in bytes: ")
+            f.write(str(signature))
             f.write(f"\nPubkey X-Point in {pubkey.public_key().curve} curve: ")
             x = str(pubkey.public_key().pointQ.x)
             f.write(x)
@@ -46,24 +50,25 @@ def verify_signature(signature, msghash, pbk_path):
             f.write(y)
             f.write("\nMessage hex: ")
             f.write(msghash_hex)
+            f.write("\nMessage in bytes base58: ")
+            f.write(str(base58.b58encode(msghash.digest())))
             print("Check the signature_file/signature.txt file!")
     except ValueError:
         print("The message is not authentic")
 
 
 if __name__ == "__main__":
-    key_path = ""
+    secret_key_path = ""
     pbk_key_path = ""
-
+    dirpath = ""
     try:
-        dirpath = ""
         dir_l = listdir(dirpath)
-        if key_path == "":
+        if secret_key_path == "":
             raise NotImplementedError
         root_hash = root(dirpath, root_type="bytes")
         h = SHA256.new(root_hash)
         # Verify the signature:
-        verify_signature(sign(root_hash, key_path), h, pbk_key_path)
+        verify_signature(sign(root_hash, secret_key_path), h, pbk_key_path)
     except FileNotFoundError:
         print("Give a valid file and keypair path!")
     except NotImplementedError:

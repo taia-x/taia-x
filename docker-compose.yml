@@ -11,28 +11,33 @@ services:
     container_name: taia-x-frontend
     environment:
       - CHOKIDAR_INTERVAL=1000
+      - CHOKIDAR_USEPOLLING=true
     ports:
       - 8080:8080
 
   sandbox:
-    image: tqtezos/flextesa:20210514
+    image: tqtezos/flextesa:20211206
+    volumes:
+      - mini-box:/tmp/mini-box
     container_name: taia-x-sandbox
     environment:
       block_time: 1
       flextesa_node_cors_origin: "*"
-    command: "flobox start --keep-root"
+    command: "granabox start --keep-root"
     ports:
       - 20000:20000
 
   # to build a ipfs cluster: https://github.com/ipfs/ipfs-cluster/blob/master/docker-compose.yml
   ipfs:
-    image: ipfs/go-ipfs:v0.8.0
+    image: ipfs/go-ipfs:latest
     ports:
       - 5001:5001 # ipfs api - expose if needed/wanted
       - 8081:8080 # ipfs gateway - expose if needed/wanted
       # - 4001:4001 # ipfs swarm - expose if needed/wanted
     volumes:
       - ipfsf:/data/ipfs
+    container_name: taia-x-ipfs
 
 volumes:
   ipfsf:
+  mini-box:

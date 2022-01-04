@@ -1,6 +1,6 @@
-export const CUSTOM_NODE_URL = "http://localhost:20000"; // Testnet: "https://granadanet.api.tez.ie";
+export const CUSTOM_NODE_URL = process.env.VUE_APP_NODE_URL || 'http://localhost:20000'; // Testnet: "https://granadanet.api.tez.ie";
 
-export const CONTRACT = "KT18yBTZzQj4TrL7i5BCsbwi1yPBsnW3naGJ"; 
+export const CONTRACT = process.env.VUE_APP_CONTRACT || ""; 
 
 // first
 // export const CONTRACT = "KT1MADr7Y4BKqHVU35oUeuvNqh5tNbHc6b3y";

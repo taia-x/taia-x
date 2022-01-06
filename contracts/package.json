@@ -11,7 +11,7 @@
     "web3": "^1.6.1"
   },
   "scripts": {
-    "start-sandbox": "docker run --rm --name taia-x-sandbox --detach -p 20000:20000 -e block_time=3 oxheadalpha/flextesa:20211221 hangzbox start",
+    "start-sandbox": "docker run --rm --name taia-x-sandbox --detach -p 20000:20000 -e block_time=3 tqtezos/flextesa:20210514 flobox start",
     "stop-sandbox": "docker kill taia-x-sandbox",
     "sandbox-info": "docker run --rm tqtezos/flextesa:20210514 flobox info",
     "compile": "docker run --rm --platform linux/amd64 -v `$PWD`:`$PWD` -w `$PWD` ligolang/ligo:0.32.0 compile contract contracts/src/taia_x_main.mligo --entry-point main -o contracts/out/taia_x_main.tz",

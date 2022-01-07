@@ -6,16 +6,16 @@ import {
 } from "@apollo/client/core";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { getMainDefinition } from "@apollo/client/utilities";
-import { HTTP_METADATA_API, WS_METADATA_API } from "@/constants";
+import { HTTP_METADATA_API_URL, WS_METADATA_API_URL } from "@/constants";
 
 // create an http link:
 const httpLink = new HttpLink({
-  uri: HTTP_METADATA_API,
+  uri: HTTP_METADATA_API_URL,
 });
 
 // create a WebSocket link:
 const wsLink = new WebSocketLink({
-  uri: WS_METADATA_API,
+  uri: WS_METADATA_API_URL,
   options: {
     reconnect: true,
   },

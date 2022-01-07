@@ -6,14 +6,15 @@
   "dependencies": {
     "@taquito/signer": "^10.1.2",
     "@taquito/taquito": "^10.1.2",
+    "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
     "web3": "^1.6.1"
   },
   "scripts": {
-    "start-sandbox": "docker run --rm --name taia-x-sandbox --detach -p 127.0.0.1:20000:20000 -e flextesa_node_cors_origin=*  tqtezos/flextesa:20210514 flobox start",
+    "start-sandbox": "docker run --rm --name taia-x-sandbox --detach -p 20000:20000 -e block_time=3 tqtezos/flextesa:20210514 flobox start",
     "stop-sandbox": "docker kill taia-x-sandbox",
     "sandbox-info": "docker run --rm tqtezos/flextesa:20210514 flobox info",
-    "compile": "docker run --rm -v \"%CD%\":/cd -w /cd ligolang/ligo:0.31.0 compile contract ./contracts/src/taia_x_main.mligo --entry-point main > ./contracts/out/taia_x_main.tz",
+    "compile": "docker run --rm --platform linux/amd64 -v `$PWD`:`$PWD` -w `$PWD` ligolang/ligo:0.32.0 compile contract contracts/src/taia_x_main.mligo --entry-point main -o contracts/out/taia_x_main.tz",
     "deploy:sandbox": "node scripts/deploy sandbox",
     "deploy:testnet": "node scripts/deploy testnet"
   }

@@ -6,8 +6,6 @@
 *** Thanks again! Now go create something AMAZING! :D
 -->
 
-
-
 <!-- PROJECT SHIELDS -->
 <!--
 *** I'm using markdown "reference style" links for readability.
@@ -16,13 +14,12 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
+
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-
-
 
 <!-- PROJECT LOGO -->
 <br />
@@ -46,8 +43,6 @@
     <a href="https://github.com/taia-x/taia-x/issues">Request Feature</a>
   </p>
 </div>
-
-
 
 <!-- TABLE OF CONTENTS -->
 <details>
@@ -75,34 +70,28 @@
   </ol>
 </details>
 
-
-
 <!-- ABOUT THE PROJECT -->
+
 ## About The Project
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-
-
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-
 
 ### Built With
 
-* [Vue.js](https://vuejs.org/)
-* [Tezos](https://tezos.com/developer-portal/)
-* [Github Actions](https://github.com/features/actions)
-* [TzKT](https://github.com/baking-bad/tzkt)
-* [DipDup](https://github.com/dipdup-net/dipdup-py)
-* [Hasura](https://github.com/hasura/graphql-engine)
-* [Zokrates](https://zokrates.github.io/)
+- [Vue.js](https://vuejs.org/)
+- [Tezos](https://tezos.com/developer-portal/)
+- [Github Actions](https://github.com/features/actions)
+- [TzKT](https://github.com/baking-bad/tzkt)
+- [DipDup](https://github.com/dipdup-net/dipdup-py)
+- [Hasura](https://github.com/hasura/graphql-engine)
+- [Zokrates](https://zokrates.github.io/)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
-
 <!-- GETTING STARTED -->
+
 ## Getting Started
 
 How to set up your project locally.
@@ -127,33 +116,30 @@ $ yarn install
 ```bash
 ALICE_SECRET=<ALICE_SECRET>
 FAUCET={"mnemonic": ["...", "...", ...], "secret": "...", "amount": "...", "pkh": "...", "password": "...", "email": "..."
+SOURCE_FILE=/opt/taia-x/contracts/contracts/src/taia_x_main.mligo
+OUTPUT_FILE=/opt/taia-x/contracts/contracts/out/taia_x_main.tz
+ENTRY_POINT=main
 ```
 
-3. Compile the smart contracts, depending on your operating system:
-
-- Linux or OSX: `docker run --rm -v $PWD:$PWD -w $PWD ligolang/ligo:0.29.0 compile contract ./contracts/src/taia_x_main.mligo --entry-point main > ./contracts/out/taia_x_main.tz`
-- Windows: `docker run --rm -v '%CD%':/cd -w /cd ligolang/ligo:0.29.0 compile contract ./contracts/src/taia_x_main.mligo --entry-point main > ./contracts/out/taia_x_main.tz`
-
-4. Enter the root folder and run the sandbox via:
+3. In the `./contracts` folder compile and run the sandbox via:
 
 ```bash
-$ docker compose build sandbox
-$ docker-compose up sandbox
+$ docker compose up sandbox
 ```
 
-5. In the `./contracts` folder deploy the contract to the sandbox via:
+4. In the `./contracts` folder deploy the contract to the sandbox via:
 
 ```bash
 $ yarn run deploy:sandbox
 ```
 
-6. Copy the contract address from the console output and assign it to the variable `CONTRACT` in `./frontend/src/constants.ts`
+5. Copy the contract address from the console output and assign it to the variable `CONTRACT` in `./frontend/src/constants.ts`
 
 ```js
-export const CONTRACT = "<contract address>"
+export const CONTRACT = "<contract address>";
 ```
 
-7. Set the same contract address in `./dipdup/dipdup.yml`:
+6. Set the same contract address in `./dipdup/dipdup.yml`:
 
 ```yml
 contracts:
@@ -162,16 +148,42 @@ contracts:
     typename: taia_x_fa2
 ```
 
-8. In the root folder build and run the rest of the docker containers:
+7. In the `./ipfs` folder run the ipfs cluster:
+
+```bash
+$ docker compose up
+```
+
+See here how to fix CORS error if it happens.
+
+8. In the `./tzkt` folder run the tzkt indexer:
+
+```bash
+$ docker compose up
+```
+
+9. In the `./dipdup` folder build and run the selective contract indexer:
 
 ```bash
 $ docker compose build
-$ docker-compose up
+$ docker compose up
 ```
 
-9. Stop all containers by running `docker compose down` from the root folder.
+10. In the `./frontend` folder build and run taia-x:
+
+```bash
+$ docker compose build
+$ docker compose up
+```
+
+or run without docker via `npm run serve`
+
+11. Stop all containers by running `docker compose down` in the respective folders.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
+
 ## Usage
 
 Show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
@@ -185,28 +197,30 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 Install [act](https://github.com/nektos/act#installation) following one of the options in the docs
 
 To see the github actions available:
+
 ```
 act -l
 ```
 
 To run a specific action:
+
 ```
 act -j GITHUB_ACTION_NAME
 ```
 
 <!-- ROADMAP -->
+
 ## Roadmap
 
 - [] Feature 1
 - [] Feature 2
 - [] Feature 3
-    - [] Nested Feature
+  - [] Nested Feature
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
-
 <!-- CONTRIBUTING -->
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
@@ -222,40 +236,35 @@ Don't forget to give the project a star! Thanks again!
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
-
 <!-- LICENSE -->
+
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
-
 <!-- CONTACT -->
-## Contact
 
+## Contact
 
 Project Link: [https://github.com/taia-x/taia-x](https://github.com/taia-x/taia-x)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
-
 <!-- ACKNOWLEDGMENTS -->
+
 ## Acknowledgments
 
-* [Best-README-Template](https://github.com/othneildrew/Best-README-Template)
-* []()
-* []()
+- [Best-README-Template](https://github.com/othneildrew/Best-README-Template)
+- []()
+- []()
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-
-
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
 [contributors-shield]: https://img.shields.io/github/contributors/alvaro-alonso/taia-x.svg
 [contributors-url]: https://github.com/taia-x/taia-x/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/alvaro-alonso/taia-x.svg

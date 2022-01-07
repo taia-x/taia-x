@@ -1,23 +1,14 @@
-version: "3.8"
+version: "3.4"
 
 services:
-  indexer:
-    build: .
-    depends_on:
-      - db_dipdup
-      - hasura
-    restart: "no"
-    environment:
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
-      - ADMIN_SECRET=${ADMIN_SECRET:-changeme}
-
   db_dipdup:
     image: postgres:13
+    networks:
+      - taia-x
     restart: always
     ports:
       - 127.0.0.1:5433:5432
-    #volumes:
-    #  - db:/var/lib/postgres/data
+    container_name: db_dipdup
     environment:
       - POSTGRES_USER=dipdup
       - POSTGRES_DB=dipdup
@@ -30,6 +21,9 @@ services:
 
   hasura:
     image: hasura/graphql-engine:v2.0.1
+    networks:
+      - taia-x
+    container_name: hasura
     ports:
       - 127.0.0.1:42000:8080
     depends_on:
@@ -43,9 +37,19 @@ services:
       - HASURA_GRAPHQL_ADMIN_SECRET=${ADMIN_SECRET:-changeme}
       - HASURA_GRAPHQL_UNAUTHORIZED_ROLE=user
 
+  indexer:
+    build: .
+    networks:
+      - taia-x
+    container_name: indexer
+    depends_on:
+      - hasura
+      - db_dipdup
+    restart: "no"
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
+      - ADMIN_SECRET=${ADMIN_SECRET:-changeme}
+
 networks:
-  default:
-    external: true
-    name: taia-x_taia-x
-#volumes:
-#  db:
+  taia-x:
+    name: taia-x

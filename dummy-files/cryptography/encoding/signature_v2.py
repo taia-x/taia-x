@@ -38,10 +38,11 @@ def keypair(path_to_file):
         mnemonic = ' '.join(mnemonic)
     seed = Mnemonic.to_seed(mnemonic, passphrase=email + password)
     public_point, secret_exponent = pysodium.crypto_sign_seed_keypair(seed=seed[:32])
-    prefix = b'ed' + b'sk'  # ed25519 curve prefix
+    prefix_s = b'ed' + b'sk'  # ed25519 curve prefix
+    prefix_p = b'ed' + b'pk'  # ed25519 curve prefix
     private_key = pysodium.crypto_sign_sk_to_seed(secret_exponent)
-    private_key58 = base58_encode(private_key, prefix).decode()  # Encode:
-    public_key58 = base58_encode(public_point, prefix).decode()
+    private_key58 = base58_encode(private_key, prefix_s).decode()  # Encode:
+    public_key58 = base58_encode(public_point, prefix_p).decode()
     return private_key58, public_key58
 
 
@@ -112,8 +113,8 @@ def save_as_txt(faucet_path: str, message: str):
         f.write(public_key)
         f.write("\nPublic key hash: ")
         f.write(public_key_hash(secret_exponent(faucet_path)[0]))
-        f.write(f"\nMessage: ")
-        f.write(message)
+        f.write(f"\nMessage in hex: ")
+        f.write(message.encode().hex())
         f.write("\nSignature: ")
         f.write(sign(message=message, file_path=faucet_path))
 

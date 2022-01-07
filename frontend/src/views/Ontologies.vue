@@ -73,20 +73,12 @@
 import { defineComponent } from "vue";
 //import { AdjustmentsIcon, SortAscendingIcon } from "@heroicons/vue/outline";
 import SearchBar from "@/components/SearchBar.vue";
-import { useOntologyStore } from "@/stores/useOntologies";
-import { storeToRefs } from "pinia";
 
 export default defineComponent({
   components: {
     //AdjustmentsIcon,
     //SortAscendingIcon,
     SearchBar,
-  },
-  setup() {
-    const ontologyStore = useOntologyStore();
-    const { ontologies } = storeToRefs(ontologyStore);
-
-    return { ontologies };
   },
 });
 </script>

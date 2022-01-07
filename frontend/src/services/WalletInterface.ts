@@ -43,6 +43,7 @@ class WalletInterface {
           rpcUrl: CUSTOM_NODE_URL,
         },
       });
+      this.Tezos.setProvider({ wallet });
     } catch (e: any) {
       throw new Error(e.toString());
     }

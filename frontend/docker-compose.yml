@@ -1,0 +1,21 @@
+version: "3.4"
+
+services:
+  frontend:
+    build:
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/opt/taia-x/frontend:cached
+      - /opt/taia-x/frontend/node_modules
+    container_name: taia-x-frontend
+    networks:
+      - taia-x
+    environment:
+      - CHOKIDAR_INTERVAL=1000
+      - CHOKIDAR_USEPOLLING=true
+    ports:
+      - 8080:8080
+
+networks:
+  taia-x:
+    name: taia-x

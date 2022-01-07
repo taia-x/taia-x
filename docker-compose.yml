@@ -11,6 +11,7 @@ services:
     container_name: taia-x-frontend
     environment:
       - CHOKIDAR_INTERVAL=1000
+      - CHOKIDAR_USEPOLLING=true
     ports:
       - 8080:8080
 
@@ -86,7 +87,7 @@ services:
     depends_on:
       - sandbox
       - db_tzkt
-  
+
   indexer:
     build: ./dipdup
     networks:

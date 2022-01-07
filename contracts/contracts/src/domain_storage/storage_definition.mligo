@@ -7,8 +7,6 @@
 #include "../user_manager/user_manager_role_lib.mligo"
 
 type marketplace_storage = {
-  //  admin: address;
-  sales: sale set;
   datasets: datasets;
   datasetIds: token_id set;
   nextDatasetId: token_id;
@@ -22,7 +20,6 @@ type nft_token_storage = {
   users: user_storage;
   ledger : ledger;
   operators : operator_storage;
-  metadata: contract_metadata;
   token_metadata: token_metadata_storage;
 }
 

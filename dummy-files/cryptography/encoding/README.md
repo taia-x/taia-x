@@ -11,8 +11,12 @@ _Linux_
 `$ sudo apt install libsodium-dev libsecp256k1-dev libgmp-dev`
 
 ### **Installation**
-
 `$ pip install pytezos`
+
+Try installing these libraries if necessary: 
+base58check
+base58
+pysodium
 
 ### **Get account from faucet**
 
@@ -26,3 +30,5 @@ Run:
 
 `python3 signature_v2.py`
 
+Only for test purposes the secret_key will be exposed! Comment it out otherwise.
+Check the created _./keys_sig/keys_sig.txt_ file.

@@ -1,6 +1,7 @@
 import base58check
 import base58
 import hashlib
+import os
 import pysodium
 import json
 from fastecdsa.ecdsa import sign
@@ -99,7 +100,27 @@ def sign(message, file_path):
     return base58_encode(signature, prefix).decode()
 
 
+def save_as_txt(faucet_path: str, message: str):
+    os.mkdir("./keys_sig/")
+    keypair_temp = keypair(faucet_path)
+    secret_key = keypair_temp[0]
+    public_key = keypair_temp[1]
+    with open(f"./keys_sig/" + "keys_sig.txt", "wt") as f:
+        f.write("Secret key: ")
+        f.write(secret_key)
+        f.write("\nPublic key: ")
+        f.write(public_key)
+        f.write("\nPublic key hash: ")
+        f.write(public_key_hash(secret_exponent(faucet_path)[0]))
+        f.write(f"\nMessage: ")
+        f.write(message)
+        f.write("\nSignature: ")
+        f.write(sign(message=message, file_path=faucet_path))
+
+
 print("secret key: ", keypair("./hangzhounet.json")[0])
 print("public key: ", keypair("./hangzhounet.json")[1])
 print("public key hash: ", public_key_hash(secret_exponent("./hangzhounet.json")[0]))
-print("sig: ", sign("asd", "./hangzhounet.json"))
+print("sig: ", sign("Hi :D", "./hangzhounet.json"))
+
+save_as_txt("./hangzhounet2.json", "Hi :D")

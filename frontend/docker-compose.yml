@@ -13,6 +13,7 @@ services:
     environment:
       - CHOKIDAR_INTERVAL=1000
       - CHOKIDAR_USEPOLLING=true
+      - VUE_APP_CONTRACT_ADDRESS=${VUE_APP_CONTRACT_ADDRESS}
     ports:
       - 8080:8080
 

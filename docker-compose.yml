@@ -23,28 +23,18 @@ services:
       - ./contracts/:/opt/taia-x/contracts
     command: "compile contract ${SOURCE_FILE} --entry-point ${ENTRY_POINT} -o ${OUTPUT_FILE}"  
 
-  deploy-sandbox: 
-    image: node:8
-    container_name: taia-deploy-on-sandbox
-    platform: linux/amd64
-    working_dir: ./contracts
-    environment:
-      - NODE_ENV=production
-    volumes:
-      - ./contracts/scripts:/opt/taia-x/contracts/scripts
-    command: node deploy.js sandbox
-
   sandbox:
     image: tqtezos/flextesa:20211206
     volumes:
       - mini-box:/tmp/mini-box
     container_name: taia-x-sandbox
+    platform: linux/amd64
     environment:
       block_time: 1
       flextesa_node_cors_origin: "*"
     command: "granabox start --keep-root"
     ports:
-      - 20000:20000
+      - 20000:20000 
 
   # to build a ipfs cluster: https://github.com/ipfs/ipfs-cluster/blob/master/docker-compose.yml
   ipfs:
@@ -60,3 +50,5 @@ services:
 volumes:
   ipfsf:
   mini-box:
+
+

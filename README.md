@@ -111,28 +111,17 @@ To run the project locally you need to have install node.js and Docker
 
 ### Installation
 
-1. in the `backend` directory, create `.env`  file according `.env.template` by filling the necessary entries.
-2. in the `contracts` directory, create `.env`  file according `.env.template` by filling the necessary entries.
-3. start the local network by running:
+1. in the `taia-x` directory, create `.env`  file according `.env.template` by filling the necessary entries.
+2. start the local network by running:
 ```
 $ docker-compose up
 ```
-4. deploy the latest contracts to the local blockchain:
+3. deploy the latest contracts to the local blockchain:
 
   - go to the `contracts` directory and install the packages
   ```
-  $ cd contracts
   $ yarn install
   ```
-  - compile the smart-contract:
-    - Windows:
-    ```
-    docker run --rm -v \"%CD%\":/cd -w /cd ligolang/ligo:0.28.0 compile-contract ./contracts/src/counter.ligo main > ./contracts/out/counter.tz
-    ```
-    - Linux and OSX:
-    ```
-    $ docker run --rm -v '$PWD':'$PWD' -w '$PWD' ligolang/ligo:0.28.0 compile-contract ./contracts/src/counter.ligo main > ./contracts/out/counter.tz
-    ```
   - deploy the smart-contract to the blockchain:
   ```
   $ yarn run deploy:testnet

@@ -133,11 +133,7 @@ $ docker compose up sandbox
 $ yarn run deploy:sandbox
 ```
 
-5. Copy the contract address from the console output and assign it to the variable `CONTRACT` in `./frontend/src/constants.ts`
-
-```js
-export const CONTRACT = "<contract address>";
-```
+5. Copy the contract address from the console output and assign it to `VUE_APP_CONTRACT_ADDRESS` in `./frontend/.env.template` and rename the file to `.env`.
 
 6. Set the same contract address in `./dipdup/dipdup.yml`:
 

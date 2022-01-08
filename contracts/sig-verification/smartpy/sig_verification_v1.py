@@ -5,13 +5,30 @@ class SignatureProcess(sp.Contract):
     def __init__(self, pbk, message):
         self.init(public_key=pbk, raw_message=message, counter=0)
 
+
     @sp.entry_point
-    def verifySig(self, params):
+    def verifySig1(self, params):
         # c.data:Retrieve contract storage.
         k = params.pbk
         s = params.provider_sig
         m = params.message_packed
-        sp.verify(sp.check_signature(k, s, m))
+
+        sp.verify(sp.check_signature(k, s, m), message="FAILED")
+        self.data.counter = self.data.counter + 1
+
+    @sp.entry_point
+    def verifySig2(self, k, s, m):
+        # c.data:Retrieve contract storage.
+        # First set types
+        sp.set_type(k, sp.TKey)
+        sp.set_type(s, sp.TSignature)
+        sp.set_type(m, sp.TString)
+        # s = sp.signature(provider_sig_unp)
+        # m_u = params.message_unp
+        # m_p = sp.pack(m_u)
+        # k_p = self.data.public_key
+        m_p = sp.pack(m)
+        sp.verify(sp.check_signature(k, s, m_p))
         self.data.counter = self.data.counter + 1
 
 
@@ -23,7 +40,7 @@ def test():
     scenario.h1("Save public key and raw message")
 
     # It produces an object with the following properties: address, public_key_hash, public_key, secret_key
-    # Creates a deterministic key-pair from a seed string 
+    # Creates a deterministic key-pair from a seed string
     nikola = sp.test_account("Provider1")
     benz = sp.test_account("Provider2")
     ferdinand = sp.test_account("Provider3")
@@ -42,11 +59,21 @@ def test():
     message_packed = sp.pack(dataset_root_nikola)
     sig_from_provider = sp.make_signature(secret_key=nikola.secret_key, message=message_packed,
                                           message_format="Raw")
-    c1.verifySig(pbk=nikola.public_key, provider_sig=sig_from_provider,
-                 message_packed=message_packed).run(valid=True)
+    c1.verifySig1(pbk=nikola.public_key, provider_sig=sig_from_provider,
+                  message_packed=message_packed).run(valid=True)
 
-    # Packing data, Return an object of type sp.TBytes. 
-    # Conversion from string to bytes is not evaluated at runtime 
+    # Test pack function inside the smart contract:
+    scenario.h2("Test function inside the smart contract")
+    dataset_root_benz = "hashed root hash2"
+    message_packed2 = sp.pack(dataset_root_benz)
+
+    sig_from_provider = sp.make_signature(secret_key=benz.secret_key, message=message_packed2,
+                                          message_format="Raw")
+    c1.verifySig2(k=benz.public_key, s=sig_from_provider,
+                  m=dataset_root_benz).run(valid=True)
+
+    # Packing data, Return an object of type sp.TBytes.
+    # Conversion from string to bytes is not evaluated at runtime
     # because no such instruction exists in Michelson
     # It is only evaluated during compilation.
 
@@ -58,4 +85,4 @@ def test():
 
 
 sp.add_compilation_target("my_contract_compiled",
-                          SignatureProcess(sp.key("edpku5ZuqYibUQrAhove2B1bZDYCQyDRTGGa1ZwtZYiJ6nvJh4GXcE"), "message"))
+                          SignatureProcess(sp.key("edsk3U1yAC9iSBWeTpXKawytAWuUH44zUYBynDSuGf3dPMZSaGLNr7"), "asd"))

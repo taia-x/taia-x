@@ -1,1 +1,0 @@
-exec "ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["http://localhost:8080"]'"

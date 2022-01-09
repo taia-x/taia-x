@@ -2,7 +2,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import { InMemorySigner } from '@taquito/signer';
 
 
-async function verify_sig() {
+async function add_cert() {
     const provider = 'https://hangzhounet.api.tez.ie';
     const signer: any = new InMemorySigner('');
         const tezos = new TezosToolkit(provider);
@@ -17,12 +17,11 @@ async function verify_sig() {
         console.log(await contract.storage())
         console.log(`Interacting with Smart Contract..`);
         console.log(`First show the signature of the method`);
-        console.log(contract.methodsObject.verifySig1().getSignature())
+        console.log(contract.methodsObject.save_cert().getSignature())
         console.log(`Now send a test transaction..`);
-        contract.methodsObject.verifySig1({
-            message_packed: '6d6279746573',
-            pbk: 'edpkuYzXL37pTYVHu7rTodeyH9bQ2rfDKadWqqGCqL8m8G1W4UH55E',
-            provider_sig:  'edsigtffaz6wutLRzi7Ni15KPcoUZULJiyF3tHX78iBp17Fdt4jTTDmJjVe6QfK8ggimYGDcv7bLFziMPKSP2JxG5sb8NGKZcQG'
+        contract.methodsObject.save_cert({
+            pbk: 'edpktz4dr5yhgw56ZmJ2V8SqMsg3o13bjgZimJcbvqmBrcFYwnLyYW',
+            root_hash:  '7465737432'
         }).send().then((op) => {
             console.log(`Awaiting for ${op.hash} to be confirmed...`);
              return op.confirmation().then(() => op.hash);
@@ -34,4 +33,4 @@ async function verify_sig() {
 }
 
 // tslint:disable-next-line: no-floating-promises
-verify_sig();
+add_cert();

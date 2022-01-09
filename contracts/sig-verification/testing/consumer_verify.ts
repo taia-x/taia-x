@@ -17,12 +17,11 @@ async function verify_sig() {
         console.log(await contract.storage())
         console.log(`Interacting with Smart Contract..`);
         console.log(`First show the signature of the method`);
-        console.log(contract.methodsObject.verifySig1().getSignature())
+        console.log(contract.methodsObject.verifySig3().getSignature())
         console.log(`Now send a test transaction..`);
-        contract.methodsObject.verifySig1({
-            message_packed: '6d6279746573',
-            pbk: 'edpkuYzXL37pTYVHu7rTodeyH9bQ2rfDKadWqqGCqL8m8G1W4UH55E',
-            provider_sig:  'edsigtffaz6wutLRzi7Ni15KPcoUZULJiyF3tHX78iBp17Fdt4jTTDmJjVe6QfK8ggimYGDcv7bLFziMPKSP2JxG5sb8NGKZcQG'
+        contract.methodsObject.verifySig3({
+            pbk: 'edpktz4dr5yhgw56ZmJ2V8SqMsg3o13bjgZimJcbvqmBrcFYwnLyYW',
+            provider_sig:  'edsigtym57ZmmpZBAyP5mimwrs7ioh6U2D8t2s4surG4L2q6zyaBGBC9hKt6k7zNbYgvfp7GM8ULHYgJviTRzgoUMNM8Cc71rWK'
         }).send().then((op) => {
             console.log(`Awaiting for ${op.hash} to be confirmed...`);
              return op.confirmation().then(() => op.hash);

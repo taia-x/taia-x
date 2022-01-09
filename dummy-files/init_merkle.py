@@ -12,7 +12,7 @@ def root(dir_p, root_type="hex"):
     for ind in dir_list:
         h = Hash(dir_p + ind)
         vehicle_m_tree.update(record=h)
-    print(vehicle_m_tree.rootHash)
+    # print(vehicle_m_tree.rootHash)
     if root_type == "bytes":
         return vehicle_m_tree.rootHash
     elif root_type == "hex":
@@ -52,6 +52,7 @@ if __name__ == "__main__":
         dir_path = ""
         dir_l = listdir(dir_path)
         r = root(dir_path, "hex")
+        print("Root of the merkle tree in hex: ", r)
         if not os.path.exists(f"{dir_path}roothash.txt"):
             with open(f"{dir_path}roothash.txt", "w") as outfile:
                 outfile.write(r)

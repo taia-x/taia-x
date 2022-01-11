@@ -16,6 +16,12 @@ const routes: Array<RouteRecordRaw> = [
     component: Explorer,
   },
   {
+    path: "/create",
+    name: "Create",
+    component: () =>
+      import(/* webpackChunkName: "create" */ "@/views/Create.vue"), // lazy loading
+  },
+  {
     path: "/ontologies",
     name: "Ontologies",
     component: () =>

@@ -15,10 +15,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
 import Header from "@/components/Header/Header.vue";
 import RegisterModal from "@/components/RegisterModal.vue";
 import AlertWrapper from "@/components/Utils/AlertWrapper.vue";
+import { useUserStore } from "@/stores/useUser";
+import initInterfaces from "@/services";
 
 export default defineComponent({
   components: {
@@ -28,6 +30,18 @@ export default defineComponent({
   },
   setup() {
     const isRegisterModalOpen = ref(false);
+
+    const user = useUserStore();
+    const { initializeUser } = user;
+
+    onMounted(async () => {
+      try {
+        await initInterfaces();
+        await initializeUser();
+      } catch (e: any) {
+        throw new Error(e.toString());
+      }
+    });
 
     return { isRegisterModalOpen };
   },

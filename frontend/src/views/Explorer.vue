@@ -1,7 +1,10 @@
 <template>
   <div class="flex flex-col w-full pt-10 pb-24">
     <div class="flex items-center w-full space-x-4">
-      <SearchBar @update:isOpen="isCreateDatasetModalOpen = true" />
+      <SearchBar
+        @update:isOpen="isCreateDatasetModalOpen = true"
+        @create:clicked="$router.push('/create')"
+      />
     </div>
     <!-- <div class="flex items-center mt-4 space-x-4">
       <button class="flex items-center space-x-2 group" @click.prevent="add()">
@@ -23,34 +26,27 @@
         >
       </button>
     </div> -->
-    <div class="grid grid-cols-4 gap-6 mt-16">
+    <div class="grid grid-cols-4 gap-6 mt-16" v-if="nfts">
       <router-link
         class="w-full transition duration-200 transform border-gray-300 rounded-lg  bg-gray-50 hover:scale-105 h-96 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-        v-for="nft in nfts"
+        v-for="(nft, index) in nfts"
         :key="nft.id"
-        :index="nft.id"
+        :index="index"
         :to="'/explore/' + nft.id"
-        :nft="nft"
       >
         <div class="flex flex-col p-4">
           <div class="grid grid-cols-2 gap-2">
             <span class="text-sm font-medium">owner</span>
-            <span class="text-sm truncate">{{ nft.owner }}</span>
+            <span class="text-sm truncate">{{ nft.creator_id }}</span>
             <span class="text-sm font-medium">id</span>
             <span class="text-sm truncate">{{ nft.id }}</span>
-            <span class="text-sm font-medium">isOwned</span>
-            <span class="text-sm truncate">{{ nft.isOwned }}</span>
-            <span class="text-sm font-medium">onSale</span>
-            <span class="text-sm truncate">{{ nft.onSale }}</span>
-            <span class="text-sm font-medium">price</span>
-            <span class="text-sm truncate">{{ nft.price || "-" }}</span>
             <span class="text-sm font-medium">metadata</span>
-            <span class="text-sm truncate">{{ nft.metadataUri }}</span>
+            <span class="text-sm truncate">{{ nft.artifact_uri }}</span>
           </div>
         </div>
       </router-link>
     </div>
-    <div class="flex items-center justify-between mt-16" v-if="nfts.length">
+    <div class="flex items-center justify-between mt-16">
       <div class="flex items-center space-x-2">
         <button
           v-for="i in [1]"
@@ -74,12 +70,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, ref } from "vue";
 //import { AdjustmentsIcon, SortAscendingIcon } from "@heroicons/vue/outline";
 import SearchBar from "@/components/SearchBar.vue";
 import CreateDatasetModal from "@/components/Explorer/CreateDatasetModal.vue";
-import { tezosInterface } from "@/services";
-import { useNftStore } from "@/stores/useNft";
+import { useQuery, useResult } from "@vue/apollo-composable";
+import { getTokenMetadata } from "@/services/graphql/queries";
 
 export default defineComponent({
   components: {
@@ -89,19 +85,14 @@ export default defineComponent({
     SearchBar,
   },
   setup() {
-    const nfts = ref([]);
-    const nftStore = useNftStore();
     const isCreateDatasetModalOpen = ref(false);
-
-    // fetches all nfts from contract when component mounts
-    onMounted(async () => {
-      try {
-        nfts.value = await tezosInterface.fetchNfts();
-        nftStore.$patch((state) => (state.nfts = [...nfts.value]));
-      } catch (e: any) {
-        throw new Error(e.toString());
-      }
-    });
+    // fetches 12 nfts from contract when component mounts
+    const { result } = useQuery(getTokenMetadata, () => ({
+      offset: 0,
+      limit: 12,
+    }));
+    // stores result in nfts when result is loaded
+    const nfts = useResult(result, null, ({token}) => token);
 
     return { nfts, isCreateDatasetModalOpen };
   },

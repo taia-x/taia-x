@@ -1,0 +1,28 @@
+version: "3.4"
+
+services:
+  compile-contracts:
+    image: ligolang/ligo:0.32.0
+    networks:
+      - taia-x
+    container_name: taia-x-compile-smart-contracts
+    platform: linux/amd64
+    volumes:
+      - ./:/opt/taia-x/contracts
+    command: "compile contract ${SOURCE_FILE} --entry-point ${ENTRY_POINT} -o ${OUTPUT_FILE}"
+
+  sandbox:
+    image: oxheadalpha/flextesa:20211221
+    networks:
+      - taia-x
+    container_name: taia-x-sandbox
+    environment:
+      block_time: 3
+      flextesa_node_cors_origin: "*"
+    command: "hangzbox start"
+    ports:
+      - 20000:20000
+
+networks:
+  taia-x:
+    name: taia-x

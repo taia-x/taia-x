@@ -3,8 +3,9 @@
 
 #include "dataset_definition.mligo"
 #include "marketplace_definition.mligo"
+#include "user_definition.mligo"
+
 #include "../tzip-12/lib/fa2_operator_lib.mligo"
-#include "../user_manager/user_manager_role_lib.mligo"
 
 type marketplace_storage = {
   datasets: datasets;

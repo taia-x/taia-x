@@ -43,8 +43,9 @@ class WalletInterface {
           rpcUrl: CUSTOM_NODE_URL,
         },
       });
-    } catch (e) {
-      throw new Error("Unable to connect to wallet!");
+      this.Tezos.setProvider({ wallet });
+    } catch (e: any) {
+      throw new Error(e.toString());
     }
   }
 
@@ -78,8 +79,8 @@ class WalletInterface {
           if (balance) return balance.toNumber();
         }
       }
-    } catch (e) {
-      throw new Error("Unable to get tezos account balance!");
+    } catch (e: any) {
+      throw new Error(e.toString());
     }
     return 0;
   }
@@ -91,8 +92,8 @@ class WalletInterface {
     try {
       const wallet = await this.getWallet();
       await wallet?.clearActiveAccount();
-    } catch (e) {
-      throw new Error("Unable to disconnect from wallet!");
+    } catch (e: any) {
+      throw new Error(e.toString());
     }
   }
 }

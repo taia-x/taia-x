@@ -1,30 +1,19 @@
-import { createApp } from "vue";
+import { createApp, provide, h } from "vue";
+import { ApolloClients } from "@vue/apollo-composable";
+import { tokenMetadataClient } from "@/services/TokenMetadata";
 import App from "./App.vue";
 import router from "./router";
 import VWave from "v-wave";
 import { createPinia } from "pinia";
 import "./assets/css/tailwind.css";
 import "./assets/css/fonts.css";
-import { useUserStore } from "@/stores/useUser";
-import initInterfaces from "@/services";
 
-const app = createApp(App);
-app.use(createPinia()).use(router).use(VWave);
-
-const user = useUserStore();
-const { initializeUser } = user;
-
-/**
- * start app by initializing user and interfaces first
- */
-const startApp = async () => {
-  try {
-    await initInterfaces();
-    await initializeUser();
-  } catch (e) {
-    throw new Error("Unable to initialize App!");
-  }
-  app.mount("#app");
-};
-
-startApp();
+const app = createApp({
+  setup() {
+    provide(ApolloClients, {
+      default: tokenMetadataClient,
+    });
+  },
+  render: () => h(App),
+});
+app.use(createPinia()).use(router).use(VWave).mount("#app");

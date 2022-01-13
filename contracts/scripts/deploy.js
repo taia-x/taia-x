@@ -3,7 +3,7 @@ const { importKey } = require("@taquito/signer");
 const migrate = require("../migration/1_initial_migration");
 
 const fs = require("fs");
-require("dotenv").config();
+require("dotenv").config({path: '../../.env'});
 
 const SANDBOX_URL = "http://127.0.0.1:20000";
 const TESTNET_URL = "https://granadanet.api.tez.ie";
@@ -25,7 +25,7 @@ const deploy = async () => {
       ? await importKey(Tezos, ALICE_SECRET)
       : await importKey(Tezos, email, password, mnemonic.join(" "), secret);
 
-    const code = fs.readFileSync("./contracts/out/taia_x_main.tz").toString();
+    const code = fs.readFileSync("../contracts/out/taia_x_main.tz").toString();
     console.log("Originate...");
 
     const initial_storage = await migrate(Tezos);
@@ -39,7 +39,6 @@ const deploy = async () => {
     const contract = await op.contract();
     console.log("Deployment successful!");
     console.log(">>> Gas used:", op.consumedGas);
-    console.log(">>> Storage:", await contract.storage());
     console.log(">>> Operation hash:", op.hash);
     console.log(">>> Contract address:", op.contractAddress);
   } catch (error) {

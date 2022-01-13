@@ -16,22 +16,24 @@ const routes: Array<RouteRecordRaw> = [
     component: Explorer,
   },
   {
+    path: "/create",
+    name: "Create",
+    component: () =>
+      import(/* webpackChunkName: "create" */ "@/views/Create.vue"), // lazy loading
+  },
+  {
     path: "/ontologies",
     name: "Ontologies",
     component: () =>
       import(/* webpackChunkName: "ontologies" */ "@/views/Ontologies.vue"), // lazy loading
   },
   {
-    path: "/ontologies/:id",
-    name: "SingleOntology",
-    component: () =>
-      import(/* webpackChunkName: "ontology" */ "@/views/SingleOntology.vue"), // lazy loading
-  },
-  {
     path: "/explore/:id",
-    name: "SingleNFT",
+    name: "ExplorerDetails",
     component: () =>
-      import(/* webpackChunkName: "nft" */ "@/views/SingleNFT.vue"), // lazy loading
+      import(
+        /* webpackChunkName: "explorer-details" */ "@/views/ExplorerDetails.vue"
+      ), // lazy loading
   },
 ];
 

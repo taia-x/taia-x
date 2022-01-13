@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed top-0 left-0 z-10 flex flex-col ml-10 space-y-4 transition-all duration-200 transform  mt-28"
+    class="fixed top-0 left-0 z-50 flex flex-col ml-10 space-y-4 transition-all duration-200 transform  mt-28"
   >
     <Alert
       v-for="(alert, index) in alerts"

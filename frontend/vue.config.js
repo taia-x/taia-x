@@ -6,6 +6,7 @@ module.exports = {
     setup(app) {
       app.use("/__open-in-editor", openInEditor("code"));
     },
+    public: "http://localhost:8080",
   },
   // configureWebpack: {
   //   performance: {

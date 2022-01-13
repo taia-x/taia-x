@@ -1,6 +1,6 @@
 import { ContractAbstraction, TezosToolkit, Wallet } from "@taquito/taquito";
 import { CONTRACT } from "@/constants";
-import { NFT, AddRoleData, RemoveRoleData } from "@/types";
+import { NFT, AddRoleData, RemoveRoleData, MintParams } from "@/types";
 import { char2Bytes, bytes2Char } from "@taquito/utils";
 
 /**
@@ -47,58 +47,25 @@ class TezosInterface {
           console.log("An error has occurred");
         }
       }
-    } catch (e) {
-      throw new Error(`Unable to assign roles!`);
-    }
-  }
-
-  /**
-   * fetch nft token from tezos blockchain
-   */
-  async fetchNfts(): Promise<any> {
-    try {
-      const storage: any = await this.contract.storage();
-      const datasetIds = storage["market"].datasetIds;
-      if (datasetIds) {
-        const tokenIds: number[] = datasetIds.map((token: any) => token.c[0]);
-        const nfts: Array<NFT> = await Promise.all(
-          tokenIds.map(async (tokenId) => {
-            const [tokenRaw, metadata] = await Promise.all([
-              storage.market.datasets.get(tokenId.toString()), // get dataset for a token id
-              storage.token_metadata.get(tokenId.toString()), // get metadata for a token id
-            ]);
-            const nft: NFT = {
-              owner: tokenRaw.owner,
-              id: tokenRaw.id.c[0],
-              isOwned: tokenRaw.isOwned,
-              onSale: tokenRaw.onSale,
-              price: tokenRaw.price,
-              metadataUri: bytes2Char(metadata.token_info.get("")), // convert bytes to string and strip off some hex numbers which are not needed
-            };
-            return nft;
-          })
-        );
-        return nfts;
-      }
-    } catch (e) {
-      throw new Error(`Unable to fetch nft's from contract: ${CONTRACT}!`);
+    } catch (e: any) {
+      throw new Error(e.toString());
     }
   }
 
   /**
    * mint nft token on tezos blockchain
    * @param address tezos account address
-   * @param metadataUri ipfs metadata uri formatted as https://ipfs.io/{CID}
+   * @param metadataUri ipfs metadata uri formatted as ipfs//{CID}
    */
-  async mintNft(address: string, metadataUri: string): Promise<void> {
+  async mintNft(mintParams: MintParams): Promise<void> {
+    const { operator, address, price, metadataUri } = mintParams;
+    console.log(operator);
+    console.log(address);
+    console.log(price);
+    console.log(metadataUri);
     try {
       const op = await this.contract.methods
-        .mint(
-          "tz1ittpFnVsKxx1M8YPKt7VJEaZfwiBZ6jo7",
-          address,
-          1000000,
-          char2Bytes(metadataUri)
-        )
+        .mint(operator, address, char2Bytes(metadataUri))
         .send();
       if (op) {
         const result = await op.confirmation(1);
@@ -110,8 +77,9 @@ class TezosInterface {
           console.log("An error has occurred");
         }
       }
-    } catch (e) {
-      throw new Error(`Unable to mint token for address ${address}!`);
+    } catch (e: any) {
+      console.log(e);
+      throw new Error(e.toString());
     }
   }
 
@@ -142,3 +110,36 @@ class TezosInterface {
 }
 
 export default TezosInterface;
+
+// /**
+//  * fetch nft token from tezos blockchain
+//  */
+// async fetchNfts(): Promise<any> {
+//   try {
+//     const storage: any = await this.contract.storage();
+//     const datasetIds = storage["market"].datasetIds;
+//     if (datasetIds) {
+//       const tokenIds: number[] = datasetIds.map((token: any) => token.c[0]);
+//       const nfts: Array<NFT> = await Promise.all(
+//         tokenIds.map(async (tokenId) => {
+//           const [tokenRaw, metadata] = await Promise.all([
+//             storage.market.datasets.get(tokenId.toString()), // get dataset for a token id
+//             storage.token_metadata.get(tokenId.toString()), // get metadata for a token id
+//           ]);
+//           const nft: NFT = {
+//             owner: tokenRaw.owner,
+//             id: tokenRaw.id.c[0],
+//             isOwned: tokenRaw.isOwned,
+//             onSale: tokenRaw.onSale,
+//             price: tokenRaw.price,
+//             metadataUri: bytes2Char(metadata.token_info.get("")), // convert bytes to string and strip off some hex numbers which are not needed
+//           };
+//           return nft;
+//         })
+//       );
+//       return nfts;
+//     }
+//   } catch (e: any) {
+//     throw new Error(e.toString());
+//   }
+// }

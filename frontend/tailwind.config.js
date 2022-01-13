@@ -16,15 +16,6 @@ module.exports = {
         system: defaultTheme.fontFamily.sans,
       },
       colors: {
-        // background: "#121212",
-        // purp: "#a65fec",
-        // custom: {
-        //   secondary: "rgba(25, 27, 31, 0.6)",
-        //   "secondary-notrans": "rgb(25, 27, 31)",
-        //   tertiary: "#25272C",
-        //   background: "#1F2128",
-        //   lines: "#1D1E23",
-        // },
         gray: colors.gray,
         cyan: colors.cyan,
         fuchsia: colors.fuchsia,
@@ -59,8 +50,12 @@ module.exports = {
       ringOffsetColor: ["focus-visible"],
       borderStyle: ["hover"],
       backgroundOpacity: ["hover"],
+      backgroundColor: ["disabled"],
+      textColor: ["disabled"],
+      cursor: ["disabled"],
       fontWeight: ["hover", "focus"],
     },
+    translate: ({ after }) => after(["group-hover"]),
   },
   plugins: [require("@tailwindcss/forms")],
 };

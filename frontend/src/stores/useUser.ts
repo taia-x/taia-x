@@ -23,10 +23,10 @@ export const useUserStore = defineStore("user", {
         ]);
         this.address = address;
         this.balance = balance;
-      } catch (e) {
-        console.log(e);
+      } catch (e: any) {
         this.balance = 0;
         this.address = "";
+        throw new Error(e.toString());
       }
     },
   },

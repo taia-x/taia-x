@@ -1,18 +1,29 @@
-export const CUSTOM_NODE_URL = "https://granadanet.api.tez.ie";
+export const CUSTOM_NODE_URL = "http://localhost:20000"; // Testnet: "https://granadanet.api.tez.ie";
 
-export const CONTRACT = "KT1McMTJQ9Y2ZzZZp3183Hjzz2iRxEjn4q7W";
-// first
-// export const CONTRACT = "KT1MADr7Y4BKqHVU35oUeuvNqh5tNbHc6b3y";
-// second
-// export const CONTRACT = "KT1Q7ytf2221ypXHTUtKjpHZsEYzhz7Uvcm7";
-// third
-// export const CONTRACT = "KT1EK894Xr74ou9xw1TUqcQ7SGFDzLzpTu6i";
-// fourth
-// export const CONTRACT = "KT1AgStGnTVLsB8rbNxv8U5wPAA6nSV116mJ";
+type HTTP = "http" | "https";
 
+export const CONTRACT =
+  process.env.VUE_APP_CONTRACT_ADDRESS ||
+  "KT1Gd4FXMY3uDE7xRNd1hTnFYizMNYwLBkLh";
+console.log(process.env.VUE_APP_CONTRACT_ADDRESS);
+
+// Roles
 export const ROLE_CERTIFIER = "certifier";
 export const ROLE_PROVIDER = "provider";
 export const ROLE_CONSUMER = "consumer";
 
-export const IPFS_API_URL = "http://localhost:5001";
-export const IPFS_GATEWAY_URL = "https://ipfs.io/ipfs";
+// IPFS
+export const IPFS_API_PROTOCOL =
+  (process.env.VUE_APP_IPFS_API_PROTOCOL as HTTP) || "http";
+export const IPFS_API_HOST = process.env.VUE_APP_IPFS_API_HOST || "localhost";
+export const IPFS_API_PORT =
+  parseInt(<string>process.env.VUE_APP_IPFS_API_PORT, 10) || 5001;
+export const IPFS_GATEWAY_URL =
+  process.env.VUE_APP_IPFS_GATEWAY_URL || "http://localhost:8081/ipfs";
+
+// GraphQL
+export const HTTP_METADATA_API_URL =
+  process.env.VUE_APP_HTTP_METADATA_API_URL ||
+  "http://localhost:42000/v1/graphql";
+export const WS_METADATA_API_URL =
+  process.env.VUE_APP_WS_METADATA_API_URL || "ws://localhost:42000/v1/graphql";

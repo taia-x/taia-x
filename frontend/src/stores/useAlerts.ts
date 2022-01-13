@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { Alert } from "@/types";
 
 export const useAlertStore = defineStore("alerts", {
-  // initial state of user
+  // initial state of alerts
   state: () => ({
     alerts: [] as Array<Alert>,
     counter: 0,
@@ -11,6 +11,7 @@ export const useAlertStore = defineStore("alerts", {
     getAlerts: (state) => state.alerts,
   },
   actions: {
+    // adds alert to alerts array and automatically removes it after 4s
     createAlert(message: string, type = "info"): void {
       const index = this.alerts.length;
 
@@ -26,6 +27,7 @@ export const useAlertStore = defineStore("alerts", {
       }, 4000);
     },
 
+    // sets visibility of alert to false
     destroyAlert(index: number): void {
       this.alerts[index].visible = false;
     },

@@ -32,15 +32,12 @@ let mint (mint_param, store : mint_param * taia_x_storage) : (operation  list) *
             let new_token_metadata = ({ token_id=token_id; token_info=new_token_metadata_info; }) in
             let token_metadata_with_new_token_metadata = Big_map.add token_id new_token_metadata s.token_metadata in
 
-            let temp_sale : sale = ({ token_id = token_id ;price= p.price_arg }) in
-            let new_sale_addition : sale set = Set.add temp_sale s.market.sales in
-
             match mint_param.operator with
             | None -> ([] : operation list),  { s with ledger = ledger_with_minted_token; token_metadata=token_metadata_with_new_token_metadata; market = { s.market with datasets=datasets_with_new_dataset; datasetIds=datasets_ids_with_new_id; nextDatasetId=next_dataset_id; owners=new_owners } }
             | Some(operator_address) ->
                 let update : update_operator = Add_operator({ owner = p.owner; operator = operator_address; token_id = token_id; }) in
                 let operators_with_minted_token_operator = update_operators (update, s.operators) in
-                ([] : operation list),  { s with ledger = ledger_with_minted_token; operators = operators_with_minted_token_operator; token_metadata=token_metadata_with_new_token_metadata; market = { s.market with datasets=datasets_with_new_dataset; sales=new_sale_addition; datasetIds=datasets_ids_with_new_id; nextDatasetId=next_dataset_id; owners=new_owners; } }
+                ([] : operation list),  { s with ledger = ledger_with_minted_token; operators = operators_with_minted_token_operator; token_metadata=token_metadata_with_new_token_metadata; market = { s.market with datasets=datasets_with_new_dataset; datasetIds=datasets_ids_with_new_id; nextDatasetId=next_dataset_id; owners=new_owners; } }
         else
             (failwith("Error: cannot mint this token") : (operation  list) * taia_x_storage)
     in

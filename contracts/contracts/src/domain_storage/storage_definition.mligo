@@ -16,7 +16,7 @@ type marketplace_storage = {
 
 type ledger = (token_id, address) big_map
 
-type nft_token_storage = {
+type taia_x_storage = {
   market : marketplace_storage;
   users: user_storage;
   ledger : ledger;

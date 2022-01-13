@@ -8,10 +8,10 @@ Buy a dataset and transfer it to the buyer.
 Several checks are carried out: the dataset must be owned by someone and must exist. The amount sent must match the dataset price
 @return storage with modified operators and lists
 *)
-let buy(buy_parameters, storage : buy_param * nft_token_storage) : (operation  list) * nft_token_storage =
+let buy(buy_parameters, storage : buy_param * taia_x_storage) : (operation  list) * taia_x_storage =
     let buyer: address = Tezos.sender in
     if not (buy_parameters.price = Tezos.amount) then
-      (failwith("The amount sent is not equal to the price of the dataset") : (operation  list) * nft_token_storage)
+      (failwith("The amount sent is not equal to the price of the dataset") : (operation  list) * taia_x_storage)
     else
       let dataset_owner_before_sale : address =  match Big_map.find_opt buy_parameters.token_id storage.ledger with
       | Some owner -> if (buyer = owner) then
@@ -35,4 +35,4 @@ let buy(buy_parameters, storage : buy_param * nft_token_storage) : (operation  l
               let withdrawTransaction : operation = Tezos.transaction unit buy_parameters.price seller in
               [withdrawTransaction], { storage with market={ storage.market with owners=owners_with_updated_buyer_and_seller; datasets = datasets_with_updated_dataset }; ledger=ledger_with_token_transferred; operators=operators_without_token_bought_operator }
             else
-                (failwith("Error: cannot transfer token"): (operation  list) * nft_token_storage)
+                (failwith("Error: cannot transfer token"): (operation  list) * taia_x_storage)

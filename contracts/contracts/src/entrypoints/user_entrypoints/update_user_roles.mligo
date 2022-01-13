@@ -4,7 +4,7 @@ type update_user_roles_param = update_roles list
 Update dynamic user role parameter from Tezos.sender.
 @return storage with updated user roles
 *)
-let update_user_roles (updates, storage: update_user_roles_param * nft_token_storage): (operation list) * nft_token_storage =
+let update_user_roles (updates, storage: update_user_roles_param * taia_x_storage): (operation list) * taia_x_storage =
     let updater = Tezos.sender in    
     let process_update = (fun (roles, update : user_storage * update_roles) ->
       let _u = check_update_roles_params_valid (update, updater) in

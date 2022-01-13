@@ -16,5 +16,5 @@ let set_new_dataset_owner(tokenId, newOwner, datasets: token_id * address * data
     let datasets_with_updated_dataset: datasets = Big_map.update tokenId (Some(updated_dataset)) datasets in
     datasets_with_updated_dataset
 
-let get_dataset_id (s : nft_token_storage) : token_id =
+let get_dataset_id (s : taia_x_storage) : token_id =
     s.market.nextDatasetId

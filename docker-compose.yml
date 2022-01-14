@@ -1,0 +1,109 @@
+version: '3.4'
+
+services:
+
+  sandbox:
+    image: oxheadalpha/flextesa:20211221
+    container_name: taia-x-sandbox
+    environment:
+      block_time: 3
+      flextesa_node_cors_origin: "*"
+    command: "hangzbox start"
+    ports:
+      - 20000:20000
+
+  db:
+    image: postgres:13-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./backend/.env
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - 5432:5432
+
+  # to build a ipfs cluster: https://github.com/ipfs/ipfs-cluster/blob/master/docker-compose.yml
+  ipfs:
+    image: ipfs/go-ipfs:v0.8.0
+    ports:
+      - 5001:5001 # ipfs api - expose if needed/wanted
+#     - 4001:4001 # ipfs swarm - expose if needed/wanted
+#     - 8080:8080 # ipfs gateway - expose if needed/wanted
+    volumes:
+      - ipfsf:/data/ipfs
+
+  db_tzkt:
+    container_name: tzkt-db
+    restart: always
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_USER: tzkt
+      POSTGRES_PASSWORD: qwerty
+      POSTGRES_DB: tzkt_db
+      POSTGRES_DB: 5431
+    expose:
+      - 5431
+    ports:
+      - 0.0.0.0:5431:5431
+
+  api_tzkt:
+    container_name: tzkt-api
+    restart: always
+    image: bakingbad/tzkt-api:latest
+    depends_on:
+      - db_tzkt
+    environment:
+      TZKT_API_KESTREL__ENDPOINTS__HTTP__URL: http://0.0.0.0:5000
+      TZKT_API_ConnectionStrings__DefaultConnection: host=db_tzkt;port=5432;database=tzkt_db;username=tzkt;password=qwerty;
+    expose:
+      - 5000
+    ports:
+      - 0.0.0.0:5000:5000
+    depends_on:
+      - sandbox
+
+  sync_tzkt:
+    container_name: tzkt-sync
+    restart: always
+    image: bakingbad/tzkt-sync:latest
+    environment:
+      TZKT_TezosNode__Endpoint: http://sandbox:20000
+      TZKT_ConnectionStrings__DefaultConnection: host=db_tzkt;port=5432;database=tzkt_db;username=tzkt;password=qwerty;
+    depends_on:
+      - sandbox
+      - db_tzkt
+
+  provider:
+    container_name: provider-node
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend/:/backend/
+    entrypoint: ./docker-start.sh
+    env_file:
+      - ./backend/.env
+    ports:
+      - 5678:5678
+      - 8000:8000
+    depends_on:
+      - db
+      - api_tzkt
+
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./frontend/:/opt/taia-x/frontend:cached
+  #     - /opt/taia-x/frontend/node_modules
+  #   container_name: taia-x-frontend
+  #   environment:
+  #     - CHOKIDAR_INTERVAL=1000
+  #   ports:
+  #     - 8080:8080
+
+volumes:
+  postgres_data:
+  ipfsf:

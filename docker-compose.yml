@@ -47,6 +47,38 @@ services:
     ports:
       - 0.0.0.0:5431:5431
 
+  db_dipdup:
+    image: postgres:13
+    restart: always
+    ports:
+      - 127.0.0.1:5433:5432
+    container_name: db_dipdup
+    environment:
+      - POSTGRES_USER=dipdup
+      - POSTGRES_DB=dipdup
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  hasura:
+    image: hasura/graphql-engine:v2.0.1
+    container_name: hasura
+    ports:
+      - 127.0.0.1:42000:8080
+    depends_on:
+      - db_dipdup
+    restart: always
+    environment:
+      - HASURA_GRAPHQL_DATABASE_URL=postgres://dipdup:${POSTGRES_PASSWORD:-changeme}@db_dipdup:5432/dipdup
+      - HASURA_GRAPHQL_ENABLE_CONSOLE=true
+      - HASURA_GRAPHQL_DEV_MODE=false
+      - HASURA_GRAPHQL_ENABLED_LOG_TYPES=startup, http-log, webhook-log, websocket-log, query-log
+      - HASURA_GRAPHQL_ADMIN_SECRET=${ADMIN_SECRET:-changeme}
+      - HASURA_GRAPHQL_UNAUTHORIZED_ROLE=user
+
   api_tzkt:
     container_name: tzkt-api
     restart: always
@@ -72,6 +104,19 @@ services:
       - sandbox
       - db_tzkt
 
+  indexer:
+    build: ./dipdup
+    container_name: indexer
+    restart: "no"
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
+      - ADMIN_SECRET=${ADMIN_SECRET:-changeme}
+    depends_on:
+      - hasura
+      - db_dipdup
+      - api_tzkt
+      - sync_tzkt
+
   provider:
     container_name: provider-node
     build: 
@@ -87,20 +132,24 @@ services:
       - 8000:8000
     depends_on:
       - db
-      - api_tzkt
+      - indexer
 
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   volumes:
-  #     - ./frontend/:/opt/taia-x/frontend:cached
-  #     - /opt/taia-x/frontend/node_modules
-  #   container_name: taia-x-frontend
-  #   environment:
-  #     - CHOKIDAR_INTERVAL=1000
-  #   ports:
-  #     - 8080:8080
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend/:/opt/taia-x/frontend:cached
+      - /opt/taia-x/frontend/node_modules
+    container_name: taia-x-frontend
+    environment:
+      - CHOKIDAR_INTERVAL=1000
+    ports:
+      - 8080:8080
+    depends_on:
+      - ipfs
+      - sandbox
+      - indexer
 
 volumes:
   postgres_data:

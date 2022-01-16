@@ -113,10 +113,7 @@ async def fetch_metadata_cf_ipfs(token, failed_attempt=0):
     addr = token.metadata.replace('ipfs://', '')
     try:
         session = aiohttp.ClientSession()
-        print("FROM IPFS")
         data = await http_request(session, 'get', url=f'http://ipfs:8080/ipfs/{addr}', timeout=10)
-        print("FROM IPFS")
-        print(data)
         await session.close()
         if data and not isinstance(data, list):
             return data

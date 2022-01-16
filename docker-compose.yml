@@ -41,7 +41,7 @@ services:
       POSTGRES_USER: tzkt
       POSTGRES_PASSWORD: qwerty
       POSTGRES_DB: tzkt_db
-      POSTGRES_DB: 5431
+      POSTGRES_PORT: 5431
     expose:
       - 5431
     ports:
@@ -51,8 +51,6 @@ services:
     container_name: tzkt-api
     restart: always
     image: bakingbad/tzkt-api:latest
-    depends_on:
-      - db_tzkt
     environment:
       TZKT_API_KESTREL__ENDPOINTS__HTTP__URL: http://0.0.0.0:5000
       TZKT_API_ConnectionStrings__DefaultConnection: host=db_tzkt;port=5432;database=tzkt_db;username=tzkt;password=qwerty;

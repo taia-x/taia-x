@@ -16,6 +16,7 @@ module.exports = async (Tezos) => {
   };
 
   const empty_users = new MichelsonMap();
+  const empty_certs = new MichelsonMap();
   const metadata = new MichelsonMap();
   const token_metadata = new MichelsonMap();
   const empty_ledger = new MichelsonMap();
@@ -24,6 +25,7 @@ module.exports = async (Tezos) => {
   return {
     market: market,
     users: empty_users,
+    certificates: empty_certs,
     ledger: empty_ledger,
     operators: empty_operators,
     token_metadata: token_metadata,

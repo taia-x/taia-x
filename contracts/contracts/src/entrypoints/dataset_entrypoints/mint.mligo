@@ -2,6 +2,8 @@ type mint_param = {
     owner: address;
     operator: address option;
     token_metadata_uri: bytes;
+    provider_pbk: key;
+    root_hash: bytes;
 }
 (**
 Create a dataset and a token (they both have the same id), associate token to given owner, (and possibly setup an operator for this newly minted token).
@@ -19,8 +21,10 @@ let mint (mint_param, store : mint_param * taia_x_storage) : (operation  list) *
     let create_token_with_operator (p, s : mint_param * taia_x_storage) : (operation  list) * taia_x_storage =
         let new_owners: owners = add_token_to_owner (token_id, p.owner, s.market.owners) in
         let ledger_with_minted_token = Big_map.add token_id p.owner s.ledger in
-        let ledger_and_owners_are_consistent : bool = check_ownership_is_consistent_in_ledger_and_owners (({owner=p.owner; token_id=token_id} : ownership), ledger_with_minted_token, new_owners) in
-        if ledger_and_owners_are_consistent then
+        let ledger_and_owners_are_consistent : bool = check_ownership_is_consistent_in_ledger_and_owners (({owner=p.owner; token_id=token_id} : ownership), ledger_with_minted_token, new_owners) in        
+        let dataset_not_certified : bool = check_dataset_not_certified (token_id, s) in
+
+        if ledger_and_owners_are_consistent && dataset_not_certified then
             let next_dataset_id = token_id + 1n in
             
             let new_dataset = ({ isOwned=true; owner=p.owner; price=(None : price option); id=token_id } : dataset) in
@@ -31,12 +35,15 @@ let mint (mint_param, store : mint_param * taia_x_storage) : (operation  list) *
             let new_token_metadata = ({ token_id=token_id; token_info=new_token_metadata_info; }) in
             let token_metadata_with_new_token_metadata = Big_map.add token_id new_token_metadata s.token_metadata in
 
+            let new_cert = ({ dataset_id=token_id; provider_pbk=p.provider_pbk; issuer=(None:address option); signature=(None:signature option); root_hash=p.root_hash; state=Pending; } : cert) in
+            let certs_with_new_cert = Big_map.add token_id new_cert s.certificates in
+
             match mint_param.operator with
             | None -> ([] : operation list),  { s with ledger = ledger_with_minted_token; token_metadata=token_metadata_with_new_token_metadata; market = { s.market with datasets=datasets_with_new_dataset; datasetIds=datasets_ids_with_new_id; nextDatasetId=next_dataset_id; owners=new_owners } }
             | Some(operator_address) ->
                 let update : update_operator = Add_operator({ owner = p.owner; operator = operator_address; token_id = token_id; }) in
                 let operators_with_minted_token_operator = update_operators (update, s.operators) in
-                ([] : operation list),  { s with ledger = ledger_with_minted_token; operators = operators_with_minted_token_operator; token_metadata=token_metadata_with_new_token_metadata; market = { s.market with datasets=datasets_with_new_dataset; datasetIds=datasets_ids_with_new_id; nextDatasetId=next_dataset_id; owners=new_owners; } }
+                ([] : operation list),  { s with ledger = ledger_with_minted_token; certificates=certs_with_new_cert;operators = operators_with_minted_token_operator; token_metadata=token_metadata_with_new_token_metadata; market = { s.market with datasets=datasets_with_new_dataset; datasetIds=datasets_ids_with_new_id; nextDatasetId=next_dataset_id; owners=new_owners; } }
         else
             (failwith("Error: cannot mint this token") : (operation  list) * taia_x_storage)
     in

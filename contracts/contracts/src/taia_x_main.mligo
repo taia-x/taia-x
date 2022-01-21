@@ -15,7 +15,7 @@ type taia_x_entry_points =
     | Update_token_metadata of update_token_metadata_param
     | Buy of buy_param
     | Update_user_roles of update_user_roles_param
-    | Certify of certify_param
+    | Update_certs of update_certs_param
 
 let fa2_main (param, storage : fa2_entry_points * taia_x_storage)
     : (operation  list) * taia_x_storage =
@@ -32,6 +32,6 @@ let main (param, storage : taia_x_entry_points * taia_x_storage)
     | Update_token_metadata p -> update_token_metadata(p, storage)
     | Buy p -> buy(p, storage)
     | Update_user_roles p -> update_user_roles(p, storage)
-    | Certify p -> certify(p, storage)
+    | Update_certs p -> update_certs(p, storage)
 
 #endif

@@ -49,7 +49,7 @@ if __name__ == "__main__":
     if sys.stdin.isatty():
         main()
     else:
-        dir_path = ""
+        dir_path = "./"
         dir_l = listdir(dir_path)
         r = root(dir_path, "hex")
         print("Root of the merkle tree in hex: ", r)

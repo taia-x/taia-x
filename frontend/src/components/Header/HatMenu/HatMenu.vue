@@ -1,7 +1,7 @@
 <template>
   <Popover v-if="address" class="relative" v-slot="{ open }">
     <PopoverButton
-      class="relative flex items-center justify-center font-semibold text-gray-500 transition duration-200 ease-in-out transform rounded-md text-md hover:text-cyan-500 group"
+      class="relative flex items-center justify-center font-semibold text-gray-500 transition duration-200 ease-in-out transform rounded-md text-md hover:text-cyan-500 group focus:outline-none"
     >
       <AcademicCapIcon class="w-5 h-5 mr-2" />
       Hat

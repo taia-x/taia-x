@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex items-center justify-between w-full px-10 py-8 mx-auto font-sans text-sm font-medium text-gray-900 border-gray-200"
+    class="flex items-center justify-between w-full px-10 py-8 mx-auto font-sans text-sm font-medium text-gray-900 border-gray-200 bg-opacity-5 backdrop-filter backdrop-blur"
   >
     <div class="flex items-center w-full space-x-6">
       <Navigation :address="address" :role="role" />

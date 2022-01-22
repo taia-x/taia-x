@@ -1,10 +1,10 @@
 <template>
   <div class="flex flex-col items-center p-1.5 w-48">
-    <div class="grid grid-cols-1 space-y-1.5 text-gray-700 w-full">
+    <div class="grid grid-cols-1 space-y-1.5 text-gray-600 w-full">
       <div class="border-b-2">
         <button
           @click.prevent="assignRole(ROLE_PROVIDER)"
-          class="w-full font-medium relative flex items-center justify-center px-12 py-2 mb-1.5 text-center rounded-md cursor-pointer hover:bg-gray-100 space-x-2"
+          class="w-full font-medium relative flex items-center justify-center px-12 py-2 mb-1.5 text-center rounded-md cursor-pointer hover:bg-gray-100 space-x-2 hover:text-gray-800 transition-colors duration-100"
         >
           <BriefcaseIcon class="absolute w-5 h-5 left-2" />
           {{ ROLE_PROVIDER[0].toUpperCase() + ROLE_PROVIDER.slice(1) }}
@@ -17,7 +17,7 @@
       <div>
         <button
           @click.prevent="assignRole(ROLE_CONSUMER)"
-          class="relative flex justify-center w-full px-12 py-2 font-medium text-center rounded-md cursor-pointer hover:bg-gray-100"
+          class="relative flex justify-center w-full px-12 py-2 font-medium text-center transition-colors duration-100 rounded-md cursor-pointer hover:bg-gray-100 hover:text-gray-800"
         >
           <ShoppingBagIcon class="absolute w-5 h-5 left-2" />
           {{ ROLE_CONSUMER[0].toUpperCase() + ROLE_CONSUMER.slice(1) }}
@@ -66,7 +66,6 @@ export default defineComponent({
         user.$patch((state) => (state.role = role));
         alerts.createAlert(`Successfully registered as ${role}!`, "success");
       } catch (e: any) {
-        // error handling
         alerts.createAlert("Something went wrong!", "error");
         throw new Error(e.toString());
       }

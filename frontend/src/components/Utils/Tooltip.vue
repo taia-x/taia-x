@@ -1,18 +1,16 @@
 <template>
-  <TransitionRoot
-    appear
-    :show="isOpen"
-    as="template"
-    enter="transform ease-out duration-200 transition origin-bottom"
-    enter-from="scale-95 translate-y-0.5 opacity-0"
-    enter-to="scale-100 translate-y-0 opacity-100"
-    leave="transition ease-in duration-100"
-    leave-from="opacity-100"
-    leave-to="opacity-0"
+  <div
+    class="relative cursor-pointer"
+    @mouseover="isHidden = false"
+    @mouseleave="isHidden = true"
   >
-    <span class="absolute inset-x-0 bottom-full mb-2.5 flex justify-center">
+    <slot name="element"></slot>
+    <span
+      class="absolute inset-x-0 bottom-full mb-2.5 justify-center whitespace-nowrap"
+      :class="isHidden ? 'hidden' : 'flex'"
+    >
       <span
-        class="px-3 py-1 text-xs font-medium text-white bg-gray-900 rounded-md  filter drop-shadow-md"
+        class="px-3 py-1 text-xs font-medium text-white bg-gray-900 rounded-md filter drop-shadow-md"
       >
         <svg
           aria-hidden="true"
@@ -28,40 +26,22 @@
             fill="currentColor"
           ></path>
         </svg>
-        {{ text }}
+        <slot name="text"></slot>
       </span>
     </span>
-  </TransitionRoot>
+  </div>
 </template>
 
 <script>
-import { defineComponent, toRefs, watchEffect } from "vue";
-import { TransitionRoot } from "@headlessui/vue";
+import { defineComponent, ref } from "vue";
 
 export default defineComponent({
-  components: {
-    TransitionRoot,
-  },
-  props: {
-    text: {
-      type: String,
-      required: true,
-    },
-    isOpen: {
-      type: Boolean,
-      required: true,
-    },
-  },
-  setup(props, { emit }) {
-    const { isOpen } = toRefs(props);
+  setup() {
+    const isHidden = ref(true);
 
-    watchEffect(() => {
-      if (isOpen.value === true) {
-        setTimeout(function () {
-          emit("closed");
-        }, 1000); // close tooltip after 1 second
-      }
-    });
+    return {
+      isHidden,
+    };
   },
 });
 </script>

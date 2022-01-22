@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-col items-center p-1.5 w-48">
-    <div class="grid grid-cols-1 space-y-1.5 text-gray-700 w-full">
+    <div class="grid grid-cols-1 space-y-1.5 text-gray-600 w-full">
       <div class="border-b-2">
         <button
-          class="w-full font-medium relative flex items-center justify-center px-12 py-2 mb-1.5 text-center rounded-md cursor-pointer hover:bg-gray-100 space-x-2"
+          class="w-full font-medium relative flex items-center justify-center px-12 py-2 mb-1.5 text-center rounded-md cursor-pointer hover:bg-gray-100 space-x-2 hover:text-gray-800 transition-colors duration-100 ease-out"
         >
           <CollectionIcon class="absolute w-5 h-5 left-2" />
           Collected
@@ -11,7 +11,7 @@
       </div>
       <div class="border-b-2">
         <button
-          class="w-full font-medium relative flex items-center justify-center px-12 py-2 mb-1.5 text-center rounded-md cursor-pointer hover:bg-gray-100"
+          class="w-full font-medium relative flex items-center justify-center px-12 py-2 mb-1.5 text-center rounded-md cursor-pointer hover:bg-gray-100 hover:text-gray-800 transition-colors duration-100 ease-out"
         >
           <DocumentAddIcon class="absolute w-5 h-5 left-2" />
           Created
@@ -19,7 +19,7 @@
       </div>
       <div class="border-b-2">
         <button
-          class="w-full font-medium relative flex items-center justify-center px-12 py-2 mb-1.5 text-center rounded-md cursor-pointer hover:bg-gray-100"
+          class="w-full font-medium relative flex items-center justify-center px-12 py-2 mb-1.5 text-center rounded-md cursor-pointer hover:bg-gray-100 hover:text-gray-800 transition-colors duration-100 ease-out"
         >
           <BadgeCheckIcon class="absolute w-5 h-5 left-2" />
           Certified
@@ -27,7 +27,7 @@
       </div>
       <div class="border-b-2">
         <button
-          class="w-full font-medium relative flex items-center justify-center px-12 py-2 mb-1.5 text-center rounded-md cursor-pointer hover:bg-gray-100"
+          class="w-full font-medium relative flex items-center justify-center px-12 py-2 mb-1.5 text-center rounded-md cursor-pointer hover:bg-gray-100 hover:text-gray-800 transition-colors duration-100 ease-out"
         >
           <ClockIcon class="absolute w-5 h-5 left-2" />
           Activity
@@ -36,7 +36,7 @@
       <div>
         <button
           @click.prevent="disconnect()"
-          class="relative flex justify-center w-full px-12 py-2 font-medium text-center rounded-md cursor-pointer hover:bg-gray-100"
+          class="relative flex justify-center w-full px-12 py-2 font-medium text-center transition-colors duration-100 ease-out rounded-md cursor-pointer hover:bg-gray-100 hover:text-gray-800"
         >
           <LogoutIcon class="absolute w-5 h-5 left-2.5" />
           Logout

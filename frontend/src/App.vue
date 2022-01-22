@@ -7,30 +7,22 @@
   <div class="relative w-full max-w-6xl mx-auto">
     <router-view />
   </div>
-  <RegisterModal
-    :isOpen="isRegisterModalOpen"
-    @update:isOpen="isRegisterModalOpen = $event"
-  />
   <AlertWrapper />
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from "vue";
 import Header from "@/components/Header/Header.vue";
-import RegisterModal from "@/components/RegisterModal.vue";
 import AlertWrapper from "@/components/Utils/AlertWrapper.vue";
 import { useUserStore } from "@/stores/useUser";
 import initInterfaces from "@/services";
 
 export default defineComponent({
   components: {
-    RegisterModal,
     Header,
     AlertWrapper,
   },
   setup() {
-    const isRegisterModalOpen = ref(false);
-
     const user = useUserStore();
     const { initializeUser } = user;
 
@@ -42,8 +34,6 @@ export default defineComponent({
         throw new Error(e.toString());
       }
     });
-
-    return { isRegisterModalOpen };
   },
 });
 </script>

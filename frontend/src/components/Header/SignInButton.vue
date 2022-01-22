@@ -1,11 +1,10 @@
 <template>
   <button
     v-if="!address"
-    v-wave
-    class="flex items-center justify-center px-3 py-2 font-semibold text-gray-500 transition duration-300 ease-in-out bg-gray-100 rounded-md  hover:text-gray-900 text-md"
+    class="flex items-center justify-center px-3 text-white transition duration-300 ease-in-out transform border-2 border-b-4 rounded-md h-10 bg-cyan-500 hover:bg-cyan-600 text-md whitespace-nowrap border-cyan-700 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 font-medium"
     @click.prevent="connect()"
   >
-    <span>Sign in</span>
+    Sign in
   </button>
 </template>
 

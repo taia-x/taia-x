@@ -27,7 +27,6 @@ interface UserRoleMapping {
   role: Role;
 }
 interface Role {
-  certifier?: boolean;
   provider?: boolean;
   consumer?: boolean;
 }

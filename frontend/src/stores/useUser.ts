@@ -6,10 +6,12 @@ export const useUserStore = defineStore("user", {
   state: () => ({
     address: "",
     balance: 0,
+    role: "",
   }),
   getters: {
     getAddress: (state) => state.address,
     getBalance: (state) => state.balance,
+    getRole: (state) => state.role,
   },
   actions: {
     /**

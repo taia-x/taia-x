@@ -35,6 +35,12 @@ const routes: Array<RouteRecordRaw> = [
         /* webpackChunkName: "explorer-details" */ "@/views/ExplorerDetails.vue"
       ), // lazy loading
   },
+  {
+    path: "/profile/:address",
+    name: "ProfileDetails",
+    component: () =>
+      import(/* webpackChunkName: "profile-details" */ "@/views/ProfileDetails.vue"),
+  },
 ];
 
 const router = createRouter({

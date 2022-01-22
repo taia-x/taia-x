@@ -18,19 +18,21 @@
       {{ privateAddress }}
     </button>
     <div class="grid w-full gap-2 pt-4 mt-4 border-t">
-      <button
-        class="flex items-center p-2 transition duration-150 ease-in-out rounded-lg  hover:bg-gray-50 group"
-      >
-        <div
-          class="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white transition duration-150 ease-in-out rounded-lg  bg-sky-50 group-hover:bg-sky-100 sm:h-12 sm:w-12"
+       <router-link
+          :to="'/profile/' + address"
+          class="flex items-center p-2 transition duration-150 ease-in-out rounded-lg  hover:bg-gray-50 group"
         >
-          <UserIcon class="w-5 h-5 text-cyan-700" />
-        </div>
-        <div class="ml-4">
-          <p class="text-sm font-medium text-left text-gray-900">Profile</p>
-          <p class="text-sm text-gray-500">View your profile</p>
-        </div></button
-      ><button
+          <div
+            class="flex items-center justify-center flex-shrink-0 w-10 h-10 text-white transition duration-150 ease-in-out rounded-lg  bg-sky-50 group-hover:bg-sky-100 sm:h-12 sm:w-12"
+          >
+            <UserIcon class="w-5 h-5 text-cyan-700" />
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-left text-gray-900">Profile</p>
+            <p class="text-sm text-gray-500">View your profile</p>
+          </div>
+      </router-link>
+      <button
         class="flex items-center p-2 transition duration-150 ease-in-out rounded-lg  hover:bg-gray-50 group"
         @click.prevent="disconnect()"
       >

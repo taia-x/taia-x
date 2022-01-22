@@ -4,7 +4,7 @@
 
 Install python dependencies:
 ```
-pip install fastapi uvicorn SQLAlchemy psycopg2-binary alembic
+pip install fastapi uvicorn SQLAlchemy psycopg2-binary alembic python-multipart
 ```
 Download PostgreSQL and set-up a database (taiax): https://medium.com/@viviennediegoencarnacion/getting-started-with-postgresql-on-mac-e6a5f48ee399
 

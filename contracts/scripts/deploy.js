@@ -3,10 +3,13 @@ const { importKey } = require("@taquito/signer");
 const migrate = require("../migration/1_initial_migration");
 
 const fs = require("fs");
-require("dotenv").config({path: '../../.env'});
+const path = require('path')
+
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
 
 const SANDBOX_URL = "http://127.0.0.1:20000";
-const TESTNET_URL = "https://granadanet.api.tez.ie";
+const TESTNET_URL = "https://rpc.tzkt.io/hangzhou2net";
+
 const FAUCET = JSON.parse(process.env.FAUCET);
 const ALICE_SECRET = process.env.ALICE_SECRET;
 
@@ -25,7 +28,7 @@ const deploy = async () => {
       ? await importKey(Tezos, ALICE_SECRET)
       : await importKey(Tezos, email, password, mnemonic.join(" "), secret);
 
-    const code = fs.readFileSync("../contracts/out/taia_x_main.tz").toString();
+    const code = fs.readFileSync(path.resolve(__dirname, '../contracts/out/taia_x_main.tz')).toString();
     console.log("Originate...");
 
     const initial_storage = await migrate(Tezos);

@@ -57,9 +57,9 @@ class WalletInterface {
   async getAddress(): Promise<string> {
     try {
       const wallet = await this.getWallet();
-      const activeAccount = await wallet.client.getActiveAccount();
-      const { publicKey } = activeAccount as any;
-      console.log(publicKey);
+      // const activeAccount = await wallet.client.getActiveAccount();
+      // const { publicKey } = activeAccount as any;
+      // console.log(publicKey);
       const account = (await wallet?.client.getActiveAccount()) as AccountInfo;
       if (account) return account.address;
     } catch (e) {

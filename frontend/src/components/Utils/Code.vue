@@ -1,5 +1,5 @@
 <script>
-import { h, toRefs } from "vue";
+import { h, toRefs, watchEffect } from "vue";
 import { highlight, languages } from "prismjs";
 
 export default {
@@ -11,7 +11,11 @@ export default {
   },
   setup(props) {
     const { code } = toRefs(props);
-    const renderedCode = highlight(code.value, languages.javascript);
+    let renderedCode = null;
+
+    watchEffect(() => {
+      renderedCode = highlight(code.value, languages.javascript);
+    });
 
     return () =>
       renderedCode.length

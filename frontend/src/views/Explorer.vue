@@ -21,7 +21,7 @@
             <span class="text-sm font-medium">id</span>
             <span class="text-sm truncate">{{ token.id }}</span>
             <span class="text-sm font-medium">metadata</span>
-            <span class="text-sm truncate">{{ token.artifact_uri }}</span>
+            <span class="text-sm truncate">{{ token.metadata }}</span>
           </div>
         </div>
       </router-link>

@@ -10,7 +10,7 @@
         </div>
         <span
           class="mx-auto text-sm text-white transform -translate-x-5 text-opacity-30"
-          >battery.json</span
+          >{{ file.fileName }}</span
         >
       </div>
       <div
@@ -49,6 +49,10 @@ export default defineComponent({
   props: {
     code: {
       type: String,
+      required: true,
+    },
+    file: {
+      type: Object,
       required: true,
     },
   },

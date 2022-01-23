@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex justify-center px-6 pt-10 mt-1 border-2 border-gray-300 border-dashed rounded-md  pb-11"
+    class="flex justify-center px-6 pt-10 mt-1 border-2 border-gray-300 border-dashed rounded-md pb-11"
     @drop.prevent="$emit('fileSelected', $event)"
     @dragover.prevent
   >
@@ -9,7 +9,7 @@
       <div class="flex text-sm text-gray-600">
         <label
           for="file-upload"
-          class="relative font-medium bg-white rounded cursor-pointer  text-cyan-500 hover:text-cyan-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-cyan-500"
+          class="relative font-medium bg-white rounded cursor-pointer text-cyan-500 hover:text-cyan-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-cyan-500"
         >
           <span>Upload a file</span>
           <input
@@ -18,6 +18,7 @@
             type="file"
             accept=".json"
             class="sr-only"
+            multiple
             @change="$emit('fileSelected', $event)"
           />
         </label>

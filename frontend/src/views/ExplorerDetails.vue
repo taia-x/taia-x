@@ -1,5 +1,9 @@
 <template>
-  <Terminal :code="code" class="mt-10 filter drop-shadow-2xl" />
+  <Terminal
+    :code="code"
+    :file="selected"
+    class="mt-10 filter drop-shadow-2xl"
+  />
   <!-- <div class="flex items-center justify-end mt-4 text-gray-500">
     <button
       class="z-10 flex items-center space-x-1 hover:text-gray-900"
@@ -34,7 +38,11 @@
         </div>
       </div>
     </div>
-    <div class="flex items-center space-x-2">
+    <a
+      href="https://tzkt.io/tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb/operations/"
+      target="_blank"
+      class="z-10 flex items-center space-x-2"
+    >
       <div class="flex flex-col">
         <div class="font-medium text-right text-gray-700">Owner</div>
         <div class="pb-2 text-sm font-medium text-right text-gray-400">
@@ -45,7 +53,7 @@
         src="https://services.tzkt.io/v1/avatars/tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"
         class="w-16 h-16 my-auto"
       />
-    </div>
+    </a>
   </div>
   <button
     class="flex items-center px-3 text-white transition duration-300 ease-in-out transform border-2 border-b-4 rounded-md h-10 bg-cyan-500 hover:bg-cyan-600 text-md whitespace-nowrap border-cyan-700 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
@@ -79,7 +87,7 @@
         {{ token?.description }}
       </p>
     </div>
-    <div class="space-y-4">
+    <div class="space-y-4" v-if="token && token.files">
       <h3
         class="flex items-center space-x-1 text-xl font-semibold text-gray-900"
       >
@@ -90,22 +98,25 @@
       </h3>
       <div
         class="flex items-center justify-between w-full p-2 mt-1 bg-gray-100 rounded-md"
+        v-for="file in token.files"
+        :key="file.fileName"
       >
         <div class="flex items-center space-x-2">
           <DocumentTextIcon class="w-5 h-5 text-gray-700" />
-          <span class="font-mono truncate">battery.json</span>
+          <span class="font-mono truncate">{{ file.fileName }}</span>
         </div>
         <div class="flex items-center space-x-4">
-          <span class="font-mono">507 KB</span>
-          <Tooltip class="group">
+          <span class="font-mono">{{ file.fileSize }} Byte</span>
+          <Tooltip class="group" @click.prevent="fetchOntology(file)">
             <template #element
-              ><EyeIcon class="relative w-5 h-5 text-gray-700"
+              ><EyeIcon
+                class="w-5 h-5 text-gray-400 transition-colors duration-150 hover:text-gray-700"
             /></template>
             <template #text>Show Ontology</template>
           </Tooltip>
         </div>
       </div>
-      <div
+      <!-- <div
         class="flex items-center justify-between w-full p-2 mt-1 bg-gray-100 rounded-md"
       >
         <div class="flex items-center space-x-2">
@@ -116,7 +127,8 @@
           <span class="font-mono">1024 KB</span>
           <Tooltip class="group">
             <template #element
-              ><EyeIcon class="relative w-5 h-5 text-gray-700"
+              ><EyeIcon
+                class="w-5 h-5 text-gray-400 transition-colors duration-150 hover:text-gray-700"
             /></template>
             <template #text>Show Ontology</template>
           </Tooltip>
@@ -133,7 +145,8 @@
           <span class="font-mono">3096 KB</span>
           <Tooltip class="group">
             <template #element
-              ><EyeIcon class="relative w-5 h-5 text-gray-700"
+              ><EyeIcon
+                class="w-5 h-5 text-gray-400 transition-colors duration-150 hover:text-gray-700"
             /></template>
             <template #text>Show Ontology</template>
           </Tooltip>
@@ -150,35 +163,13 @@
           <span class="font-mono">256 KB</span>
           <Tooltip class="group">
             <template #element
-              ><EyeIcon class="relative w-5 h-5 text-gray-700"
+              ><EyeIcon
+                class="w-5 h-5 text-gray-400 transition-colors duration-150 hover:text-gray-700"
             /></template>
             <template #text>Show Ontology</template>
           </Tooltip>
-          <!-- <span
-            class="absolute inset-x-0 bottom-full mb-2.5 flex justify-center"
-          >
-            <span
-              class="px-3 py-1 text-xs font-medium text-white bg-gray-900 rounded-md filter drop-shadow-md"
-            >
-              <svg
-                aria-hidden="true"
-                width="16"
-                height="6"
-                viewBox="0 0 16 6"
-                class="absolute -mt-px -ml-2 text-gray-900 left-1/2 top-full"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M15 0H1V1.00366V1.00366V1.00371H1.01672C2.72058 1.0147 4.24225 2.74704 5.42685 4.72928C6.42941 6.40691 9.57154 6.4069 10.5741 4.72926C11.7587 2.74703 13.2803 1.0147 14.9841 1.00371H15V0Z"
-                  fill="currentColor"
-                ></path>
-              </svg>
-              hallo
-            </span>
-          </span> -->
         </div>
-      </div>
+      </div> -->
     </div>
     <div class="space-y-4">
       <h3
@@ -223,9 +214,10 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute();
-    const isOpen = ref(false);
+    //const isOpen = ref(false);
     const code = ref("");
     const token = ref(null);
+    const selected = ref({});
 
     // fetches single token metadata based on route param
     const { result } = useQuery(getSingleTokenMetadata, () => ({
@@ -241,30 +233,45 @@ export default defineComponent({
 
     // render ui when token_metadata contains values
     watchEffect(async () => {
-      if (token_metadata.value) {
+      if (token_metadata?.value?.id) {
+        selected.value = token_metadata.value.files[0];
         token.value = token_metadata.value;
         const asset = await fetch(
-          ipfsInterface.makeGatewayURL(token_metadata.value.artifact_uri)
+          ipfsInterface.makeGatewayURL(
+            token_metadata.value.files[0].ontologyUri
+          )
         );
         code.value = JSON.stringify(await asset.json(), null, 2);
       }
     });
 
-    // copies content of artifact json to clipboard
-    const copyToClipboard = async () => {
-      try {
-        navigator.clipboard.writeText(code.value);
-        isOpen.value = true;
-      } catch (e) {
-        console.log(e);
+    const fetchOntology = async (file) => {
+      if (file.ontologyUri && selected.value.fileName !== file.fileName) {
+        selected.value = file;
+        const asset = await fetch(
+          ipfsInterface.makeGatewayURL(file.ontologyUri)
+        );
+        code.value = JSON.stringify(await asset.json(), null, 2);
       }
     };
 
+    // copies content of artifact json to clipboard
+    // const copyToClipboard = async () => {
+    //   try {
+    //     navigator.clipboard.writeText(code.value);
+    //     isOpen.value = true;
+    //   } catch (e) {
+    //     console.log(e);
+    //   }
+    // };
+
     return {
       code,
-      isOpen,
-      copyToClipboard,
+      //isOpen,
+      selected,
+      //copyToClipboard,
       highlightAll,
+      fetchOntology,
       route,
       token,
     };

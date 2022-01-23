@@ -2,6 +2,8 @@ import json
 import os
 import time
 import datetime
+from os import listdir
+from zipfile import ZipFile
 from sensordata.Sensors.battery_sensor import BatterySensor
 from sensordata.Sensors.camera import CameraSensor
 from sensordata.Sensors.gnss_sensor import GnssSensor
@@ -12,7 +14,6 @@ from sensordata.Sensors.semantic_lidar_sensor import LidarSensor
 
 
 def dummy_data(frame, timestamp, location, rotation):
-
     temp_battery_obj = BatterySensor(frame, timestamp, location, rotation, 0.5, 1.2, 1.3, 31, 24)
     temp_camera_obj = CameraSensor(frame, timestamp, location, rotation, 0.1, 100, 150, None)
     temp_gnss_obj = GnssSensor(frame, timestamp, location, rotation, 850.1, 52.49416511471363, 13.376593102568735)
@@ -34,7 +35,7 @@ def dummy_data(frame, timestamp, location, rotation):
     return temp_dict
 
 
-def save_file(name, path1, frame, timestamp, location, rotation):
+def save_file(name: str, path1: str, frame: int, timestamp: int, location: int, rotation: int):
     sensors = dummy_data(frame, timestamp, location, rotation)
     for sensor, values in sensors.items():
 
@@ -53,6 +54,13 @@ def save_file(name, path1, frame, timestamp, location, rotation):
                 json.dump(data, outfile)
 
 
+def zip_files(name: str, path1: str):
+    dir_list = listdir(path1)
+    with ZipFile(path1 + "/" + name, 'w') as zipObj:
+        for ind in dir_list:
+            zipObj.write(path1 + "/" + ind)
+
+
 def main(dir_path=None, dir_na=None, time_lapse=10):
     name = "vehicle1"
     timestamp = int(time.time())
@@ -63,6 +71,7 @@ def main(dir_path=None, dir_na=None, time_lapse=10):
                 # save_file(name + f"-{dt}s", dir_path + dir_na, 1, dt + timestamp, 2, 3)
                 # set location and rotation to 2 and 3 respectively
                 save_file(name, dir_path + dir_na, 1, dt + timestamp, 2, 3)
+            zip_files("zipped_files.zip", dir_path + dir_na)
         except FileExistsError:
             print("Directory exists, create new one..")
     else:

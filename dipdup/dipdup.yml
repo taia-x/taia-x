@@ -23,7 +23,7 @@ hasura:
 
 contracts:
   taia_x_sandbox:
-    address: KT18ozfc38cKJ9nDULHxj1XAK5Hiem9yd8RX
+    address: KT1XkcniE5kc8Y7ZguX4C8XLnP61fzNx5vsv
     typename: taia_x_fa2
 
 datasources:

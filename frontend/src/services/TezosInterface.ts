@@ -36,7 +36,7 @@ class TezosInterface {
   ): Promise<void> {
     const roleData = Array.isArray(data) ? data : [data];
     try {
-      const op = await this.contract.methods.user_manager(roleData).send();
+      const op = await this.contract.methods.update_user_roles(roleData).send();
       if (op) {
         const result = await op.confirmation(1);
         if (result.completed) {

@@ -1,7 +1,6 @@
 const { TezosToolkit } = require("@taquito/taquito");
 const { importKey } = require("@taquito/signer");
 const migrate = require("../migration/1_initial_migration");
-console.log("1");
 const fs = require("fs");
 const path = require("path");
 

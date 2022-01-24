@@ -12,6 +12,8 @@
 import { defineComponent } from "vue";
 import { walletInterface } from "@/services/index";
 import { useUserStore } from "@/stores/useUser";
+import { storeToRefs } from "pinia";
+import { HTTP_METADATA_API_URL } from "@/constants";
 
 export default defineComponent({
   props: {
@@ -23,10 +25,36 @@ export default defineComponent({
   setup() {
     const user = useUserStore();
     const { initializeUser } = user;
+    const { address } = storeToRefs(user);
+
+    const setRole = async () => {
+      const result = await fetch(HTTP_METADATA_API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: `
+              query GetAccount($address: String = "") {
+                account_by_pk(address: $address) {
+                  address
+                  role
+                }
+              }
+            `,
+          variables: {
+            address: address.value,
+          },
+        }),
+      });
+      const { data } = await result.json();
+      user.$patch((state) => (state.role = data.account_by_pk.role));
+    };
 
     const connect = async (): Promise<void> => {
       await walletInterface.connectWallet();
       await initializeUser();
+      if (address.value) setRole();
     };
 
     return { connect };

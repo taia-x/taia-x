@@ -28,9 +28,10 @@ class IpfsInterface {
    */
   async writeFile(content: any): Promise<string> {
     try {
-      const { path } = await this.ipfs.add(
-        Buffer.from(JSON.stringify(content))
-      );
+      const { path } =
+        content instanceof File
+          ? await this.ipfs.add(content)
+          : await this.ipfs.add(Buffer.from(JSON.stringify(content)));
       const cid = `ipfs://${path}`;
       return cid;
     } catch (e: any) {

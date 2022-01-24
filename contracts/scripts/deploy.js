@@ -1,12 +1,10 @@
 const { TezosToolkit } = require("@taquito/taquito");
 const { importKey } = require("@taquito/signer");
 const migrate = require("../migration/1_initial_migration");
-
 const fs = require("fs");
-const path = require('path')
+const path = require("path");
 
-require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
-
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 const SANDBOX_URL = "http://127.0.0.1:20000";
 const TESTNET_URL = "https://rpc.tzkt.io/hangzhou2net";
 
@@ -28,7 +26,9 @@ const deploy = async () => {
       ? await importKey(Tezos, ALICE_SECRET)
       : await importKey(Tezos, email, password, mnemonic.join(" "), secret);
 
-    const code = fs.readFileSync(path.resolve(__dirname, '../contracts/out/taia_x_main.tz')).toString();
+    const code = fs
+      .readFileSync(path.resolve(__dirname, "../contracts/out/taia_x_main.tz"))
+      .toString();
     console.log("Originate...");
 
     const initial_storage = await migrate(Tezos);

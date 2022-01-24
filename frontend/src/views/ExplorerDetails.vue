@@ -22,7 +22,7 @@
     </button>
   </div> -->
   <div class="flex items-center justify-between pt-10 pb-4">
-    <div>
+    <div v-if="token && token.files">
       <h1 class="text-3xl font-extrabold tracking-tight text-gray-800">
         {{ token?.name }}
       </h1>
@@ -30,7 +30,7 @@
         <div># {{ route.params.id }}</div>
         <div class="flex items-center space-x-1">
           <DocumentIcon class="w-5 h-5" />
-          <span>7 Files</span>
+          <span>{{ token?.files.length }} Files</span>
         </div>
         <div class="flex items-center space-x-1">
           <ClockIcon class="w-5 h-5" />
@@ -39,18 +39,19 @@
       </div>
     </div>
     <a
-      href="https://tzkt.io/tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb/operations/"
+      v-if="token && token.creator_id"
+      :href="`https://tzkt.io/${token?.creator_id}`"
       target="_blank"
       class="z-10 flex items-center space-x-2"
     >
       <div class="flex flex-col">
         <div class="font-medium text-right text-gray-700">Owner</div>
         <div class="pb-2 text-sm font-medium text-right text-gray-400">
-          tz1V...jcjb
+          {{ getPrivatizedAddress(token?.creator_id) }}
         </div>
       </div>
       <img
-        src="https://services.tzkt.io/v1/avatars/tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"
+        :src="`https://services.tzkt.io/v1/avatars/${token?.creator_id}`"
         class="w-16 h-16 my-auto"
       />
     </a>
@@ -116,60 +117,6 @@
           </Tooltip>
         </div>
       </div>
-      <!-- <div
-        class="flex items-center justify-between w-full p-2 mt-1 bg-gray-100 rounded-md"
-      >
-        <div class="flex items-center space-x-2">
-          <DocumentTextIcon class="w-5 h-5 text-gray-700" />
-          <span class="font-mono truncate">camera.json</span>
-        </div>
-        <div class="flex items-center space-x-4">
-          <span class="font-mono">1024 KB</span>
-          <Tooltip class="group">
-            <template #element
-              ><EyeIcon
-                class="w-5 h-5 text-gray-400 transition-colors duration-150 hover:text-gray-700"
-            /></template>
-            <template #text>Show Ontology</template>
-          </Tooltip>
-        </div>
-      </div>
-      <div
-        class="flex items-center justify-between w-full p-2 mt-1 bg-gray-100 rounded-md"
-      >
-        <div class="flex items-center space-x-2">
-          <DocumentTextIcon class="w-5 h-5 text-gray-700" />
-          <span class="font-mono truncate">lidar.json</span>
-        </div>
-        <div class="flex items-center space-x-4">
-          <span class="font-mono">3096 KB</span>
-          <Tooltip class="group">
-            <template #element
-              ><EyeIcon
-                class="w-5 h-5 text-gray-400 transition-colors duration-150 hover:text-gray-700"
-            /></template>
-            <template #text>Show Ontology</template>
-          </Tooltip>
-        </div>
-      </div>
-      <div
-        class="flex items-center justify-between w-full p-2 mt-1 bg-gray-100 rounded-md"
-      >
-        <div class="flex items-center space-x-2">
-          <DocumentTextIcon class="w-5 h-5 text-gray-700" />
-          <span class="font-mono truncate">radar.json</span>
-        </div>
-        <div class="flex items-center space-x-4">
-          <span class="font-mono">256 KB</span>
-          <Tooltip class="group">
-            <template #element
-              ><EyeIcon
-                class="w-5 h-5 text-gray-400 transition-colors duration-150 hover:text-gray-700"
-            /></template>
-            <template #text>Show Ontology</template>
-          </Tooltip>
-        </div>
-      </div> -->
     </div>
     <div class="space-y-4">
       <h3
@@ -180,7 +127,88 @@
           class="w-5 h-5 text-gray-400 transform -translate-y-1"
         />
       </h3>
-      <p class="text-base text-gray-700">...</p>
+      <div v-if="token && token.events">
+        <div
+          class="grid grid-cols-5 grid-rows-1 px-3 py-2 font-medium text-gray-900 border-t-2 border-l-2 border-r-2 border-gray-100 rounded-t-lg"
+        >
+          <div>Event</div>
+          <div>From</div>
+          <div>To</div>
+          <div>Price</div>
+          <div>Date</div>
+        </div>
+        <div
+          class="grid grid-cols-5 grid-rows-1 px-3 py-2 text-base text-gray-700 border-2 border-gray-100"
+          :class="index + 1 === token.events.length ? 'rounded-b-lg' : ''"
+          v-for="(event, index) in token.events"
+          :key="event.id"
+          :index="index"
+        >
+          <div class="flex items-center space-x-2">
+            <DocumentAddIcon
+              v-if="event.event_type === 'mint'"
+              class="w-5 h-5 text-gray-700"
+            />
+            <BadgeCheckIcon
+              v-if="event.event_type === 'certify'"
+              class="w-5 h-5 text-gray-700"
+            />
+            <ShoppingBagIcon
+              v-if="event.event_type === 'purchase'"
+              class="w-5 h-5 text-gray-700"
+            />
+            <BanIcon
+              v-if="event.event_type === 'reject'"
+              class="w-5 h-5 text-gray-700"
+            />
+            <span class="truncate">
+              {{
+                event.event_type[0].toUpperCase() + event.event_type.slice(1)
+              }}
+            </span>
+          </div>
+          <a
+            v-if="event"
+            :href="`https://tzkt.io/${event.creator_id}`"
+            target="_blank"
+            class="flex items-center space-x-2"
+          >
+            <img
+              v-if="event.creator_id"
+              :src="`https://services.tzkt.io/v1/avatars/${event.creator_id}`"
+              class="w-10 h-10 my-auto"
+            />
+            <span class="truncate">{{
+              event.creator_id ? getPrivatizedAddress(event.creator_id) : "-"
+            }}</span>
+          </a>
+          <a
+            v-if="event"
+            target="_blank"
+            :href="`https://tzkt.io/${event.recipient_id}`"
+            class="flex items-center space-x-2"
+          >
+            <img
+              v-if="event.recipient_id"
+              :src="`https://services.tzkt.io/v1/avatars/${event.recipient_id}`"
+              class="w-10 h-10 my-auto"
+            />
+            <span class="truncate">{{
+              event.recipient_id
+                ? getPrivatizedAddress(event.recipient_id)
+                : "-"
+            }}</span>
+          </a>
+          <div class="flex items-center">
+            <span class="truncate">{{ event.price || "-" }}</span>
+          </div>
+          <div class="flex items-center">
+            <span class="truncate">{{
+              new Date(event.timestamp).toDateString()
+            }}</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -192,8 +220,12 @@ import { useRoute } from "vue-router";
 import {
   ClockIcon,
   DocumentIcon,
+  DocumentAddIcon,
   InformationCircleIcon,
   DocumentTextIcon,
+  ShoppingBagIcon,
+  BadgeCheckIcon,
+  BanIcon,
   EyeIcon,
 } from "@heroicons/vue/outline";
 import { highlightAll } from "prismjs";
@@ -208,7 +240,11 @@ export default defineComponent({
     ClockIcon,
     DocumentIcon,
     InformationCircleIcon,
+    ShoppingBagIcon,
+    BanIcon,
+    DocumentAddIcon,
     DocumentTextIcon,
+    BadgeCheckIcon,
     EyeIcon,
     Tooltip,
   },
@@ -255,6 +291,13 @@ export default defineComponent({
       }
     };
 
+    const getPrivatizedAddress = (address) => {
+      return `${address.substring(0, 5)}...${address.substring(
+        address.length - 5,
+        address.length
+      )}`;
+    };
+
     // copies content of artifact json to clipboard
     // const copyToClipboard = async () => {
     //   try {
@@ -272,6 +315,7 @@ export default defineComponent({
       //copyToClipboard,
       highlightAll,
       fetchOntology,
+      getPrivatizedAddress,
       route,
       token,
     };

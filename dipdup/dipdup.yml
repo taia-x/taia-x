@@ -23,7 +23,7 @@ hasura:
 
 contracts:
   taia_x_sandbox:
-    address: KT1XkcniE5kc8Y7ZguX4C8XLnP61fzNx5vsv
+    address: KT1CkKMFrNhuDimTDdS6TTogFm6Z1VKvx4ZG
     typename: taia_x_fa2
 
 datasources:
@@ -42,3 +42,7 @@ indexes:
         pattern:
           - destination: taia_x_sandbox
             entrypoint: mint
+      - callback: on_update_role
+        pattern:
+          - destination: taia_x_sandbox
+            entrypoint: update_user_roles

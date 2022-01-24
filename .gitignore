@@ -151,3 +151,6 @@ test-measurements-sensorwise/
 
 # Editor files
 .DS_Store
+
+*.ini
+assets/

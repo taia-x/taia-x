@@ -17,6 +17,6 @@ let get_balance (p, ledger : balance_of_param * ledger) : operation =
   Tezos.transaction responses 0mutez p.callback
 
 
-let fa2_balance (pm, storage: balance_of_param * nft_token_storage): (operation  list) * nft_token_storage =
+let fa2_balance (pm, storage: balance_of_param * taia_x_storage): (operation  list) * taia_x_storage =
     let op = get_balance (pm, storage.ledger) in
     [op], storage

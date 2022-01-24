@@ -14,7 +14,6 @@ async def on_mint(
     mint: Transaction[MintParameter, TaiaX_Fa2Storage],
 ) -> None:
     holder, _ = await models.Account.get_or_create(address=mint.parameter.owner)
-
     creator = holder
 
     #if await models.Token.exists(id=mint.parameter.token_id):
@@ -43,6 +42,8 @@ async def on_mint(
     )
     await token.save()
 
+    recipient, _ = await models.Account.get_or_create(address=mint.data.target_address)
+    recipient.save()
     #minter, _ = await models.TokenHolder.get_or_create(holder=holder, token=token)
     #await minter.save()
 
@@ -52,6 +53,7 @@ async def on_mint(
     event = models.Event(
         token=token,
         creator=holder,
+        recipient=recipient,
         event_type=models.EventType.mint,
         ophash=mint.data.hash,
         level=mint.data.level,

@@ -167,45 +167,50 @@
               }}
             </span>
           </div>
-          <a
-            v-if="event"
-            :href="`https://tzkt.io/${event.creator_id}`"
-            target="_blank"
-            class="flex items-center space-x-2"
-          >
-            <img
-              v-if="event.creator_id"
-              :src="`https://services.tzkt.io/v1/avatars/${event.creator_id}`"
-              class="w-10 h-10 my-auto"
-            />
-            <span class="truncate">{{
-              event.creator_id ? getPrivatizedAddress(event.creator_id) : "-"
-            }}</span>
-          </a>
-          <a
-            v-if="event"
-            target="_blank"
-            :href="`https://tzkt.io/${event.recipient_id}`"
-            class="flex items-center space-x-2"
-          >
-            <img
-              v-if="event.recipient_id"
-              :src="`https://services.tzkt.io/v1/avatars/${event.recipient_id}`"
-              class="w-10 h-10 my-auto"
-            />
-            <span class="truncate">{{
-              event.recipient_id
-                ? getPrivatizedAddress(event.recipient_id)
-                : "-"
-            }}</span>
-          </a>
+          <div v-if="event" class="flex">
+            <a
+              :href="`https://tzkt.io/${event.creator_id}`"
+              target="_blank"
+              class="flex items-center space-x-2"
+            >
+              <img
+                v-if="event.creator_id"
+                :src="`https://services.tzkt.io/v1/avatars/${event.creator_id}`"
+                class="w-10 h-10 my-auto"
+              />
+              <span class="truncate">{{
+                event.creator_id ? getPrivatizedAddress(event.creator_id) : "-"
+              }}</span>
+            </a>
+          </div>
+          <div v-if="event" class="flex">
+            <a
+              target="_blank"
+              :href="`https://tzkt.io/${event.recipient_id}`"
+              class="flex items-center space-x-2"
+            >
+              <img
+                v-if="event.recipient_id"
+                :src="`https://services.tzkt.io/v1/avatars/${event.recipient_id}`"
+                class="w-10 h-10 my-auto"
+              />
+              <span class="truncate">{{
+                event.recipient_id
+                  ? getPrivatizedAddress(event.recipient_id)
+                  : "-"
+              }}</span>
+            </a>
+          </div>
           <div class="flex items-center">
             <span class="truncate">{{ event.price || "-" }}</span>
           </div>
           <div class="flex items-center">
-            <span class="truncate">{{
-              new Date(event.timestamp).toDateString()
-            }}</span>
+            <a
+              class="truncate"
+              target="_blank"
+              :href="`https://tzkt.io/${event.ophash}`"
+              >{{ new Date(event.timestamp).toDateString() }}</a
+            >
           </div>
         </div>
       </div>

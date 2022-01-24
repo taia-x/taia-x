@@ -43,8 +43,8 @@ class Token(Model):
 class Event(Model):
     id = fields.BigIntField(pk=True)
     token = fields.ForeignKeyField('models.Token', 'events', null=True, index=True)
-    creator = fields.ForeignKeyField('models.Account', 'sales', null=True, index=True)
-    recipient = fields.ForeignKeyField('models.Account', 'purchases', null=True, index=True)
+    creator = fields.ForeignKeyField('models.Account', 'creations', null=True, index=True)
+    recipient = fields.ForeignKeyField('models.Account', 'receivings', null=True, index=True)
     event_type = fields.CharEnumField(EventType, default=EventType.unspecified)
     price = fields.BigIntField(null=True)
     ophash = fields.CharField(51)

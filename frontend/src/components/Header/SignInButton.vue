@@ -48,7 +48,8 @@ export default defineComponent({
         }),
       });
       const { data } = await result.json();
-      user.$patch((state) => (state.role = data.account_by_pk.role));
+      if (data?.account_by_pk?.role)
+        user.$patch((state) => (state.role = data.account_by_pk.role));
     };
 
     const connect = async (): Promise<void> => {

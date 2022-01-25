@@ -49,6 +49,10 @@ services:
     environment:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
       - ADMIN_SECRET=${ADMIN_SECRET:-changeme}
+      - DB_HOST=${DB_HOST:-db_dipdup}
+      - DB_PORT=${DB_PORT:-5432}
+      - IPFS_HOST=${IPFS_HOST:-ipfs}
+      - API_TZKT=${API_TZKT:-http://api_tzkt:5000}
 
 networks:
   taia-x:

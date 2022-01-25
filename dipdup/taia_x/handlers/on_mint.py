@@ -13,8 +13,7 @@ async def on_mint(
     ctx: HandlerContext,
     mint: Transaction[MintParameter, TaiaX_Fa2Storage],
 ) -> None:
-    holder, _ = await models.Holder.get_or_create(address=mint.parameter.owner)
-
+    holder, _ = await models.Account.get_or_create(address=mint.parameter.owner)
     creator = holder
 
     #if await models.Token.exists(id=mint.parameter.token_id):
@@ -31,6 +30,9 @@ async def on_mint(
         metadata=metadata,
         creator=creator,
         timestamp=mint.data.timestamp,
+        formats=[],
+        files=[],
+        tags=[]
         #royalties=mint_objkt.parameter.royalties,
         #display_uri='',
         #thumbnail_uri='',
@@ -40,16 +42,18 @@ async def on_mint(
     )
     await token.save()
 
-    minter, _ = await models.TokenHolder.get_or_create(holder=holder, token=token)
-    await minter.save()
+    recipient, _ = await models.Account.get_or_create(address=mint.data.target_address)
+    recipient.save()
+    #minter, _ = await models.TokenHolder.get_or_create(holder=holder, token=token)
+    #await minter.save()
 
-    operator, _ = await models.TokenOperator.get_or_create(token=token, owner=holder, operator=mint.parameter.operator)
-    await operator.save()
+    #operator, _ = await models.TokenOperator.get_or_create(token=token, owner=holder, operator=mint.parameter.operator)
+    #await operator.save()
 
     event = models.Event(
         token=token,
         creator=holder,
-        amount=1,
+        recipient=recipient,
         event_type=models.EventType.mint,
         ophash=mint.data.hash,
         level=mint.data.level,

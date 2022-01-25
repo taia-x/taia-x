@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import { useUserStore } from "@/stores/useUser";
 import Explorer from "@/views/Explorer.vue";
 
 const routes: Array<RouteRecordRaw> = [
@@ -19,13 +20,7 @@ const routes: Array<RouteRecordRaw> = [
     path: "/create",
     name: "Create",
     component: () =>
-      import(/* webpackChunkName: "create" */ "@/views/Create.vue"), // lazy loading
-  },
-  {
-    path: "/ontologies",
-    name: "Ontologies",
-    component: () =>
-      import(/* webpackChunkName: "ontologies" */ "@/views/Ontologies.vue"), // lazy loading
+      import(/* webpackChunkName: "create" */ "@/views/Create.vue"),
   },
   {
     path: "/explore/:id",
@@ -33,7 +28,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () =>
       import(
         /* webpackChunkName: "explorer-details" */ "@/views/ExplorerDetails.vue"
-      ), // lazy loading
+      ),
   },
 ];
 
@@ -41,5 +36,13 @@ const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 });
+
+// navigation guard to ensure provider role to be able to access /create route
+// router.beforeEach((to, from, next) => {
+//   const user = useUserStore();
+//   if (to.name === "Create" && user.getRole !== "provider")
+//     next({ name: "Explorer" });
+//   else next();
+// });
 
 export default router;

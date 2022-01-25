@@ -7,8 +7,8 @@ package: taia_x
 
 database:
   kind: postgres
-  host: db_dipdup
-  port: 5432
+  host: ${DB_HOST:-127.0.0.1}
+  port: ${DB_PORT:-5433}
   user: dipdup
   password: ${POSTGRES_PASSWORD:-changeme}
   database: dipdup
@@ -23,13 +23,13 @@ hasura:
 
 contracts:
   taia_x_sandbox:
-    address: KT1Gd4FXMY3uDE7xRNd1hTnFYizMNYwLBkLh
+    address: KT1CkKMFrNhuDimTDdS6TTogFm6Z1VKvx4ZG
     typename: taia_x_fa2
 
 datasources:
   tzkt_sandbox:
     kind: tzkt
-    url: http://api_tzkt:5000
+    url: ${API_TZKT:-http://localhost:5000}
 
 indexes:
   taia-x:
@@ -42,3 +42,7 @@ indexes:
         pattern:
           - destination: taia_x_sandbox
             entrypoint: mint
+      - callback: on_update_role
+        pattern:
+          - destination: taia_x_sandbox
+            entrypoint: update_user_roles

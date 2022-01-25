@@ -1,13 +1,12 @@
 <template>
   <Popover v-if="address" class="relative" v-slot="{ open }">
     <PopoverButton
-      class="flex items-center justify-center px-3 py-2 font-semibold text-gray-500 transition duration-300 ease-in-out transform bg-gray-100 rounded-md  text-md hover:text-gray-900 group"
+      class="relative flex items-center justify-center font-semibold text-gray-500 transition duration-200 ease-in-out transform rounded-md text-md hover:text-cyan-500 group focus:outline-none"
     >
-      <span>
-        {{ privateAddress }}
-      </span>
+      <AcademicCapIcon class="w-5 h-5 mr-2" />
+      Hat
       <ChevronDownIcon
-        class="w-5 h-5 transition-transform duration-300 transform translate-x-1 "
+        class="w-5 h-5 text-gray-900 transition-transform duration-300 transform translate-x-1"
         :class="open ? '-rotate-180' : '-rotate-0'"
       />
     </PopoverButton>
@@ -21,13 +20,9 @@
       leave-to-class="transform scale-95 opacity-0"
     >
       <PopoverPanel
-        class="absolute right-0 z-10 flex flex-col w-screen max-w-xs p-4 px-4 mt-1 bg-white border border-gray-200 rounded-lg shadow-md "
+        class="absolute right-0 z-10 flex flex-col mt-4 bg-white border-2 border-gray-100 rounded-md"
       >
-        <AccountToggleContent
-          :address="address"
-          :privateAddress="privateAddress"
-          :balance="balance"
-        />
+        <HatMenuContent />
       </PopoverPanel>
     </transition>
   </Popover>
@@ -35,14 +30,16 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import AccountToggleContent from "@/components/Header/Account/AccountToggleContent.vue";
+import HatMenuContent from "@/components/Header/HatMenu/HatMenuContent.vue";
 import { ChevronDownIcon } from "@heroicons/vue/solid";
+import { AcademicCapIcon } from "@heroicons/vue/outline";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue";
 
 export default defineComponent({
   components: {
-    AccountToggleContent,
+    HatMenuContent,
     ChevronDownIcon,
+    AcademicCapIcon,
     Popover,
     PopoverButton,
     PopoverPanel,
@@ -51,14 +48,6 @@ export default defineComponent({
     address: {
       type: String,
       requried: true,
-    },
-    privateAddress: {
-      type: String,
-      requried: true,
-    },
-    balance: {
-      type: Number,
-      required: true,
     },
   },
 });

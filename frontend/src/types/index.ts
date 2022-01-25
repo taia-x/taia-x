@@ -27,7 +27,6 @@ interface UserRoleMapping {
   role: Role;
 }
 interface Role {
-  certifier?: boolean;
   provider?: boolean;
   consumer?: boolean;
 }
@@ -39,42 +38,24 @@ export interface Alert {
   visible: boolean;
 }
 
+interface Sensor {
+  fileName: string;
+  fileSize: number;
+  mimeType: string;
+  ontologyUri: string | null;
+}
+
 interface Format {
   uri: string;
   hash: string;
   mimeType: string;
 }
 
-interface Attribute {
-  name: string;
-  value: string;
-}
-
-interface Level {
-  name: string;
-  value: number;
-}
-
-interface Stat {
-  name: string;
-  value: number;
-}
-
 export interface TokenMetadata {
   name: string;
-  owner: string;
-  version?: number;
+  description: string;
   tags: Array<string>;
-  symbol: string;
-  decimals: number;
-  price: number;
-  creators?: Array<string>;
-  collection_id?: number;
-  formats?: Array<Format>;
-  attributes?: Array<Attribute>;
-  levels?: Array<Level>;
-  stats?: Array<Stat>;
-  displayUri?: string;
+  files: Array<Sensor>;
+  formats: Array<Format>;
   artifactUri: string;
-  thumbnailUri?: string;
 }

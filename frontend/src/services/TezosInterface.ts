@@ -1,7 +1,7 @@
 import { ContractAbstraction, TezosToolkit, Wallet } from "@taquito/taquito";
 import { CONTRACT } from "@/constants";
-import { NFT, AddRoleData, RemoveRoleData, MintParams } from "@/types";
-import { char2Bytes, bytes2Char } from "@taquito/utils";
+import { AddRoleData, RemoveRoleData, MintParams } from "@/types";
+import { char2Bytes } from "@taquito/utils";
 
 /**
  * exposes an interface for interaction with the role smart contract
@@ -36,7 +36,7 @@ class TezosInterface {
   ): Promise<void> {
     const roleData = Array.isArray(data) ? data : [data];
     try {
-      const op = await this.contract.methods.user_manager(roleData).send();
+      const op = await this.contract.methods.update_user_roles(roleData).send();
       if (op) {
         const result = await op.confirmation(1);
         if (result.completed) {
@@ -59,10 +59,6 @@ class TezosInterface {
    */
   async mintNft(mintParams: MintParams): Promise<void> {
     const { operator, address, price, metadataUri } = mintParams;
-    console.log(operator);
-    console.log(address);
-    console.log(price);
-    console.log(metadataUri);
     try {
       const op = await this.contract.methods
         .mint(operator, address, char2Bytes(metadataUri))
@@ -78,7 +74,6 @@ class TezosInterface {
         }
       }
     } catch (e: any) {
-      console.log(e);
       throw new Error(e.toString());
     }
   }
@@ -110,36 +105,3 @@ class TezosInterface {
 }
 
 export default TezosInterface;
-
-// /**
-//  * fetch nft token from tezos blockchain
-//  */
-// async fetchNfts(): Promise<any> {
-//   try {
-//     const storage: any = await this.contract.storage();
-//     const datasetIds = storage["market"].datasetIds;
-//     if (datasetIds) {
-//       const tokenIds: number[] = datasetIds.map((token: any) => token.c[0]);
-//       const nfts: Array<NFT> = await Promise.all(
-//         tokenIds.map(async (tokenId) => {
-//           const [tokenRaw, metadata] = await Promise.all([
-//             storage.market.datasets.get(tokenId.toString()), // get dataset for a token id
-//             storage.token_metadata.get(tokenId.toString()), // get metadata for a token id
-//           ]);
-//           const nft: NFT = {
-//             owner: tokenRaw.owner,
-//             id: tokenRaw.id.c[0],
-//             isOwned: tokenRaw.isOwned,
-//             onSale: tokenRaw.onSale,
-//             price: tokenRaw.price,
-//             metadataUri: bytes2Char(metadata.token_info.get("")), // convert bytes to string and strip off some hex numbers which are not needed
-//           };
-//           return nft;
-//         })
-//       );
-//       return nfts;
-//     }
-//   } catch (e: any) {
-//     throw new Error(e.toString());
-//   }
-// }

@@ -3,7 +3,6 @@ import { ApolloClients } from "@vue/apollo-composable";
 import { tokenMetadataClient } from "@/services/TokenMetadata";
 import App from "./App.vue";
 import router from "./router";
-import VWave from "v-wave";
 import { createPinia } from "pinia";
 import "./assets/css/tailwind.css";
 import "./assets/css/fonts.css";
@@ -16,4 +15,4 @@ const app = createApp({
   },
   render: () => h(App),
 });
-app.use(createPinia()).use(router).use(VWave).mount("#app");
+app.use(createPinia()).use(router).mount("#app");

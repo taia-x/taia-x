@@ -2,7 +2,6 @@ type mint_param = {
     owner: address;
     operator: address option;
     token_metadata_uri: bytes;
-    provider_pbk: key;
     root_hash: bytes;
 }
 (**
@@ -35,7 +34,7 @@ let mint (mint_param, store : mint_param * taia_x_storage) : (operation  list) *
             let new_token_metadata = ({ token_id=token_id; token_info=new_token_metadata_info; }) in
             let token_metadata_with_new_token_metadata = Big_map.add token_id new_token_metadata s.token_metadata in
 
-            let new_cert = ({ dataset_id=token_id; provider_pbk=p.provider_pbk; issuer=(None:address option); signature=(None:signature option); root_hash=p.root_hash; state=Pending; } : cert) in
+            let new_cert = ({ dataset_id=token_id; issuer=(None:address option); root_hash=p.root_hash; state=Pending; } : cert) in
             let certs_with_new_cert = Big_map.add token_id new_cert s.certificates in
 
             match mint_param.operator with

@@ -61,7 +61,7 @@ class TezosInterface {
     const { operator, address, price, metadataUri } = mintParams;
     try {
       const op = await this.contract.methods
-        .mint(operator, address, char2Bytes(metadataUri))
+        .mint(operator, address, price, char2Bytes(metadataUri))
         .send();
       if (op) {
         const result = await op.confirmation(1);
@@ -75,6 +75,31 @@ class TezosInterface {
       }
     } catch (e: any) {
       throw new Error(e.toString());
+    }
+  }
+
+  /**
+   * buy nft token on tezos blockchain
+   * @param address tezos account address
+   * @param metadataUri ipfs metadata uri formatted as https://ipfs.io/{CID}
+   */
+  async buy(price: number, tokenId: number): Promise<void> {
+    try {
+      const op = await this.contract.methods
+        .buy(price, tokenId)
+        .send({ amount: price / 1000000 });
+      if (op) {
+        const result = await op.confirmation(1);
+        if (result.completed) {
+          console.log("Transaction correctly processed!");
+          console.log(`Block: ${result.block.header.level}`);
+          console.log(`Chain ID: ${result.block.chain_id}`);
+        } else {
+          console.log("An error has occurred");
+        }
+      }
+    } catch (e) {
+      throw new Error(`Unable to buy token with token_id ${tokenId}!`);
     }
   }
 }

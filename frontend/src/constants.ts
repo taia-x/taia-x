@@ -5,10 +5,10 @@ type HTTP = "http" | "https";
 export const CONTRACT =
   process.env.VUE_APP_CONTRACT_ADDRESS ||
   "KT1Gd4FXMY3uDE7xRNd1hTnFYizMNYwLBkLh";
-console.log(process.env.VUE_APP_CONTRACT_ADDRESS);
+
+export const ACCOUNT_IMAGE_PATH = "https://services.tzkt.io/v1/avatars/";
 
 // Roles
-export const ROLE_CERTIFIER = "certifier";
 export const ROLE_PROVIDER = "provider";
 export const ROLE_CONSUMER = "consumer";
 

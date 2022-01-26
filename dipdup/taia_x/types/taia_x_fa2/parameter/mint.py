@@ -14,4 +14,5 @@ class MintParameter(BaseModel):
 
     operator: Optional[str]
     owner: str
+    price_arg: str
     token_metadata_uri: str

@@ -1,30 +1,14 @@
 <template>
   <div
-    class="flex items-center justify-between w-full px-10 py-4 h-24  mx-auto font-sans text-sm font-medium text-gray-900 border-gray-200 "
+    class="flex items-center justify-between w-full px-10 py-4 h-24 mx-auto font-sans text-sm font-medium text-gray-900 border-gray-200 bg-opacity-5 backdrop-filter backdrop-blur"
   >
-    <nav>
-      <router-link
-        to="/"
-        class="text-lg font-semibold leading-7 text-gray-700 transition duration-300 ease-in-out  hover:text-cyan-500"
-        >Taia-X<span class="font-mono text-xs text-gray-600 font-extralight"
-          >&nbsp;A Blockchain Marketplace for Digital Twin Data</span
-        ></router-link
-      >
-    </nav>
-    <div class="flex items-center space-x-6">
-      <Navigation />
-      <div class="flex items-center space-x-2">
+    <div class="flex items-center w-full space-x-6">
+      <Navigation :address="address" :role="role" />
+      <div class="flex items-center h-9">
         <SignInButton :address="address" />
-        <SignUpButton
-          :address="address"
-          @update:isOpen="$emit('update:isOpen', true)"
-        />
-        <AccountToggle
-          :address="address"
-          :privateAddress="getPrivatizedAddress"
-          :balance="balance"
-        />
+        <HatMenu :address="address" />
       </div>
+      <UserMenu :address="address" :privateAddress="getPrivatizedAddress" />
     </div>
   </div>
 </template>
@@ -33,8 +17,8 @@
 import { defineComponent, computed } from "vue";
 import Navigation from "@/components/Header/Navigation.vue";
 import SignInButton from "@/components/Header/SignInButton.vue";
-import SignUpButton from "@/components/Header/SignUpButton.vue";
-import AccountToggle from "@/components/Header/Account/AccountToggle.vue";
+import UserMenu from "@/components/Header/UserMenu/UserMenu.vue";
+import HatMenu from "@/components/Header/HatMenu/HatMenu.vue";
 import { useUserStore } from "@/stores/useUser";
 import { storeToRefs } from "pinia";
 
@@ -42,13 +26,14 @@ export default defineComponent({
   components: {
     Navigation,
     SignInButton,
-    SignUpButton,
-    AccountToggle,
+    UserMenu,
+    HatMenu,
   },
   setup() {
     const user = useUserStore();
-    const { address, balance } = storeToRefs(user);
+    const { address, role } = storeToRefs(user);
 
+    // does not reveal full address in ui
     const getPrivatizedAddress = computed(() => {
       return `${address.value.substring(0, 5)}...${address.value.substring(
         address.value.length - 5,
@@ -56,7 +41,7 @@ export default defineComponent({
       )}`;
     });
 
-    return { address, balance, getPrivatizedAddress };
+    return { address, role, getPrivatizedAddress };
   },
 });
 </script>

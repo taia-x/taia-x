@@ -3,6 +3,7 @@ type mint_param = {
     operator: address option;
     token_metadata_uri: bytes;
     root_hash: bytes;
+    price_arg : tez 
 }
 (**
 Create a dataset and a token (they both have the same id), associate token to given owner, (and possibly setup an operator for this newly minted token).
@@ -26,7 +27,7 @@ let mint (mint_param, store : mint_param * taia_x_storage) : (operation  list) *
         if ledger_and_owners_are_consistent && dataset_not_certified then
             let next_dataset_id = token_id + 1n in
             
-            let new_dataset = ({ isOwned=true; owner=p.owner; price=(None : price option); id=token_id } : dataset) in
+            let new_dataset = ({ isOwned=true; owner=p.owner; price=(Some (p.price_arg) : price option); id=token_id;  } : dataset) in
             let datasets_with_new_dataset = Big_map.add token_id new_dataset s.market.datasets in
             let datasets_ids_with_new_id = Set.add token_id s.market.datasetIds in
             
@@ -50,3 +51,5 @@ let mint (mint_param, store : mint_param * taia_x_storage) : (operation  list) *
     match token_owner_option with
     | Some(_ownr) -> (failwith("This non-fungible token already exists"): (operation  list) * taia_x_storage)
     | None -> create_token_with_operator (mint_param, store)
+
+

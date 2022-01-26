@@ -37,6 +37,7 @@ export const getSingleTokenMetadata = gql`
       files
       formats
       id
+      price
       metadata
       name
       tags

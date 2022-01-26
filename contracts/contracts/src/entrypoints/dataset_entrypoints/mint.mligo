@@ -2,9 +2,10 @@ type mint_param = {
     owner: address;
     operator: address option;
     token_metadata_uri: bytes;
-    root_hash: bytes;
-    price_arg : tez 
+    price_arg : tez;
+    hash: bytes;
 }
+
 (**
 Create a dataset and a token (they both have the same id), associate token to given owner, (and possibly setup an operator for this newly minted token).
 Several checks are carried out: the token  must be a new token (and not an already existing token).
@@ -35,7 +36,7 @@ let mint (mint_param, store : mint_param * taia_x_storage) : (operation  list) *
             let new_token_metadata = ({ token_id=token_id; token_info=new_token_metadata_info; }) in
             let token_metadata_with_new_token_metadata = Big_map.add token_id new_token_metadata s.token_metadata in
 
-            let new_cert = ({ dataset_id=token_id; issuer=(None:address option); root_hash=p.root_hash; state=Pending; } : cert) in
+            let new_cert = ({ dataset_id=token_id; issuer=(None:address option); hash=p.hash; state=Pending; } : cert) in
             let certs_with_new_cert = Big_map.add token_id new_cert s.certificates in
 
             match mint_param.operator with

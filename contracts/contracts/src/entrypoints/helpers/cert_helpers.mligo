@@ -1,6 +1,6 @@
 let set_cert_state (p, issuer, state, certificates : cert_params * address * cert_state * cert_storage): cert_storage =
   let new_cert : cert =  match Big_map.find_opt p.dataset_id certificates with
-    | Some c -> ({c with issuer = (Some (issuer) : address option); state=state})
+    | Some c -> ({c with issuer = (Some (issuer) : address option); hash=p.hash; state=state;})
     | None -> (failwith("No corresponding certificate found for this dataset id") : cert)
   in 
   Big_map.update (p.dataset_id : token_id) (Some (new_cert)) certificates

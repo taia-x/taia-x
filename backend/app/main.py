@@ -2,8 +2,6 @@ import uvicorn
 
 from fastapi import FastAPI, Depends, File, UploadFile
 from fastapi.responses import FileResponse
-from functools import lru_cache
-import config
 from uuid import uuid4
 from pathlib import Path
 import glob

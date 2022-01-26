@@ -30,6 +30,7 @@ async def on_mint(
         metadata=metadata,
         creator=creator,
         timestamp=mint.data.timestamp,
+        price=mint.parameter.price_arg,
         formats=[],
         files=[],
         tags=[]
@@ -43,7 +44,7 @@ async def on_mint(
     await token.save()
 
     recipient, _ = await models.Account.get_or_create(address=mint.data.target_address)
-    recipient.save()
+    await recipient.save()
     #minter, _ = await models.TokenHolder.get_or_create(holder=holder, token=token)
     #await minter.save()
 

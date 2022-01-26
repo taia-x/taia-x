@@ -208,6 +208,7 @@ export default defineComponent({
             mimeType: "application/zip",
           },
         ];
+        console.log("test");
         Object.keys(ontologies.value).forEach((key) =>
           formats.push({
             uri: ontologies.value[key]?.fileUri,
@@ -229,17 +230,19 @@ export default defineComponent({
           artifactUri: "http://localhost:33080/download/1",
         };
         const metadataCid = await ipfsInterface.writeFile(tokenMetadata);
+
         // mint token via wallet
         await tezosInterface.mintNft({
           operator: "tz1ittpFnVsKxx1M8YPKt7VJEaZfwiBZ6jo7",
           address: address.value,
-          price: 1000000,
+          price: 1,
           metadataUri: metadataCid,
         });
         // notifies user and resets values
         alerts.createAlert("Successfully minted NFT!", "success");
         reset();
       } catch (e: any) {
+        console.log(e);
         alerts.createAlert("Something went wrong!", "error");
         throw new Error(e.toString());
       }

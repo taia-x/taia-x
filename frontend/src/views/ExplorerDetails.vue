@@ -57,9 +57,10 @@
     </a>
   </div>
   <button
+    v-if="token && token.price"
     class="flex items-center px-3 text-white transition duration-300 ease-in-out transform border-2 border-b-4 rounded-md h-10 bg-cyan-500 hover:bg-cyan-600 text-md whitespace-nowrap border-cyan-700 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
   >
-    Buy for 5 ꜩ
+    Buy for {{ token.price }} ꜩ
   </button>
   <div class="flex flex-col pt-12 pb-20 space-y-12">
     <div class="space-y-4">

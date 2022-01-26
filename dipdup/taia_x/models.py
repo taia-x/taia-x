@@ -30,6 +30,7 @@ class Token(Model):
     formats = fields.JSONField(default=[])
     files = fields.JSONField(default=[])
     tags = fields.JSONField(default=[])
+    price = fields.BigIntField(null=False)
     #thumbnail_uri = fields.TextField(default='')
     #display_uri = fields.TextField(default='')
     #extra = fields.JSONField(default={})

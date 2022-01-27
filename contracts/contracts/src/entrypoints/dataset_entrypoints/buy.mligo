@@ -15,7 +15,7 @@ let buy(buy_parameters, storage : buy_param * taia_x_storage) : (operation  list
     then (failwith("A dataset can only be bought by a consumer") : (operation  list) * taia_x_storage)
     else
       // check if dataset price equals Tezos.amount 
-      let dataset : dataset =  match Big_map.find_opt buy_parameters.token_id storage.market.datasets with
+      let _dataset : dataset =  match Big_map.find_opt buy_parameters.token_id storage.market.datasets with
         | Some d -> if (d.price = (Some price: price option)) then d else (failwith("The amount sent is not equal to the price of the dataset"): dataset)
         | None -> (failwith("This dataset does not exist") : dataset)
       in

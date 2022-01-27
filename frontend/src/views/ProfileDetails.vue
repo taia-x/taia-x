@@ -75,6 +75,8 @@ import { defineComponent, ref } from "vue";
 import { useRoute } from "vue-router";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import { UserCircleIcon } from "@heroicons/vue/solid";
+import { useQuery, useResult } from "@vue/apollo-composable";
+import { getTokenMetadata } from "@/services/graphql/queries";
 
 export default defineComponent({
   components: {
@@ -87,8 +89,22 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute();
+
+    const { result } = useQuery(
+      getTokenMetadata,
+      () => ({
+        offset: 0,
+        limit: 12,
+      }),
+      {
+        fetchPolicy: "cache-and-network",
+      }
+    );
+    // stores result in tokens when result is loaded
+    const tokens = useResult(result, null, ({ token }) => token);
+    console.log("profile tokens", tokens);
     let categories = ref({
-      Recent: [
+      Collected: [
         {
           id: 1,
           title: "Does drinking coffee make you smarter?",
@@ -104,7 +120,7 @@ export default defineComponent({
           shareCount: 2,
         },
       ],
-      Popular: [
+      Created: [
         {
           id: 1,
           title: "Is tech making coffee better or worse?",
@@ -120,7 +136,7 @@ export default defineComponent({
           shareCount: 12,
         },
       ],
-      Trending: [
+      Certified: [
         {
           id: 1,
           title: "Ask Me Anything: 10 answers to your questions about coffee",
@@ -141,6 +157,7 @@ export default defineComponent({
     return {
       route,
       categories,
+      tokens,
     };
   },
 });

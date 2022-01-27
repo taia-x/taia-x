@@ -7,24 +7,13 @@
       />
     </div>
     <div class="grid grid-cols-4 gap-6 mt-16" v-if="tokens">
-      <router-link
-        class="w-full transition duration-200 transform border-gray-300 rounded-lg bg-gray-50 hover:scale-105 h-96 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+      <DatasetCard
         v-for="(token, index) in tokens"
         :key="token.id"
+        :dataset="dataset"
         :index="index"
-        :to="'/explore/' + token.id"
       >
-        <div class="flex flex-col p-4">
-          <div class="grid grid-cols-2 gap-2">
-            <span class="text-sm font-medium">owner</span>
-            <span class="text-sm truncate">{{ token.creator_id }}</span>
-            <span class="text-sm font-medium">id</span>
-            <span class="text-sm truncate">{{ token.id }}</span>
-            <span class="text-sm font-medium">metadata</span>
-            <span class="text-sm truncate">{{ token.metadata }}</span>
-          </div>
-        </div>
-      </router-link>
+      </DatasetCard>
     </div>
     <div class="flex items-center justify-between mt-16">
       <div class="flex items-center space-x-2">
@@ -48,12 +37,14 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import SearchBar from "@/components/Explorer/SearchBar.vue";
+import DatasetCard from "@/components/Utils/Dataset/DatasetCard.vue";
+
 import { useQuery, useResult } from "@vue/apollo-composable";
 import { getTokenMetadata } from "@/services/graphql/queries";
 
 export default defineComponent({
   components: {
-    SearchBar,
+    SearchBar,DatasetCard
   },
   setup() {
     const isCreateDatasetModalOpen = ref(false);

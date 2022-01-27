@@ -101,6 +101,30 @@ def sign(message, file_path):
     return base58_encode(signature, prefix).decode()
 
 
+def verify_sig(signature, message, public_key):
+    """
+    Verify signature, raise exception if it is not valid
+    :param message: sequance of bytes, raw format or hexadecimal notation
+    :param signature: a signature in base58 encoding
+    """
+    signature = scrub_input(signature)
+    message = scrub_input(message)
+    pbk = scrub_input(public_key)
+
+    signature = base58_decode(signature)
+    pbk = base58_decode(pbk)
+
+    # Ed25519
+    digest = pysodium.crypto_generichash(message)
+    try:
+        pysodium.crypto_sign_verify_detached(signature, digest, pbk)
+    except ValueError:
+        raise ValueError('Signature is invalid.')
+    print("Signature is valid!")
+
+    return None
+
+
 def save_as_txt(faucet_path: str, message: str):
     os.mkdir("./keys_sig/")
     keypair_temp = keypair(faucet_path)

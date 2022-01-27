@@ -30,6 +30,7 @@ async def on_mint(
         metadata=metadata,
         creator=creator,
         timestamp=mint.data.timestamp,
+        hash=mint.parameter.hash,
         price=mint.parameter.price_arg,
         formats=[],
         files=[],

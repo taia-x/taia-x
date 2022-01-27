@@ -12,6 +12,7 @@ class MintParameter(BaseModel):
     class Config:
         extra = Extra.forbid
 
+    hash: str
     operator: Optional[str]
     owner: str
     price_arg: str

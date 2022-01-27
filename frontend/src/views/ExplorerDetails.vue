@@ -57,6 +57,7 @@
     </a>
   </div>
   <button
+    @click.prevent="buyToken"
     v-if="token && token.price"
     class="flex items-center px-3 text-white transition duration-300 ease-in-out transform border-2 border-b-4 rounded-md h-10 bg-cyan-500 hover:bg-cyan-600 text-md whitespace-nowrap border-cyan-700 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
   >
@@ -235,10 +236,11 @@ import {
   EyeIcon,
 } from "@heroicons/vue/outline";
 import { highlightAll } from "prismjs";
-import { ipfsInterface } from "@/services";
+import { ipfsInterface, tezosInterface } from "@/services";
 import { useQuery, useResult } from "@vue/apollo-composable";
 import { getSingleTokenMetadata } from "@/services/graphql/queries";
 import Tooltip from "@/components/Utils/Tooltip.vue";
+import { useAlertStore } from "@/stores/useAlerts";
 
 export default defineComponent({
   components: {
@@ -256,6 +258,7 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute();
+    const alerts = useAlertStore();
     //const isOpen = ref(false);
     const code = ref("");
     const token = ref(null);
@@ -304,6 +307,18 @@ export default defineComponent({
       )}`;
     };
 
+    const buyToken = async () => {
+      try {
+        await tezosInterface.buy(token.value.price, token.value.id);
+        // notifies user and resets values
+        alerts.createAlert("Successfully purchased NFT!", "success");
+      } catch (e) {
+        console.log(e);
+        alerts.createAlert("Something went wrong!", "error");
+        throw new Error(e.toString());
+      }
+    };
+
     // copies content of artifact json to clipboard
     // const copyToClipboard = async () => {
     //   try {
@@ -322,6 +337,7 @@ export default defineComponent({
       highlightAll,
       fetchOntology,
       getPrivatizedAddress,
+      buyToken,
       route,
       token,
     };

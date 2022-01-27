@@ -58,10 +58,10 @@ class TezosInterface {
    * @param metadataUri ipfs metadata uri formatted as ipfs//{CID}
    */
   async mintNft(mintParams: MintParams): Promise<void> {
-    const { operator, address, price, metadataUri } = mintParams;
+    const { hash, operator, address, price, metadataUri } = mintParams;
     try {
       const op = await this.contract.methods
-        .mint(operator, address, price, char2Bytes(metadataUri))
+        .mint(hash, operator, address, price, char2Bytes(metadataUri))
         .send();
       if (op) {
         const result = await op.confirmation(1);
@@ -87,7 +87,7 @@ class TezosInterface {
     try {
       const op = await this.contract.methods
         .buy(price, tokenId)
-        .send({ amount: price / 1000000 });
+        .send({ amount: 1 });
       if (op) {
         const result = await op.confirmation(1);
         if (result.completed) {

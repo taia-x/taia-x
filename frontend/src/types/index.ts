@@ -8,6 +8,7 @@ export interface NFT {
 }
 
 export interface MintParams {
+  hash: string;
   operator: string;
   address: string;
   price: number;

@@ -20,6 +20,7 @@ const inputFiles = () => {
       files.value = newFiles;
     } else {
       newFiles.forEach((file: File) => {
+        console.log(file);
         const index = files.value.findIndex((f: File) => f.name === file.name);
         if (index > -1) {
           files.value[index] = file;
@@ -28,10 +29,16 @@ const inputFiles = () => {
         }
       });
     }
-    files.value.forEach((file: File) => {
-      zip.file(file.name, file);
+    files.value.forEach(async (file: File) => {
+      if (file.type === "application/zip") {
+        zip.loadAsync(file).then(function (zip) {
+          console.log(zip);
+        });
+      } else {
+        zip.file(file.name, file);
+        archive.value = await zip.generateAsync({ type: "blob" });
+      }
     });
-    archive.value = await zip.generateAsync({ type: "blob" });
   };
 
   const removeFile = async (index: number): Promise<void> => {

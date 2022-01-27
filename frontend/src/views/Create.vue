@@ -14,113 +14,10 @@
           @ontologyAdded="ontologies[$event.fileName] = $event"
           :files="files"
         />
-        <div>
-          <label for="name" class="block text-sm font-medium text-gray-700">
-            Name
-          </label>
-          <div class="flex w-full mt-1 rounded-md shadow-sm">
-            <input
-              v-model="name"
-              tabindex="1"
-              autofocus
-              type="text"
-              name="name"
-              id="name"
-              class="flex-1 block w-full border-gray-300 rounded-md focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
-              placeholder="Dataset name"
-            />
-          </div>
-        </div>
-        <div>
-          <label
-            for="description"
-            class="block text-sm font-medium text-gray-700"
-          >
-            Description
-          </label>
-          <div class="mt-1">
-            <textarea
-              v-model="description"
-              tabindex="2"
-              id="description"
-              name="description"
-              rows="6"
-              class="block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
-              placeholder="Provide a description of your dataset..."
-            />
-          </div>
-        </div>
-        <div>
-          <label for="name" class="block text-sm font-medium text-gray-700">
-            Tags
-          </label>
-          <div class="flex w-full mt-1 rounded-md shadow-sm">
-            <input
-              v-model="tags"
-              tabindex="3"
-              autofocus
-              type="text"
-              name="name"
-              id="name"
-              class="flex-1 block w-full border-gray-300 rounded-md focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
-              placeholder="Comma separated list"
-            />
-          </div>
-        </div>
+        <NameInput @update:name="name = $event" />
+        <DescriptionInput @update:description="description = $event" />
+        <TagsInput @update:tags="tags = $event" />
       </div>
-      <!-- <div class="w-full pt-6">
-        <div class="w-full mx-auto bg-white rounded-2xl">
-          <Disclosure v-slot="{ open }">
-            <DisclosureButton
-              class="flex justify-between w-full py-4 text-sm font-medium text-left text-gray-700 bg-white rounded-lg group hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-cyan-500 focus-visible:ring-opacity-75"
-            >
-              <span
-                class="transition-all duration-200 transform group-hover:translate-x-4"
-                >Attributes</span
-              >
-              <ChevronUpIcon
-                :class="open ? 'transform rotate-0' : 'transform rotate-180'"
-                class="w-5 h-5 text-gray-700 transition duration-200 ease-in-out transform group-hover:-translate-x-4"
-              />
-            </DisclosureButton>
-            <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
-              If you're unhappy with your purchase for any reason, email us
-              within 90 days and we'll refund you in full, no questions asked.
-            </DisclosurePanel>
-          </Disclosure>
-          <Disclosure as="div" class="mt-2" v-slot="{ open }">
-            <DisclosureButton
-              class="flex justify-between w-full py-4 text-sm font-medium text-left text-gray-700 bg-white rounded-lg group hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-cyan-500 focus-visible:ring-opacity-75"
-            >
-              <span
-                class="transition-all duration-200 transform group-hover:translate-x-4"
-                >Levels</span
-              >
-              <ChevronUpIcon
-                :class="open ? 'transform rotate-0' : 'transform rotate-180'"
-                class="w-5 h-5 text-gray-700 transition duration-200 ease-in-out transform group-hover:-translate-x-4"
-              />
-            </DisclosureButton>
-            <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
-              No.
-            </DisclosurePanel>
-          </Disclosure>
-          <Disclosure as="div" class="mt-2" v-slot="{ open }">
-            <DisclosureButton
-              class="flex justify-between w-full py-4 text-sm font-medium text-left text-gray-700 bg-white rounded-lg hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-cyan-500 focus-visible:ring-opacity-75"
-            >
-              <span>Stats</span>
-              <ChevronUpIcon
-                :class="open ? 'transform rotate-0' : 'transform rotate-180'"
-                class="w-5 h-5 text-gray-700 transition duration-200 ease-in-out "
-              />
-            </DisclosureButton>
-            <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
-              No.
-            </DisclosurePanel>
-          </Disclosure>
-        </div>
-      </div> -->
       <div class="w-full mt-6 space-x-2 text-right">
         <button
           type="button"
@@ -150,22 +47,22 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from "vue";
 import FileSection from "@/components/Utils/FileUpload/FileSection.vue";
+import NameInput from "@/components/Create/NameInput.vue";
+import DescriptionInput from "@/components/Create/DescriptionInput.vue";
+import TagsInput from "@/components/Create/TagsInput.vue";
 import inputFiles from "@/composables/inputFiles";
 import { ipfsInterface, tezosInterface } from "@/services";
 import { useUserStore } from "@/stores/useUser";
 import { useAlertStore } from "@/stores/useAlerts";
 import { storeToRefs } from "pinia";
 import { TokenMetadata } from "@/types";
-//import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-//import { ChevronUpIcon } from "@heroicons/vue/solid";
 
 export default defineComponent({
   components: {
     FileSection,
-    //ChevronUpIcon,
-    //Disclosure,
-    //DisclosureButton,
-    //DisclosurePanel,
+    NameInput,
+    DescriptionInput,
+    TagsInput,
   },
   setup() {
     const name = ref("");
@@ -197,18 +94,45 @@ export default defineComponent({
     // upload artifact to backend, upload ontologies on ipfs, upload metadata on ipfs, mint token
     const mint = async () => {
       try {
-        // TODO: upload .zip to backend
-        // TODO: upload ontologies
-        // upload metadata to ipfs
-        const tagsArray = tags.value.replace(/ /g, "").split(/[,]+/);
+        // create form data to upload file via post request
+        const form = new FormData();
+        form.append("archive", archive.value);
+
+        // upload file
+        const uploadResponse = await fetch("http://localhost:8000/upload", {
+          method: "POST",
+          body: form,
+        });
+        const { artifactUri }: { artifactUri: string } =
+          await uploadResponse.json();
+        // const boy: any = {
+        //   nft_id: "1",
+        //   sig: "Test",
+        //   pbkey: "Test",
+        // };
+        // const res2 = await fetch(artifactUri, {
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/json" },
+        //   body: JSON.stringify(boy),
+        // });
+        // console.log(
+        //   "cool2 ",
+        //   await generateSHA256(new Blob([await res2.arrayBuffer()]))
+        // );
+
+        // generate hash from zip archive
+        const hash = await generateSHA256(files.value[0]);
+
+        // store artifactUri in formats for token metadata file
         const formats = [
           {
-            uri: "http://localhost:33080/download/1",
-            hash: `sha256://${await generateSHA256(archive.value)}`,
+            uri: artifactUri,
+            hash: `sha256://${hash}`,
             mimeType: "application/zip",
           },
         ];
-        console.log("test");
+
+        // if ontolofies were uploaded, add format for each ontology file including uri, hash and mimetype
         Object.keys(ontologies.value).forEach((key) =>
           formats.push({
             uri: ontologies.value[key]?.fileUri,
@@ -216,33 +140,38 @@ export default defineComponent({
             mimeType: "application/json",
           } as any)
         );
+
+        // construct token metadata to be uploaded to ipfs
         const tokenMetadata: TokenMetadata = {
           name: name.value,
           description: description.value,
-          tags: tagsArray,
+          tags: tags.value.length
+            ? tags.value.replace(/ /g, "").split(/[,]+/)
+            : [],
           files: files.value.map((file: File) => ({
             fileName: file.name,
             fileSize: file.size,
             mimeType: file.type,
             ontologyUri: ontologies.value[file.name]?.fileUri || null,
           })),
-          formats: formats,
-          artifactUri: "http://localhost:33080/download/1",
+          formats,
+          artifactUri,
         };
-        const metadataCid = await ipfsInterface.writeFile(tokenMetadata);
+        const metadataUri = await ipfsInterface.writeFile(tokenMetadata); // upload metadata to ipfs
 
-        // mint token via wallet
+        // mint token
         await tezosInterface.mintNft({
+          hash,
           operator: "tz1ittpFnVsKxx1M8YPKt7VJEaZfwiBZ6jo7",
           address: address.value,
-          price: 1,
-          metadataUri: metadataCid,
+          price: 1000000,
+          metadataUri,
         });
+
         // notifies user and resets values
         alerts.createAlert("Successfully minted NFT!", "success");
         reset();
       } catch (e: any) {
-        console.log(e);
         alerts.createAlert("Something went wrong!", "error");
         throw new Error(e.toString());
       }

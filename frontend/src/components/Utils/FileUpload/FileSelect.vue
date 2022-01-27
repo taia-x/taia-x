@@ -16,7 +16,7 @@
             id="file-upload"
             name="file-upload"
             type="file"
-            accept=".json"
+            accept=".json,.zip"
             class="sr-only"
             multiple
             @change="$emit('fileSelected', $event)"

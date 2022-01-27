@@ -13,7 +13,7 @@
       id="file"
       name="file-upload"
       type="file"
-      accept=".json"
+      accept=".json,.zip"
       v-if="files.length"
       class="sr-only"
       multiple

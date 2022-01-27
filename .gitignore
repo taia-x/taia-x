@@ -154,3 +154,7 @@ test-measurements-sensorwise/
 
 *.ini
 assets/
+
+# backend
+backend/assets
+backend/app/__pycache__

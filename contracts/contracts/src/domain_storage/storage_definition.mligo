@@ -4,6 +4,7 @@
 #include "dataset_definition.mligo"
 #include "marketplace_definition.mligo"
 #include "user_definition.mligo"
+#include "cert_definition.mligo"
 
 #include "../tzip-12/lib/fa2_operator_lib.mligo"
 
@@ -18,6 +19,7 @@ type ledger = (token_id, address) big_map
 
 type taia_x_storage = {
   market : marketplace_storage;
+  certificates: cert_storage; 
   users: user_storage;
   ledger : ledger;
   operators : operator_storage;

@@ -100,29 +100,81 @@ How to set up your project locally.
 
 To run the project locally you need to have install node.js and Docker
 
-### Installation
+### Installation (Sandbox)
 
-1. in the `taia-x` directory, create `.env`  file according `.env.template` by filling the necessary entries.
-2. start the local network by running:
+1. In the `./contracts` directory run:
+
+```bash
+$ yarn install
 ```
 
-See here how to fix CORS error if it happens.
+2. Rename the `.env.template` in `./contracts` to `.env` file. The file should include the following data.
+
+```bash
+ALICE_SECRET=edsk3QoqBuvdamxouPhin7swCvkQNgq4jP5KZPbwWNnwdZpSpJiEbq
+JON=jon,edpkuTWU5vkNqfFXSAJuZNVa4gAdF6iU3tZongtkgesoytne2YcqVj,tz1ggvpTMyxX5QVYqbpLVmNGCsgDpDyUMawq,unencrypted:edsk3Un2TGaZYUL1gCDPyUvkYvtxznkmZwfa4fdcjdWrne2kyvd3Lj
+LAURA=laura,edpkv2PkEkoaYN9KP769GrFgshMoVn8cvHUuYVUkogxiqZMctxPbB8,tz1TUEs5dubGJoCkvSK11zFqTWU9jh6cV8kb,unencrypted:edsk3VdieyzxcsjFRxApVvLk8LQmQELiuJtGrww27WHamxF83dZwyY
+SOURCE_FILE=/opt/taia-x/contracts/contracts/src/taia_x_main.mligo
+OUTPUT_FILE=/opt/taia-x/contracts/contracts/out/taia_x_main.tz
+ENTRY_POINT=main
+```
+
+3. In the `./contracts` folder compile and run the sandbox via:
+
+```bash
+$ docker compose up sandbox
+```
+
+4. In the `./contracts` folder deploy the contract to the sandbox via:
+
+```bash
+$ yarn run deploy:sandbox
+```
+
+5. Copy the contract address from the console output and assign it to `VUE_APP_CONTRACT_ADDRESS` in `./frontend/.env.template` and rename the file to `.env`.
+
+6. Set the same contract address in `./dipdup/dipdup.yml`:
+
+```yml
+contracts:
+  taia_x_sandbox:
+    address: <contract address>
+    typename: taia_x_fa2
+```
+
+7. In the `./ipfs` folder run the ipfs cluster:
+
+```bash
+$ docker compose up
+```
+
+See [here](https://github.com/taia-x/taia-x/tree/main/ipfs) how to fix CORS error if it happens.
 
 8. In the `./tzkt` folder run the tzkt indexer:
 
 ```bash
 $ docker compose up
 ```
-3. deploy the latest contracts to the local blockchain:
 
-  - go to the `contracts` directory and install the packages
-  ```
-  $ yarn install
-  ```
-  - deploy the smart-contract to the blockchain:
-  ```
-  $ yarn run deploy:testnet
-  ```
+9. In the `./dipdup` folder build and run the selective contract indexer:
+
+```bash
+$ docker compose build
+$ docker compose up
+```
+
+10. In the `./frontend` folder build and run taia-x:
+
+```bash
+$ docker compose build
+$ docker compose up
+```
+
+or run without docker via `npm run serve`
+
+11. Stop all containers by running `docker compose down` in the respective folders.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
 

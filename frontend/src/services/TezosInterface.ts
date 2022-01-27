@@ -1,7 +1,7 @@
 import { ContractAbstraction, TezosToolkit, Wallet } from "@taquito/taquito";
 import { CONTRACT } from "@/constants";
-import { NFT, AddRoleData, RemoveRoleData, MintParams } from "@/types";
-import { char2Bytes, bytes2Char } from "@taquito/utils";
+import { AddRoleData, RemoveRoleData, MintParams } from "@/types";
+import { char2Bytes } from "@taquito/utils";
 
 /**
  * exposes an interface for interaction with the role smart contract
@@ -59,13 +59,9 @@ class TezosInterface {
    */
   async mintNft(mintParams: MintParams): Promise<void> {
     const { operator, address, price, metadataUri } = mintParams;
-    console.log(operator);
-    console.log(address);
-    console.log(price);
-    console.log(metadataUri);
     try {
       const op = await this.contract.methods
-        .mint(operator, address, char2Bytes(metadataUri))
+        .mint(operator, address, price, char2Bytes(metadataUri))
         .send();
       if (op) {
         const result = await op.confirmation(1);
@@ -78,43 +74,34 @@ class TezosInterface {
         }
       }
     } catch (e: any) {
-      console.log(e);
       throw new Error(e.toString());
+    }
+  }
+
+  /**
+   * buy nft token on tezos blockchain
+   * @param address tezos account address
+   * @param metadataUri ipfs metadata uri formatted as https://ipfs.io/{CID}
+   */
+  async buy(price: number, tokenId: number): Promise<void> {
+    try {
+      const op = await this.contract.methods
+        .buy(price, tokenId)
+        .send({ amount: price / 1000000 });
+      if (op) {
+        const result = await op.confirmation(1);
+        if (result.completed) {
+          console.log("Transaction correctly processed!");
+          console.log(`Block: ${result.block.header.level}`);
+          console.log(`Chain ID: ${result.block.chain_id}`);
+        } else {
+          console.log("An error has occurred");
+        }
+      }
+    } catch (e) {
+      throw new Error(`Unable to buy token with token_id ${tokenId}!`);
     }
   }
 }
 
 export default TezosInterface;
-
-// /**
-//  * fetch nft token from tezos blockchain
-//  */
-// async fetchNfts(): Promise<any> {
-//   try {
-//     const storage: any = await this.contract.storage();
-//     const datasetIds = storage["market"].datasetIds;
-//     if (datasetIds) {
-//       const tokenIds: number[] = datasetIds.map((token: any) => token.c[0]);
-//       const nfts: Array<NFT> = await Promise.all(
-//         tokenIds.map(async (tokenId) => {
-//           const [tokenRaw, metadata] = await Promise.all([
-//             storage.market.datasets.get(tokenId.toString()), // get dataset for a token id
-//             storage.token_metadata.get(tokenId.toString()), // get metadata for a token id
-//           ]);
-//           const nft: NFT = {
-//             owner: tokenRaw.owner,
-//             id: tokenRaw.id.c[0],
-//             isOwned: tokenRaw.isOwned,
-//             onSale: tokenRaw.onSale,
-//             price: tokenRaw.price,
-//             metadataUri: bytes2Char(metadata.token_info.get("")), // convert bytes to string and strip off some hex numbers which are not needed
-//           };
-//           return nft;
-//         })
-//       );
-//       return nfts;
-//     }
-//   } catch (e: any) {
-//     throw new Error(e.toString());
-//   }
-// }

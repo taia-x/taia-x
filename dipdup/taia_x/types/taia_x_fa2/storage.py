@@ -14,17 +14,8 @@ class Datasets(BaseModel):
 
     id: str
     isOwned: bool
-    onSale: bool
     owner: str
     price: Optional[str]
-
-
-class Sale(BaseModel):
-    class Config:
-        extra = Extra.forbid
-
-    price: str
-    token_id: str
 
 
 class Market(BaseModel):
@@ -35,7 +26,6 @@ class Market(BaseModel):
     datasets: Dict[str, Datasets]
     nextDatasetId: str
     owners: Dict[str, List[str]]
-    sales: List[Sale]
 
 
 class Key(BaseModel):
@@ -106,7 +96,6 @@ class TaiaX_Fa2Storage(BaseModel):
 
     ledger: Dict[str, str]
     market: Market
-    metadata: Dict[str, str]
     operators: List[Operator]
     token_metadata: Dict[str, TokenMetadata]
     users: List[User]

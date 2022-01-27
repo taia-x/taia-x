@@ -1,4 +1,6 @@
-type role = Consumer | Certifier | Provider 
+type user_role = Consumer | Provider
+
+type role = User of user_role | Certifier // Certifier role can not be changed
 
 (** 
 (user, role) -> unit
@@ -10,7 +12,7 @@ type role_param =
 [@layout:comb]
 {
   user : address;
-  role : role;
+  role : user_role;
 }
 
 type update_roles =

@@ -10,7 +10,7 @@
       <DatasetCard
         v-for="(token, index) in tokens"
         :key="token.id"
-        :dataset="dataset"
+        :dataset="token"
         :index="index"
       >
       </DatasetCard>

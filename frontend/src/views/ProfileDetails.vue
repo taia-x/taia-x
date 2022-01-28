@@ -2,13 +2,16 @@
   <div class="container mx-auto space-y-8">
     <div class="flex items-center space-x-8">
       <div>
-        <UserCircleIcon class="h-32 w-32 text-cyan-500 rounded-full" />
+        <img
+          :src="`${ACCOUNT_IMAGE_PATH}${address}`"
+          class="h-32 w-32 rounded-full"
+        />
       </div>
       <h1>{{ route.params.address }}</h1>
     </div>
-    <div>
+    <div v-if="tokens">
       <TabGroup>
-        <TabList class="flex border-b">
+        <TabList class="flex border-b space-x-10">
           <Tab
             v-for="category in Object.keys(categories)"
             as="template"
@@ -17,7 +20,7 @@
           >
             <button
               :class="[
-                'px-6 py-3 text-black relative text-sm font-medium transition duration-300 ease-in-out',
+                'py-4 text-black relative font-semibold transition duration-300 ease-in-out',
                 selected ? '' : 'text-opacity-25 hover:text-opacity-100',
               ]"
             >
@@ -25,8 +28,8 @@
                 class=""
                 aria-hidden="true"
                 :class="[
-                  'block absolute w-full h-px -bottom-px left-0 transition duration-300 ease-in-out',
-                  selected ? 'bg-black' : 'bg-transparent',
+                  'block absolute w-full h-0.5 -bottom-0.5 left-0 transition duration-300 ease-in-out',
+                  selected ? 'bg-cyan-500' : 'bg-transparent',
                 ]"
               ></span>
               {{ category }}
@@ -38,31 +41,15 @@
           <TabPanel
             v-for="(posts, idx) in Object.values(categories)"
             :key="idx"
-            :class="['py-8']"
+            :class="['py-8 grid grid-cols-4 gap-6']"
           >
-            <ul>
-              <li
-                v-for="post in posts"
-                :key="post.id"
-                class="relative p-3 rounded-md hover:bg-coolGray-100"
-              >
-                <h3 class="text-sm font-medium leading-5">
-                  {{ post.title }}
-                </h3>
-
-                <ul
-                  class="flex mt-1 space-x-1 text-xs font-normal leading-4 text-coolGray-500"
-                >
-                  <li>{{ post.date }}</li>
-                  <li>&middot;</li>
-                  <li>{{ post.commentCount }} comments</li>
-                  <li>&middot;</li>
-                  <li>{{ post.shareCount }} shares</li>
-                </ul>
-
-                <a href="#" :class="['absolute inset-0 rounded-md']" />
-              </li>
-            </ul>
+            <DatasetCard
+              v-for="(token, i) in tokens"
+              :key="token.id"
+              :dataset="token"
+              :index="i"
+            >
+            </DatasetCard>
           </TabPanel>
         </TabPanels>
       </TabGroup>
@@ -74,9 +61,10 @@
 import { defineComponent, ref } from "vue";
 import { useRoute } from "vue-router";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
-import { UserCircleIcon } from "@heroicons/vue/solid";
-import { useQuery, useResult } from "@vue/apollo-composable";
 import { getTokenMetadata } from "@/services/graphql/queries";
+import { ACCOUNT_IMAGE_PATH } from "@/constants";
+import { useQuery, useResult } from "@vue/apollo-composable";
+import DatasetCard from "@/components/Utils/Dataset/DatasetCard.vue";
 
 export default defineComponent({
   components: {
@@ -85,7 +73,7 @@ export default defineComponent({
     Tab,
     TabPanels,
     TabPanel,
-    UserCircleIcon,
+    DatasetCard,
   },
   setup() {
     const route = useRoute();
@@ -102,7 +90,7 @@ export default defineComponent({
     );
     // stores result in tokens when result is loaded
     const tokens = useResult(result, null, ({ token }) => token);
-    console.log("profile tokens", tokens);
+
     let categories = ref({
       Collected: [
         {
@@ -152,12 +140,29 @@ export default defineComponent({
           shareCount: 2,
         },
       ],
+      Activity: [
+        {
+          id: 1,
+          title: "Ask Me Anything: 10 answers to your questions about coffee",
+          date: "2d ago",
+          commentCount: 9,
+          shareCount: 5,
+        },
+        {
+          id: 2,
+          title: "The worst advice we've ever heard about coffee",
+          date: "4d ago",
+          commentCount: 1,
+          shareCount: 2,
+        },
+      ],
     });
 
     return {
       route,
       categories,
       tokens,
+      ACCOUNT_IMAGE_PATH,
     };
   },
 });

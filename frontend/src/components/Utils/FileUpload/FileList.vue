@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex items-center justify-between w-full p-2 mt-2 rounded-md bg-gray-50"
+    class="flex items-center justify-between w-full h-12 p-2 mt-2 rounded-md bg-gray-50"
     v-for="(file, index) in files"
     :key="file.name"
     :index="index"
@@ -11,20 +11,27 @@
     </div>
     <div class="flex items-center py-1 space-x-4">
       <input
-        id="ontology"
+        id="preview"
         name="file-upload"
         type="file"
         accept=".json"
         v-if="files.length"
         class="sr-only"
-        @change="uploadOntology($event)"
+        @change="uploadPreview($event)"
       />
       <button
-        v-if="files.length"
         @click.prevent="openFileSelect"
-        class="px-2 py-1 space-x-2 text-xs text-white transition-colors duration-100 bg-gray-900 rounded-md bg-opacity-10 hover:bg-gray-800"
+        v-if="!previews[file.name]"
+        class="px-2 py-1 space-x-2 text-xs text-white transition-colors duration-100 bg-gray-900 rounded-md hover:bg-gray-800"
       >
-        Add Ontology
+        Add Preview
+      </button>
+      <button
+        @click.prevent="delete previews[file.name]"
+        v-if="previews[file.name]"
+        class="px-2 py-1 space-x-2 text-xs text-white transition-colors duration-100 bg-red-500 rounded-md hover:bg-red-400"
+      >
+        Remove Preview
       </button>
       <XIcon
         class="w-5 h-5 text-gray-400 cursor-pointer hover:text-gray-700"
@@ -51,33 +58,37 @@ export default defineComponent({
       type: Array,
       required: true,
     },
+    previews: {
+      type: Object,
+      required: true,
+    },
   },
-  emits: ["fileRemoved", "ontologyAdded"],
+  emits: ["fileRemoved", "previewAdded"],
   setup(_, { emit }) {
     const { generateSHA256 } = inputFiles();
 
     const openFileSelect = () => {
-      document?.getElementById("ontology")?.click();
+      document?.getElementById("preview")?.click();
     };
 
-    const uploadOntology = async (e: any) => {
+    const uploadPreview = async (e: any) => {
       const files: any = e?.target?.files
         ? Array.from(e.target.files)
         : Array.from(e.dataTransfer.files);
       try {
-        const ontologyCid = await ipfsInterface.writeFile(files[0]);
-        const ontology = {
+        const previewCid = await ipfsInterface.writeFile(files[0]);
+        const preview = {
           fileName: files[0].name,
-          fileUri: ontologyCid,
+          fileUri: previewCid,
           fileHash: `sha256://${await generateSHA256(files[0])}`,
         };
-        emit("ontologyAdded", ontology);
+        emit("previewAdded", preview);
       } catch (e: any) {
         throw new Error(e.toString());
       }
     };
 
-    return { openFileSelect, uploadOntology };
+    return { openFileSelect, uploadPreview };
   },
 });
 </script>

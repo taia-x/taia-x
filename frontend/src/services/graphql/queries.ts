@@ -21,15 +21,15 @@ export const getSingleTokenMetadata = gql`
   query GetSingleTokenMetadata($id: bigint = 1) {
     token_by_pk(id: $id) {
       events {
-        creator_id
-        event_type
-        level
-        ophash
-        price
-        timestamp
-        id
-        recipient_id
         token_id
+        timestamp
+        recipient_id
+        price
+        ophash
+        level
+        id
+        event_type
+        caller_id
       }
       artifact_uri
       creator_id

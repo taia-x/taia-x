@@ -51,6 +51,7 @@ module.exports = {
       borderStyle: ["hover"],
       backgroundOpacity: ["hover"],
       backgroundColor: ["disabled"],
+      borderColor: ["disabled"],
       textColor: ["disabled"],
       cursor: ["disabled"],
       fontWeight: ["hover", "focus"],

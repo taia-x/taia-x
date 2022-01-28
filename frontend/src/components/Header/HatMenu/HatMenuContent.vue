@@ -17,7 +17,7 @@
       <div>
         <button
           @click.prevent="assignRole(ROLE_CONSUMER)"
-          class="relative flex justify-center w-full px-12 py-2 font-medium text-center transition-colors duration-100 rounded-md cursor-pointer hover:bg-gray-100 hover:text-gray-800"
+          class="relative flex items-center justify-center w-full px-12 py-2 space-x-2 font-medium text-center transition-colors duration-100 rounded-md cursor-pointer hover:bg-gray-100 hover:text-gray-800"
         >
           <ShoppingBagIcon class="absolute w-5 h-5 left-2" />
           {{ ROLE_CONSUMER[0].toUpperCase() + ROLE_CONSUMER.slice(1) }}

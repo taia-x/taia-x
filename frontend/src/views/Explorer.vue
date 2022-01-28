@@ -15,7 +15,10 @@
       >
       </DatasetCard>
     </div>
-    <div class="flex items-center justify-between mt-16">
+    <div
+      class="flex items-center justify-between mt-16"
+      v-if="tokens && tokens.length"
+    >
       <div class="flex items-center space-x-2">
         <button
           v-for="i in [1]"

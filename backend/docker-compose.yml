@@ -1,0 +1,18 @@
+version: "3.4"
+
+services:
+  provider:
+    container_name: taia-x-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/backend/
+    entrypoint: ./docker-start.sh
+    ports:
+      - 5678:5678
+      - 8000:8000
+
+networks:
+  taia-x:
+    name: taia-x

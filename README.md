@@ -100,7 +100,7 @@ How to set up your project locally.
 
 To run the project locally you need to have install node.js and Docker
 
-### Installation
+### Installation (Sandbox)
 
 1. In the `./contracts` directory run:
 
@@ -108,14 +108,13 @@ To run the project locally you need to have install node.js and Docker
 $ yarn install
 ```
 
-2. Create `.env` file according `.env.template` by filling the necessary entries.
-
-- A test faucet can be obtained from https://faucet.tzalpha.net/. It must be saved as json string to `FAUCET` in the `.env` file.
-- The secret can be obtained by running `yarn run sandbox-info` and copy the value from alice which starts with `edsk`. This value must be saved to `ALICE_KEY` in the `.env` file.
+2. Rename the `.env.template` in `./contracts` to `.env` file. The file should include the following data.
 
 ```bash
-ALICE_SECRET=<ALICE_SECRET>
-FAUCET={"mnemonic": ["...", "...", ...], "secret": "...", "amount": "...", "pkh": "...", "password": "...", "email": "..."
+FAUCET={"mnemonic":["...","..."],"secret":"...","amount": "...","pkh":"...","password":"...","email":"..."}
+ALICE_SECRET=edsk3QoqBuvdamxouPhin7swCvkQNgq4jP5KZPbwWNnwdZpSpJiEbq
+JON=jon,edpkuTWU5vkNqfFXSAJuZNVa4gAdF6iU3tZongtkgesoytne2YcqVj,tz1ggvpTMyxX5QVYqbpLVmNGCsgDpDyUMawq,unencrypted:edsk3Un2TGaZYUL1gCDPyUvkYvtxznkmZwfa4fdcjdWrne2kyvd3Lj
+LAURA=laura,edpkv2PkEkoaYN9KP769GrFgshMoVn8cvHUuYVUkogxiqZMctxPbB8,tz1TUEs5dubGJoCkvSK11zFqTWU9jh6cV8kb,unencrypted:edsk3VdieyzxcsjFRxApVvLk8LQmQELiuJtGrww27WHamxF83dZwyY
 SOURCE_FILE=/opt/taia-x/contracts/contracts/src/taia_x_main.mligo
 OUTPUT_FILE=/opt/taia-x/contracts/contracts/out/taia_x_main.tz
 ENTRY_POINT=main
@@ -135,14 +134,7 @@ $ yarn run deploy:sandbox
 
 5. Copy the contract address from the console output and assign it to `VUE_APP_CONTRACT_ADDRESS` in `./frontend/.env.template` and rename the file to `.env`.
 
-6. Set the same contract address in `./dipdup/dipdup.yml`:
-
-```yml
-contracts:
-  taia_x_sandbox:
-    address: <contract address>
-    typename: taia_x_fa2
-```
+6. Rename the `.env.template` in `./dipdup` to `.env` file and assign the contract address to `CONTRACT_ADDRESS`.
 
 7. In the `./ipfs` folder run the ipfs cluster:
 
@@ -150,22 +142,28 @@ contracts:
 $ docker compose up
 ```
 
-See here how to fix CORS error if it happens.
+See [here](https://github.com/taia-x/taia-x/tree/main/ipfs) how to fix CORS error if it happens.
 
-8. In the `./tzkt` folder run the tzkt indexer:
+8. In the `./backend` folder run the backend:
 
 ```bash
 $ docker compose up
 ```
 
-9. In the `./dipdup` folder build and run the selective contract indexer:
+9. In the `./tzkt` folder run the tzkt indexer:
+
+```bash
+$ docker compose up
+```
+
+10. In the `./dipdup` folder build and run the selective contract indexer:
 
 ```bash
 $ docker compose build
 $ docker compose up
 ```
 
-10. In the `./frontend` folder build and run taia-x:
+11. In the `./frontend` folder build and run taia-x:
 
 ```bash
 $ docker compose build
@@ -174,7 +172,7 @@ $ docker compose up
 
 or run without docker via `npm run serve`
 
-11. Stop all containers by running `docker compose down` in the respective folders.
+12. Stop all containers by running `docker compose down` in the respective folders.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 

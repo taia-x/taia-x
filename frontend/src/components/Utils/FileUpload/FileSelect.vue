@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex justify-center px-6 pt-10 mt-1 border-2 border-gray-300 border-dashed rounded-md pb-11"
+    class="flex justify-center px-6 pt-10 mt-1 border-2 border-gray-200 border-dashed rounded-md pb-11"
     @drop.prevent="$emit('fileSelected', $event)"
     @dragover.prevent
   >
@@ -16,7 +16,7 @@
             id="file-upload"
             name="file-upload"
             type="file"
-            accept=".json"
+            accept=".json,.zip"
             class="sr-only"
             multiple
             @change="$emit('fileSelected', $event)"

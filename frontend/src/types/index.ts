@@ -8,6 +8,7 @@ export interface NFT {
 }
 
 export interface MintParams {
+  hash: string;
   operator: string;
   address: string;
   price: number;
@@ -42,7 +43,7 @@ interface Sensor {
   fileName: string;
   fileSize: number;
   mimeType: string;
-  ontologyUri: string | null;
+  previewUri: string | null;
 }
 
 interface Format {

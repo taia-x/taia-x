@@ -1,7 +1,7 @@
 import { ref } from "vue";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-// import { saveAs } from "file-saver";
+import { saveAs } from "file-saver";
 import JSZip from "jszip";
 
 /**
@@ -20,6 +20,7 @@ const inputFiles = () => {
       files.value = newFiles;
     } else {
       newFiles.forEach((file: File) => {
+        console.log(file);
         const index = files.value.findIndex((f: File) => f.name === file.name);
         if (index > -1) {
           files.value[index] = file;
@@ -28,16 +29,34 @@ const inputFiles = () => {
         }
       });
     }
-    files.value.forEach((file: File) => {
-      zip.file(file.name, file);
+    files.value.forEach(async (file: File) => {
+      if (file.type === "application/zip") {
+        const zipArchive: any = await zip.loadAsync(file);
+        console.log(zipArchive);
+        zipArchive.forEach((file: any) => {
+          if (!file.startsWith("__MACOSX")) {
+            zip.file(file.name, file);
+            console.log(file);
+          }
+          //console.log(zipArchive.files[file]["_data"]["compressedContent"]);
+        });
+        console.log(zip);
+        archive.value = await zip.generateAsync({ type: "blob" });
+
+        saveAs(archive.value, "Archive.zip");
+      } else {
+        zip.file(file.name, file);
+        archive.value = await zip.generateAsync({ type: "blob" });
+      }
     });
-    archive.value = await zip.generateAsync({ type: "blob" });
   };
 
   const removeFile = async (index: number): Promise<void> => {
     const file = files.value[index];
-    zip.remove(file.name);
-    archive.value = await zip.generateAsync({ type: "blob" });
+    if (file.type !== "application/zip") {
+      zip.remove(file.name);
+      archive.value = await zip.generateAsync({ type: "blob" });
+    }
     files.value.splice(index, 1);
   };
 

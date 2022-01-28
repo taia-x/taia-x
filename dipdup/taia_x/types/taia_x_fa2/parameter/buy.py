@@ -3,12 +3,8 @@
 
 from __future__ import annotations
 
-from pydantic import BaseModel, Extra
+from pydantic import BaseModel
 
 
 class BuyParameter(BaseModel):
-    class Config:
-        extra = Extra.forbid
-
-    price: str
-    token_id: str
+    __root__: str

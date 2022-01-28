@@ -11,7 +11,7 @@ module.exports = async (Tezos) => {
   const market = {
     datasets: empty_datasets,
     datasetIds: empty_dataset_ids,
-    nextDatasetId: 0,
+    nextDatasetId: 1,
     owners: empty_owners,
   };
 

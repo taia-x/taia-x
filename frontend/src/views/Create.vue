@@ -11,17 +11,47 @@
           @filesSelected="onFileSelected($event)"
           @addFiles="onFileSelected($event)"
           @fileRemoved="removeFile($event)"
-          @ontologyAdded="ontologies[$event.fileName] = $event"
+          @previewAdded="previews[$event.fileName] = $event"
           :files="files"
+          :previews="previews"
         />
-        <NameInput @update:name="name = $event" />
-        <DescriptionInput @update:description="description = $event" />
-        <TagsInput @update:tags="tags = $event" />
+        <TextInput
+          @update="name = $event"
+          :placeholder="'Name of Digital Twin'"
+          :name="'name'"
+          :value="name"
+          ><template v-slot:title> Name* </template></TextInput
+        >
+        <TextInput
+          @update="description = $event"
+          :placeholder="'Description for Digital Twin'"
+          :rows="'6'"
+          :name="'description'"
+          :element="'textarea'"
+          :value="description"
+          ><template v-slot:title> Description* </template></TextInput
+        >
+        <TextInput
+          @update="tags = $event"
+          :placeholder="'Comma-separated list of Tags'"
+          :name="'tags'"
+          :value="tags"
+          ><template v-slot:title> Tags </template></TextInput
+        >
+        <TextInput
+          @update="price = $event"
+          :type="'number'"
+          :placeholder="'Price'"
+          :name="'price'"
+          :value="price"
+          ><template v-slot:title> Price* </template></TextInput
+        >
       </div>
+      <div class="mt-4 text-xs text-grey-700">* indicates required fields</div>
       <div class="w-full mt-6 space-x-2 text-right">
         <button
           type="button"
-          class="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 transition duration-200 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+          class="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border-2 border-gray-200 rounded-md sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
           tabindex="5"
           @click.prevent="
             reset();
@@ -33,7 +63,7 @@
         <button
           type="submit"
           tabindex="4"
-          class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white transition duration-200 rounded-md shadow-sm disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400 bg-cyan-500 hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+          class="inline-flex items-center justify-center px-3 text-white transition duration-300 ease-in-out transform border-2 border-b-4 rounded-md h-10 bg-cyan-500 hover:bg-cyan-600 text-md whitespace-nowrap border-cyan-700 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:border-gray-300 disabled:text-gray-400"
           @click.prevent="mint()"
           :disabled="!isFormValid"
         >
@@ -47,9 +77,7 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from "vue";
 import FileSection from "@/components/Utils/FileUpload/FileSection.vue";
-import NameInput from "@/components/Create/NameInput.vue";
-import DescriptionInput from "@/components/Create/DescriptionInput.vue";
-import TagsInput from "@/components/Create/TagsInput.vue";
+import TextInput from "@/components/Create/TextInput.vue";
 import inputFiles from "@/composables/inputFiles";
 import { ipfsInterface, tezosInterface } from "@/services";
 import { useUserStore } from "@/stores/useUser";
@@ -60,15 +88,14 @@ import { TokenMetadata } from "@/types";
 export default defineComponent({
   components: {
     FileSection,
-    NameInput,
-    DescriptionInput,
-    TagsInput,
+    TextInput,
   },
   setup() {
     const name = ref("");
     const tags = ref("");
+    const price = ref(0);
     const description = ref("");
-    const ontologies = ref({} as any);
+    const previews = ref({} as any);
     const { files, archive, generateSHA256, onFileSelected, removeFile } =
       inputFiles();
     const user = useUserStore();
@@ -80,6 +107,8 @@ export default defineComponent({
       name.value = "";
       description.value = "";
       files.value = [];
+      tags.value = "";
+      price.value = 0;
     };
 
     // checks if each input field contains values
@@ -87,11 +116,12 @@ export default defineComponent({
       return (
         name.value.length > 0 &&
         description.value.length > 0 &&
-        files.value.length > 0
+        files.value.length > 0 &&
+        price.value > 0
       );
     });
 
-    // upload artifact to backend, upload ontologies on ipfs, upload metadata on ipfs, mint token
+    // upload artifact to backend, upload previews on ipfs, upload metadata on ipfs, mint token
     const mint = async () => {
       try {
         // create form data to upload file via post request
@@ -121,7 +151,7 @@ export default defineComponent({
         // );
 
         // generate hash from zip archive
-        const hash = await generateSHA256(files.value[0]);
+        const hash = await generateSHA256(archive.value);
 
         // store artifactUri in formats for token metadata file
         const formats = [
@@ -132,11 +162,11 @@ export default defineComponent({
           },
         ];
 
-        // if ontolofies were uploaded, add format for each ontology file including uri, hash and mimetype
-        Object.keys(ontologies.value).forEach((key) =>
+        // if ontolofies were uploaded, add format for each preview file including uri, hash and mimetype
+        Object.keys(previews.value).forEach((key) =>
           formats.push({
-            uri: ontologies.value[key]?.fileUri,
-            hash: ontologies.value[key]?.fileHash,
+            uri: previews.value[key]?.fileUri,
+            hash: previews.value[key]?.fileHash,
             mimeType: "application/json",
           } as any)
         );
@@ -152,7 +182,7 @@ export default defineComponent({
             fileName: file.name,
             fileSize: file.size,
             mimeType: file.type,
-            ontologyUri: ontologies.value[file.name]?.fileUri || null,
+            previewUri: previews.value[file.name]?.fileUri || null,
           })),
           formats,
           artifactUri,
@@ -164,7 +194,7 @@ export default defineComponent({
           hash,
           operator: "tz1ittpFnVsKxx1M8YPKt7VJEaZfwiBZ6jo7",
           address: address.value,
-          price: 1000000,
+          price: price.value * 1000000,
           metadataUri,
         });
 
@@ -180,8 +210,9 @@ export default defineComponent({
     return {
       name,
       description,
-      ontologies,
+      previews,
       files,
+      price,
       isFormValid,
       reset,
       onFileSelected,

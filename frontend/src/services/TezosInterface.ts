@@ -59,6 +59,7 @@ class TezosInterface {
    */
   async mintNft(mintParams: MintParams): Promise<void> {
     const { hash, operator, address, price, metadataUri } = mintParams;
+    console.log(price);
     try {
       const op = await this.contract.methods
         .mint(hash, operator, address, price, char2Bytes(metadataUri))
@@ -84,10 +85,11 @@ class TezosInterface {
    * @param metadataUri ipfs metadata uri formatted as https://ipfs.io/{CID}
    */
   async buy(price: number, tokenId: number): Promise<void> {
+    console.log(price);
     try {
       const op = await this.contract.methods
-        .buy(price, tokenId)
-        .send({ amount: 1 });
+        .buy(tokenId)
+        .send({ amount: price, mutez: true });
       if (op) {
         const result = await op.confirmation(1);
         if (result.completed) {
@@ -99,6 +101,7 @@ class TezosInterface {
         }
       }
     } catch (e) {
+      console.log(e);
       throw new Error(`Unable to buy token with token_id ${tokenId}!`);
     }
   }

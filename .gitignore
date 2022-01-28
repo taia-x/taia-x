@@ -154,3 +154,4 @@ test-measurements-sensorwise/
 
 # dipdup
 dipdup/taia_x.sqlite3
+dipdup/.env

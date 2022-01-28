@@ -43,7 +43,7 @@ interface Sensor {
   fileName: string;
   fileSize: number;
   mimeType: string;
-  ontologyUri: string | null;
+  previewUri: string | null;
 }
 
 interface Format {

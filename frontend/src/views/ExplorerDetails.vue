@@ -2,25 +2,9 @@
   <Terminal
     :code="code"
     :file="selected"
+    :token="token"
     class="mt-10 filter drop-shadow-2xl"
   />
-  <!-- <div class="flex items-center justify-end mt-4 text-gray-500">
-    <button
-      class="z-10 flex items-center space-x-1 hover:text-gray-900"
-      @click.prevent="highlightAll()"
-    >
-      <span>Download</span>
-      <DownloadIcon class="w-5 h-5" />
-    </button>
-    <button
-      class="relative z-10 flex items-center space-x-1 hover:text-gray-900"
-      @click.prevent="copyToClipboard()"
-    >
-      <span class="pl-4">Copy</span>
-      <ClipboardCopyIcon class="w-5 h-5" />
-      <ToolTip :isOpen="isOpen" :text="'Copied!'" @closed="isOpen = false" />
-    </button>
-  </div> -->
   <div class="flex items-center justify-between pt-10 pb-4">
     <div v-if="token && token.files">
       <h1 class="text-3xl font-extrabold tracking-tight text-gray-800">
@@ -61,7 +45,7 @@
     v-if="token && token.price"
     class="flex items-center px-3 text-white transition duration-300 ease-in-out transform border-2 border-b-4 rounded-md h-10 bg-cyan-500 hover:bg-cyan-600 text-md whitespace-nowrap border-cyan-700 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
   >
-    Buy for {{ token.price }} ꜩ
+    Buy for {{ token.price / 1000000 }} ꜩ
   </button>
   <div class="flex flex-col pt-12 pb-20 space-y-12">
     <div class="space-y-4">
@@ -110,112 +94,22 @@
         </div>
         <div class="flex items-center space-x-4">
           <span class="font-mono">{{ file.fileSize }} Byte</span>
-          <Tooltip class="group" @click.prevent="fetchOntology(file)">
+          <Tooltip
+            class="group"
+            @click.prevent="fetchPreview(file)"
+            v-if="file.previewUri"
+          >
             <template #element
               ><EyeIcon
                 class="w-5 h-5 text-gray-400 transition-colors duration-150 hover:text-gray-700"
             /></template>
-            <template #text>Show Ontology</template>
+            <template #text>Show Preview</template>
           </Tooltip>
         </div>
       </div>
     </div>
-    <div class="space-y-4">
-      <h3
-        class="flex items-center space-x-1 text-xl font-semibold text-gray-900"
-      >
-        <span>History</span>
-        <InformationCircleIcon
-          class="w-5 h-5 text-gray-400 transform -translate-y-1"
-        />
-      </h3>
-      <div v-if="token && token.events">
-        <div
-          class="grid grid-cols-5 grid-rows-1 px-3 py-2 font-medium text-gray-900 border-t-2 border-l-2 border-r-2 border-gray-100 rounded-t-lg"
-        >
-          <div>Event</div>
-          <div>From</div>
-          <div>To</div>
-          <div>Price</div>
-          <div>Date</div>
-        </div>
-        <div
-          class="grid grid-cols-5 grid-rows-1 px-3 py-2 text-base text-gray-700 border-2 border-gray-100"
-          :class="index + 1 === token.events.length ? 'rounded-b-lg' : ''"
-          v-for="(event, index) in token.events"
-          :key="event.id"
-          :index="index"
-        >
-          <div class="flex items-center space-x-2">
-            <DocumentAddIcon
-              v-if="event.event_type === 'mint'"
-              class="w-5 h-5 text-gray-700"
-            />
-            <BadgeCheckIcon
-              v-if="event.event_type === 'certify'"
-              class="w-5 h-5 text-gray-700"
-            />
-            <ShoppingBagIcon
-              v-if="event.event_type === 'purchase'"
-              class="w-5 h-5 text-gray-700"
-            />
-            <BanIcon
-              v-if="event.event_type === 'reject'"
-              class="w-5 h-5 text-gray-700"
-            />
-            <span class="truncate">
-              {{
-                event.event_type[0].toUpperCase() + event.event_type.slice(1)
-              }}
-            </span>
-          </div>
-          <div v-if="event" class="flex">
-            <a
-              :href="`https://tzkt.io/${event.creator_id}`"
-              target="_blank"
-              class="flex items-center space-x-2"
-            >
-              <img
-                v-if="event.creator_id"
-                :src="`https://services.tzkt.io/v1/avatars/${event.creator_id}`"
-                class="w-10 h-10 my-auto"
-              />
-              <span class="truncate">{{
-                event.creator_id ? getPrivatizedAddress(event.creator_id) : "-"
-              }}</span>
-            </a>
-          </div>
-          <div v-if="event" class="flex">
-            <a
-              target="_blank"
-              :href="`https://tzkt.io/${event.recipient_id}`"
-              class="flex items-center space-x-2"
-            >
-              <img
-                v-if="event.recipient_id"
-                :src="`https://services.tzkt.io/v1/avatars/${event.recipient_id}`"
-                class="w-10 h-10 my-auto"
-              />
-              <span class="truncate">{{
-                event.recipient_id
-                  ? getPrivatizedAddress(event.recipient_id)
-                  : "-"
-              }}</span>
-            </a>
-          </div>
-          <div class="flex items-center">
-            <span class="truncate">{{ event.price || "-" }}</span>
-          </div>
-          <div class="flex items-center">
-            <a
-              class="truncate"
-              target="_blank"
-              :href="`https://tzkt.io/${event.ophash}`"
-              >{{ new Date(event.timestamp).toDateString() }}</a
-            >
-          </div>
-        </div>
-      </div>
+    <div v-if="token">
+      <History :token="token" />
     </div>
   </div>
 </template>
@@ -223,16 +117,13 @@
 <script>
 import { defineComponent, watchEffect, ref } from "vue";
 import Terminal from "@/components/Utils/Terminal.vue";
+import History from "@/components/History/History.vue";
 import { useRoute } from "vue-router";
 import {
   ClockIcon,
   DocumentIcon,
-  DocumentAddIcon,
   InformationCircleIcon,
   DocumentTextIcon,
-  ShoppingBagIcon,
-  BadgeCheckIcon,
-  BanIcon,
   EyeIcon,
 } from "@heroicons/vue/outline";
 import { highlightAll } from "prismjs";
@@ -248,18 +139,14 @@ export default defineComponent({
     ClockIcon,
     DocumentIcon,
     InformationCircleIcon,
-    ShoppingBagIcon,
-    BanIcon,
-    DocumentAddIcon,
     DocumentTextIcon,
-    BadgeCheckIcon,
     EyeIcon,
     Tooltip,
+    History,
   },
   setup() {
     const route = useRoute();
     const alerts = useAlertStore();
-    //const isOpen = ref(false);
     const code = ref("");
     const token = ref(null);
     const selected = ref({});
@@ -281,20 +168,28 @@ export default defineComponent({
       if (token_metadata?.value?.id) {
         selected.value = token_metadata.value.files[0];
         token.value = token_metadata.value;
-        const asset = await fetch(
-          ipfsInterface.makeGatewayURL(
-            token_metadata.value.files[0].ontologyUri
-          )
-        );
-        code.value = JSON.stringify(await asset.json(), null, 2);
+        if (token_metadata.value.files) {
+          const file = token_metadata.value.files.find(
+            (file) => file.previewUri !== null
+          );
+          if (file) {
+            const asset = await fetch(
+              ipfsInterface.makeGatewayURL(file.previewUri)
+            );
+            code.value = JSON.stringify(await asset.json(), null, 2);
+          }
+        }
       }
     });
 
-    const fetchOntology = async (file) => {
-      if (file.ontologyUri && selected.value.fileName !== file.fileName) {
+    const fetchPreview = async (file) => {
+      if (
+        file.previewUri !== null &&
+        selected.value.fileName !== file.fileName
+      ) {
         selected.value = file;
         const asset = await fetch(
-          ipfsInterface.makeGatewayURL(file.ontologyUri)
+          ipfsInterface.makeGatewayURL(file.previewUri)
         );
         code.value = JSON.stringify(await asset.json(), null, 2);
       }
@@ -313,29 +208,16 @@ export default defineComponent({
         // notifies user and resets values
         alerts.createAlert("Successfully purchased NFT!", "success");
       } catch (e) {
-        console.log(e);
         alerts.createAlert("Something went wrong!", "error");
         throw new Error(e.toString());
       }
     };
 
-    // copies content of artifact json to clipboard
-    // const copyToClipboard = async () => {
-    //   try {
-    //     navigator.clipboard.writeText(code.value);
-    //     isOpen.value = true;
-    //   } catch (e) {
-    //     console.log(e);
-    //   }
-    // };
-
     return {
       code,
-      //isOpen,
       selected,
-      //copyToClipboard,
       highlightAll,
-      fetchOntology,
+      fetchPreview,
       getPrivatizedAddress,
       buyToken,
       route,

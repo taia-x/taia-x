@@ -7,7 +7,8 @@
       v-if="files.length"
       :files="files"
       @fileRemoved="$emit('fileRemoved', $event)"
-      @ontologyAdded="$emit('ontologyAdded', $event)"
+      @previewAdded="$emit('previewAdded', $event)"
+      :previews="previews"
     />
     <input
       id="file"
@@ -48,8 +49,12 @@ export default defineComponent({
       type: Array,
       required: true,
     },
+    previews: {
+      type: Object,
+      required: true,
+    },
   },
-  emits: ["fileRemoved", "filesSelected", "addFiles", "ontologyAdded"],
+  emits: ["fileRemoved", "filesSelected", "addFiles", "previewAdded"],
   methods: {
     openFileSelect() {
       document?.getElementById("file")?.click();

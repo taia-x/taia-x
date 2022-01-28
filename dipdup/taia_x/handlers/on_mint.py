@@ -13,16 +13,14 @@ async def on_mint(
     ctx: HandlerContext,
     mint: Transaction[MintParameter, TaiaX_Fa2Storage],
 ) -> None:
-    holder, _ = await models.Account.get_or_create(address=mint.parameter.owner)
-    creator = holder
-
-    #if await models.Token.exists(id=mint.parameter.token_id):
-    #    return
+    # save or get account that minted a new token
+    creator, _ = await models.Account.get_or_create(address=mint.parameter.owner)
 
     metadata = ''
     if mint.parameter.token_metadata_uri:
         metadata = fromhex(mint.parameter.token_metadata_uri)
 
+    # save token in db
     token = models.Token(
         name='',
         description='',
@@ -31,30 +29,21 @@ async def on_mint(
         creator=creator,
         timestamp=mint.data.timestamp,
         hash=mint.parameter.hash,
-        price=mint.parameter.price_arg,
+        price=mint.parameter.price,
         formats=[],
         files=[],
         tags=[]
-        #royalties=mint_objkt.parameter.royalties,
-        #display_uri='',
-        #thumbnail_uri='',
-        #mime='',
-        #supply=mint.parameter.amount,
-        #level=mint.data.level,
     )
     await token.save()
 
+    # save or create recipient of the event in db
     recipient, _ = await models.Account.get_or_create(address=mint.data.target_address)
     await recipient.save()
-    #minter, _ = await models.TokenHolder.get_or_create(holder=holder, token=token)
-    #await minter.save()
 
-    #operator, _ = await models.TokenOperator.get_or_create(token=token, owner=holder, operator=mint.parameter.operator)
-    #await operator.save()
-
+    # save mint event in db
     event = models.Event(
         token=token,
-        creator=holder,
+        caller=creator,
         recipient=recipient,
         event_type=models.EventType.mint,
         ophash=mint.data.hash,
@@ -63,5 +52,6 @@ async def on_mint(
     )
     await event.save()
 
+    # get metadata from ipfs and save information related to this token
     await fix_token_metadata(token)
     await fix_other_metadata()

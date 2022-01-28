@@ -144,20 +144,26 @@ $ docker compose up
 
 See [here](https://github.com/taia-x/taia-x/tree/main/ipfs) how to fix CORS error if it happens.
 
-8. In the `./tzkt` folder run the tzkt indexer:
+8. In the `./backend` folder run the backend:
 
 ```bash
 $ docker compose up
 ```
 
-9. In the `./dipdup` folder build and run the selective contract indexer:
+9. In the `./tzkt` folder run the tzkt indexer:
+
+```bash
+$ docker compose up
+```
+
+10. In the `./dipdup` folder build and run the selective contract indexer:
 
 ```bash
 $ docker compose build
 $ docker compose up
 ```
 
-10. In the `./frontend` folder build and run taia-x:
+11. In the `./frontend` folder build and run taia-x:
 
 ```bash
 $ docker compose build
@@ -166,7 +172,7 @@ $ docker compose up
 
 or run without docker via `npm run serve`
 
-11. Stop all containers by running `docker compose down` in the respective folders.
+12. Stop all containers by running `docker compose down` in the respective folders.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 

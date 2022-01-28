@@ -134,14 +134,7 @@ $ yarn run deploy:sandbox
 
 5. Copy the contract address from the console output and assign it to `VUE_APP_CONTRACT_ADDRESS` in `./frontend/.env.template` and rename the file to `.env`.
 
-6. Set the same contract address in `./dipdup/dipdup.yml`:
-
-```yml
-contracts:
-  taia_x_sandbox:
-    address: <contract address>
-    typename: taia_x_fa2
-```
+6. Rename the `.env.template` in `./dipdup` to `.env` file and assign the contract address to `CONTRACT_ADDRESS`.
 
 7. In the `./ipfs` folder run the ipfs cluster:
 

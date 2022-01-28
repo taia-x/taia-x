@@ -46,6 +46,8 @@ services:
       - hasura
       - db_dipdup
     restart: "no"
+    env_file:
+      - .env
     environment:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
       - ADMIN_SECRET=${ADMIN_SECRET:-changeme}

@@ -2,7 +2,7 @@ type mint_param = {
     owner: address;
     operator: address option;
     token_metadata_uri: bytes;
-    price_arg : tez;
+    price: price;
     hash: bytes;
 }
 
@@ -28,7 +28,7 @@ let mint (mint_param, store : mint_param * taia_x_storage) : (operation  list) *
         if ledger_and_owners_are_consistent && dataset_not_certified then
             let next_dataset_id = token_id + 1n in
             
-            let new_dataset = ({ isOwned=true; owner=p.owner; price=(Some (p.price_arg) : price option); id=token_id;  } : dataset) in
+            let new_dataset = ({ isOwned=true; owner=p.owner; price=(Some (p.price) : price option); id=token_id;  } : dataset) in
             let datasets_with_new_dataset = Big_map.add token_id new_dataset s.market.datasets in
             let datasets_ids_with_new_id = Set.add token_id s.market.datasetIds in
             

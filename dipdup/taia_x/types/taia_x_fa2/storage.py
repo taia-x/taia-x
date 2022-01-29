@@ -8,6 +8,37 @@ from typing import Any, Dict, List, Optional, Union
 from pydantic import BaseModel, Extra, Field
 
 
+class StateItem(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
+    certified: Dict[str, Any]
+
+
+class StateItem1(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
+    pending: Dict[str, Any]
+
+
+class StateItem2(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
+    rejected: Dict[str, Any]
+
+
+class Certificates(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
+    dataset_id: str
+    hash: str
+    issuer: Optional[str]
+    state: Union[StateItem, StateItem1, StateItem2]
+
+
 class Datasets(BaseModel):
     class Config:
         extra = Extra.forbid
@@ -94,6 +125,7 @@ class TaiaX_Fa2Storage(BaseModel):
     class Config:
         extra = Extra.forbid
 
+    certificates: Dict[str, Certificates]
     ledger: Dict[str, str]
     market: Market
     operators: List[Operator]

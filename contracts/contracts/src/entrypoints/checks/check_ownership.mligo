@@ -22,12 +22,10 @@ let check_owner_owns_a_given_token_id (ownership, owners: ownership * owners) : 
         | Some (tokens) -> Set.mem ownership.token_id tokens
         | None -> false
 
-(* (token_id_is_owned_by_owner_in_ledger && owner_owns_a_given_token_id_in_owners) *)
 let check_ownership_is_consistent_in_ledger_and_owners (ownership, ledger, owners : ownership * ledger * owners ) : bool =
     let token_id_is_owned_by_owner_in_ledger: bool = check_token_id_is_owned_by_given_owner (ownership, ledger) in
     let owner_owns_a_given_token_id_in_owners: bool = check_owner_owns_a_given_token_id (ownership, owners) in
-    let einfache_loesung : bool = true in
-    if (einfache_loesung) then
+    if (token_id_is_owned_by_owner_in_ledger && owner_owns_a_given_token_id_in_owners) then
         true
     else
         false

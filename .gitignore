@@ -152,5 +152,12 @@ test-measurements-sensorwise/
 # Editor files
 .DS_Store
 
+*.ini
+assets/
+
+# backend
+backend/assets
+backend/app/__pycache__
 # dipdup
 dipdup/taia_x.sqlite3
+dipdup/.env

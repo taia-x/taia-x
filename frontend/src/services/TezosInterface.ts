@@ -85,7 +85,6 @@ class TezosInterface {
    * @param metadataUri ipfs metadata uri formatted as https://ipfs.io/{CID}
    */
   async buy(price: number, tokenId: number): Promise<void> {
-    console.log(price);
     try {
       const op = await this.contract.methods
         .buy(tokenId)

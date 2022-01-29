@@ -13,11 +13,11 @@
     :class="
       index >= 1
         ? 'border-t-0'
-        : index + 1 === token.events.length
+        : index + 1 === events.length
         ? 'rounded-b-lg'
         : ''
     "
-    v-for="(event, index) in token.events"
+    v-for="(event, index) in events"
     :key="event.id"
     :index="index"
   >
@@ -106,8 +106,8 @@ import {
 
 export default defineComponent({
   props: {
-    token: {
-      type: Object,
+    events: {
+      type: Array,
       required: true,
     },
   },

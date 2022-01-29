@@ -10,6 +10,12 @@ class EventType(str, Enum):
     purchase = 'purchase'
     transfer = 'transfer'
 
+class CertState(str, Enum):
+    unspecified = 'unspecified'
+    rejected = 'rejected'
+    certified = 'certified'
+    pending = 'pending'
+
 class Account(Model):
     address = fields.CharField(36, pk=True)
     name = fields.TextField(default='')
@@ -29,6 +35,7 @@ class Token(Model):
     files = fields.JSONField(default=[])
     tags = fields.JSONField(default=[])
     price = fields.BigIntField(null=False)
+    cert_state = fields.CharEnumField(CertState, default=CertState.unspecified)
     hash = fields.CharField(64, null=False)
 
 class Event(Model):

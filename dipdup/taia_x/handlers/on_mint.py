@@ -30,6 +30,7 @@ async def on_mint(
         timestamp=mint.data.timestamp,
         hash=mint.parameter.hash,
         price=mint.parameter.price,
+        cert_state=models.CertState.pending,
         formats=[],
         files=[],
         tags=[]

@@ -10,9 +10,12 @@ export const getTokenMetadata = gql`
     ) {
       creator_id
       id
+      description
+      files
+      cert_state
       name
+      price
       tags
-      metadata
     }
   }
 `;

@@ -1,29 +1,17 @@
 <template>
   <div class="flex flex-col w-full pt-10 pb-24">
     <div class="flex items-center w-full space-x-4">
-      <SearchBar
-        @update:isOpen="isCreateDatasetModalOpen = true"
-        @create:clicked="$router.push('/create')"
-      />
+      <SearchBar />
     </div>
     <div class="grid grid-cols-4 gap-6 mt-16" v-if="tokens">
       <router-link
-        class="w-full transition duration-200 transform border-gray-300 rounded-lg bg-gray-50 hover:scale-105 h-96 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+        class="w-full h-56 transition duration-200 transform border-2 border-gray-100 rounded-lg hover:shadow-xl hover:-translate-y-2 focus:outline-none focus:ring-2 focus:ring-cyan-500"
         v-for="(token, index) in tokens"
         :key="token.id"
         :index="index"
         :to="'/explore/' + token.id"
       >
-        <div class="flex flex-col p-4">
-          <div class="grid grid-cols-2 gap-2">
-            <span class="text-sm font-medium">owner</span>
-            <span class="text-sm truncate">{{ token.creator_id }}</span>
-            <span class="text-sm font-medium">id</span>
-            <span class="text-sm truncate">{{ token.id }}</span>
-            <span class="text-sm font-medium">metadata</span>
-            <span class="text-sm truncate">{{ token.metadata }}</span>
-          </div>
-        </div>
+        <TokenCard :token="token" />
       </router-link>
     </div>
     <div
@@ -49,17 +37,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import SearchBar from "@/components/Explorer/SearchBar.vue";
+import TokenCard from "@/components/TokenCard/TokenCard.vue";
 import { useQuery, useResult } from "@vue/apollo-composable";
 import { getTokenMetadata } from "@/services/graphql/queries";
 
 export default defineComponent({
   components: {
     SearchBar,
+    TokenCard,
   },
   setup() {
-    const isCreateDatasetModalOpen = ref(false);
     // fetches 12 tokens from contract when component mounts
     const { result } = useQuery(
       getTokenMetadata,
@@ -74,7 +63,9 @@ export default defineComponent({
     // stores result in tokens when result is loaded
     const tokens = useResult(result, null, ({ token }) => token);
 
-    return { tokens, isCreateDatasetModalOpen };
+    return {
+      tokens,
+    };
   },
 });
 </script>

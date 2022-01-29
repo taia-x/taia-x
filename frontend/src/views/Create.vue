@@ -41,7 +41,7 @@
         <TextInput
           @update="price = $event"
           :type="'number'"
-          :placeholder="'Price'"
+          :placeholder="'Price in ꜩ'"
           :name="'price'"
           :value="price"
           ><template v-slot:title> Price* </template></TextInput

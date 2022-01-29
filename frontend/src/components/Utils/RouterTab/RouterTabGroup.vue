@@ -1,70 +1,43 @@
 <template>
-  <div  >
-      <TabGroup>
-        <TabList class="flex border-b">
-          <Tab
-            v-for="category in Object.keys(categories)"
-            as="template"
-            :key="category"
-            v-slot="{ selected }"
-          >
-            <button
-              :class="[
-                'px-6 py-3 text-black relative text-sm font-medium transition duration-300 ease-in-out',
-                selected ? '' : 'text-opacity-25 hover:text-opacity-100',
-              ]"
-            >
-              <span
-                class=""
-                aria-hidden="true"
-                :class="[
-                  'block absolute w-full h-px -bottom-px left-0 transition duration-300 ease-in-out',
-                  selected ? 'bg-black' : 'bg-transparent',
-                ]"
-              ></span>
-              {{ category }}
-            </button>
-          </Tab>
-        </TabList>
+  <TabGroup as="div" :selectedIndex="selectedIndex">
+    <TabList class="flex border-b space-x-10">
+      <Tab
+        v-for="tab in tabs"
+        as="template"
+        :key="tab.to"
+        v-slot="{ selected }"
+      >
+        <router-link
+          :to="tab.to"
+          :class="[
+            'py-4 text-black relative font-semibold transition duration-300 ease-in-out',
+            selected ? '' : 'text-opacity-25 hover:text-opacity-100',
+          ]"
+        >
+          <span
+            class=""
+            aria-hidden="true"
+            :class="[
+              'block absolute w-full h-0.5 -bottom-0.5 left-0 transition duration-300 ease-in-out',
+              selected ? 'bg-cyan-500' : 'bg-transparent',
+            ]"
+          ></span>
+          {{ tab.title }} {{ selectedIndex }}
+        </router-link>
+      </Tab>
+    </TabList>
 
-        <TabPanels class="mt-2">
-          <TabPanel
-            v-for="(posts, idx) in Object.values(categories)"
-            :key="idx"
-            :class="['py-8']"
-          >
-            <ul>
-              <li
-                v-for="post in posts"
-                :key="post.id"
-                class="relative p-3 rounded-md hover:bg-coolGray-100"
-              >
-                <h3 class="text-sm font-medium leading-5">
-                  {{ post.title }}
-                </h3>
-
-                <ul
-                  class="flex mt-1 space-x-1 text-xs font-normal leading-4 text-coolGray-500"
-                >
-                  <li>{{ post.date }}</li>
-                  <li>&middot;</li>
-                  <li>{{ post.commentCount }} comments</li>
-                  <li>&middot;</li>
-                  <li>{{ post.shareCount }} shares</li>
-                </ul>
-
-                <a href="#" :class="['absolute inset-0 rounded-md']" />
-              </li>
-            </ul>
-          </TabPanel>
-        </TabPanels>
-      </TabGroup>
-  </div>
+    <TabPanels class="mt-2">
+      <slot></slot>
+    </TabPanels>
+  </TabGroup>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
+<script>
+import { defineComponent, computed } from "vue";
+import { TabGroup, TabList, Tab, TabPanels } from "@headlessui/vue";
+import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
   components: {
@@ -72,9 +45,22 @@ export default defineComponent({
     TabList,
     Tab,
     TabPanels,
-    TabPanel,
   },
-  setup() {
+  setup(props, { slots }) {
+    const route = useRoute();
+    const tabs = ref([]);
+
+    onMounted(function () {
+      tabs.value = slots.default()[0].children.map((c) => {
+        return { title: c.props.title, to: c.props.to };
+      });
+    });
+
+    const selectedIndex = computed(() =>
+      tabs.value.findIndex((t) => t.to === route.params.tab)
+    );
+
+    return { tabs, selectedIndex };
   },
 });
 </script>

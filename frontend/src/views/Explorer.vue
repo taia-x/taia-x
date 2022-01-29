@@ -40,14 +40,15 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import SearchBar from "@/components/Explorer/SearchBar.vue";
-import DatasetCard from "@/components/Utils/Dataset/DatasetCard.vue";
+import DatasetCard from "@/components/Dataset/DatasetCard.vue";
 
 import { useQuery, useResult } from "@vue/apollo-composable";
 import { getTokenMetadata } from "@/services/graphql/queries";
 
 export default defineComponent({
   components: {
-    SearchBar,DatasetCard
+    SearchBar,
+    DatasetCard,
   },
   setup() {
     const isCreateDatasetModalOpen = ref(false);

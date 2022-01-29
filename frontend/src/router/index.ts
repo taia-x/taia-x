@@ -31,7 +31,7 @@ const routes: Array<RouteRecordRaw> = [
       ),
   },
   {
-    path: "/profile/:address",
+    path: "/profile/:address/:tab",
     name: "ProfileDetails",
     component: () =>
       import(/* webpackChunkName: "profile-details" */ "@/views/ProfileDetails.vue"),

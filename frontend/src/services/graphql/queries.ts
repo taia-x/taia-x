@@ -1,5 +1,6 @@
 import gql from "graphql-tag";
 
+
 export const getTokenMetadata = gql`
   query GetAllTokenMetadata($offset: Int = 0, $limit: Int = 12) {
     token(
@@ -42,6 +43,23 @@ export const getSingleTokenMetadata = gql`
       name
       tags
       timestamp
+    }
+  }
+`;
+
+export const getTokenMetadataByCreator = gql`
+  query GetAllTokenMetadataByCreator($creatorId: String, $offset: Int = 0, $limit: Int = 12) {
+    token(
+      where: { metadata: { _is_null: false }, _and: {creator_id: {_eq: $creatorId}}}
+      limit: $limit
+      order_by: { timestamp: desc }
+      offset: $offset
+    ) {
+      creator_id
+      id
+      name
+      tags
+      metadata
     }
   }
 `;

@@ -3,9 +3,9 @@ export const CUSTOM_NODE_URL = "http://localhost:20000"; // Testnet: "https://gr
 type HTTP = "http" | "https";
 
 export const CONTRACT =
-  process.env.VUE_APP_CONTRACT_ADDRESS ||
+  process.env.CONTRACT_ADDRESS ||
   "KT1Gd4FXMY3uDE7xRNd1hTnFYizMNYwLBkLh";
-console.log(process.env.VUE_APP_CONTRACT_ADDRESS);
+console.log(process.env.CONTRACT_ADDRESS);
 
 // Roles
 export const ROLE_CERTIFIER = "certifier";

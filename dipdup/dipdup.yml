@@ -7,11 +7,11 @@ package: taia_x
 
 database:
   kind: postgres
-  host: db_dipdup
-  port: 5432
-  user: dipdup
+  host: ${POSTGRES_HOST:-db_dipdup}
+  port: ${POSTGRES_PORT:-5432}
+  user: ${POSTGRES_USER:-dipdup_user}
   password: ${POSTGRES_PASSWORD:-changeme}
-  database: dipdup
+  database: ${POSTGRES_DB:-dipdup_db}
   #schema_name: taia_x
 
 hasura:
@@ -23,7 +23,7 @@ hasura:
 
 contracts:
   taia_x_sandbox:
-    address: KT1Gd4FXMY3uDE7xRNd1hTnFYizMNYwLBkLh
+    address: <contract address>
     typename: taia_x_fa2
 
 datasources:

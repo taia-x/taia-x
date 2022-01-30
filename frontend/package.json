@@ -15,6 +15,7 @@
     "@headlessui/vue": "^1.4.2",
     "@heroicons/vue": "^1.0.5",
     "@tailwindcss/forms": "^0.3.4",
+    "@tailwindcss/line-clamp": "^0.3.1",
     "@taquito/beacon-wallet": "^10.2.1",
     "@taquito/taquito": "^10.2.1",
     "@taquito/tzip16": "^11.0.2",

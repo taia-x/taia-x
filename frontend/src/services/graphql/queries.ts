@@ -10,9 +10,12 @@ export const getTokenMetadata = gql`
     ) {
       creator_id
       id
+      description
+      files
+      cert_state
       name
+      price
       tags
-      metadata
     }
   }
 `;
@@ -20,17 +23,6 @@ export const getTokenMetadata = gql`
 export const getSingleTokenMetadata = gql`
   query GetSingleTokenMetadata($id: bigint = 1) {
     token_by_pk(id: $id) {
-      events {
-        token_id
-        timestamp
-        recipient_id
-        price
-        ophash
-        level
-        id
-        event_type
-        caller_id
-      }
       artifact_uri
       creator_id
       description
@@ -42,6 +34,22 @@ export const getSingleTokenMetadata = gql`
       name
       tags
       timestamp
+    }
+  }
+`;
+
+export const subscribeToTokenEvent = gql`
+  subscription MySubscription($token_id: bigint = 1) {
+    event(where: { token_id: { _eq: $token_id } }) {
+      caller_id
+      event_type
+      id
+      level
+      ophash
+      price
+      recipient_id
+      timestamp
+      token_id
     }
   }
 `;

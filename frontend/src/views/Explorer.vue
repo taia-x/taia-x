@@ -1,19 +1,18 @@
 <template>
   <div class="flex flex-col w-full pt-10 pb-24">
     <div class="flex items-center w-full space-x-4">
-      <SearchBar
-        @update:isOpen="isCreateDatasetModalOpen = true"
-        @create:clicked="$router.push('/create')"
-      />
+      <SearchBar />
     </div>
     <div class="grid grid-cols-4 gap-6 mt-16" v-if="tokens">
-      <DatasetCard
+      <router-link
+        class="w-full h-56 transition duration-200 transform border-2 border-gray-100 rounded-lg hover:shadow-xl hover:-translate-y-2 focus:outline-none focus:ring-2 focus:ring-cyan-500"
         v-for="(token, index) in tokens"
         :key="token.id"
         :dataset="token"
         :index="index"
       >
-      </DatasetCard>
+        <TokenCard :token="token" />
+      </router-link>
     </div>
     <div
       class="flex items-center justify-between mt-16"
@@ -38,20 +37,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import SearchBar from "@/components/Explorer/SearchBar.vue";
-import DatasetCard from "@/components/Dataset/DatasetCard.vue";
-
+import TokenCard from "@/components/TokenCard/TokenCard.vue";
 import { useQuery, useResult } from "@vue/apollo-composable";
 import { getTokenMetadata } from "@/services/graphql/queries";
 
 export default defineComponent({
   components: {
     SearchBar,
-    DatasetCard,
+    TokenCard,
   },
   setup() {
-    const isCreateDatasetModalOpen = ref(false);
     // fetches 12 tokens from contract when component mounts
     const { result } = useQuery(
       getTokenMetadata,
@@ -66,7 +63,9 @@ export default defineComponent({
     // stores result in tokens when result is loaded
     const tokens = useResult(result, null, ({ token }) => token);
 
-    return { tokens, isCreateDatasetModalOpen };
+    return {
+      tokens,
+    };
   },
 });
 </script>

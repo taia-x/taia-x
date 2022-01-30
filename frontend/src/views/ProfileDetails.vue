@@ -38,34 +38,48 @@
         </TabList>
 
         <TabPanels class="mt-2">
-          <TabPanel :class="['py-8 grid grid-cols-4 gap-6']">
-            <DatasetCard
-              v-for="(token, i) in tokens"
-              :key="token.id"
-              :dataset="token"
-              :index="i"
-            >
-            </DatasetCard>
-          </TabPanel>
-          <TabPanel :class="['py-8 grid grid-cols-4 gap-6']">
-            <DatasetCard
-              v-for="(token, i) in tokens"
-              :key="token.id"
-              :dataset="token"
-              :index="i"
-            >
-            </DatasetCard>
+          <TabPanel>
+            <div :class="['py-8 grid grid-cols-4 gap-6']" v-if="tokens">
+              <router-link
+                class="w-full h-56 transition duration-200 transform border-2 border-gray-100 rounded-lg hover:shadow-xl hover:-translate-y-2 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                v-for="(token, index) in tokens"
+                :key="'collected-' + token.id"
+                :index="index"
+                :to="'/explore/' + token.id"
+              >
+                <TokenCard :token="token" />
+              </router-link>
+            </div>
           </TabPanel>
 
-          <TabPanel :class="['py-8 grid grid-cols-4 gap-6']">
-            <DatasetCard
-              v-for="(token, i) in tokens"
-              :key="token.id"
-              :dataset="token"
-              :index="i"
-            >
-            </DatasetCard>
+          <TabPanel>
+            <div :class="['py-8 grid grid-cols-4 gap-6']" v-if="tokens">
+              <router-link
+                class="w-full h-56 transition duration-200 transform border-2 border-gray-100 rounded-lg hover:shadow-xl hover:-translate-y-2 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                v-for="(token, index) in tokens"
+                :key="'created-' + token.id"
+                :index="index"
+                :to="'/explore/' + token.id"
+              >
+                <TokenCard :token="token" />
+              </router-link>
+            </div>
           </TabPanel>
+
+          <TabPanel>
+            <div :class="['py-8 grid grid-cols-4 gap-6']" v-if="tokens">
+              <router-link
+                class="w-full h-56 transition duration-200 transform border-2 border-gray-100 rounded-lg hover:shadow-xl hover:-translate-y-2 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                v-for="(token, index) in tokens"
+                :key="'certified-' + token.id"
+                :index="index"
+                :to="'/explore/' + token.id"
+              >
+                <TokenCard :token="token" />
+              </router-link>
+            </div>
+          </TabPanel>
+
           <TabPanel :class="['py-8']">
             <History :events="events" />
           </TabPanel>
@@ -81,7 +95,7 @@ import { useRoute } from "vue-router";
 import { getSingleCreator } from "@/services/graphql/queries";
 import { ACCOUNT_IMAGE_PATH } from "@/constants";
 import { useQuery, useResult } from "@vue/apollo-composable";
-import DatasetCard from "@/components/Dataset/DatasetCard.vue";
+import TokenCard from "@/components/TokenCard/TokenCard.vue";
 import { TabGroup, TabList, TabPanel, Tab } from "@headlessui/vue";
 import History from "@/components/History/History.vue";
 
@@ -91,7 +105,7 @@ export default defineComponent({
     TabList,
     TabPanel,
     Tab,
-    DatasetCard,
+    TokenCard,
     History,
   },
   setup() {

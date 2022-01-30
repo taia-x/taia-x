@@ -10,50 +10,82 @@
       <h1>{{ route.params.address }}</h1>
     </div>
     <div>
-      <RouterTabGroup>
-        <RouterTab
-          v-for="(tokens, idx) in Object.values(tabs)"
-          :key="idx"
-          :title="Object.keys(tabs)[idx]"
-          :to="Object.keys(tabs)[idx].toLowerCase()"
-          :class="['py-8 grid grid-cols-4 gap-6']"
-        >
-          <DatasetCard
-            v-for="(token, i) in tokens"
-            :key="idx + token.id"
-            :dataset="token"
-            :index="i"
+      <TabGroup>
+        <TabList class="flex border-b space-x-10">
+          <Tab
+            v-for="title in ['Created', 'Activity']"
+            as="template"
+            :key="title"
+            v-slot="{ selected }"
           >
-          </DatasetCard>
-        </RouterTab>
-      </RouterTabGroup>
+            <button
+              :class="[
+                'py-4 text-black relative font-semibold transition duration-300 ease-in-out',
+                selected ? '' : 'text-opacity-25 hover:text-opacity-100',
+              ]"
+            >
+              <span
+                class=""
+                aria-hidden="true"
+                :class="[
+                  'block absolute w-full h-0.5 -bottom-0.5 left-0 transition duration-300 ease-in-out',
+                  selected ? 'bg-cyan-500' : 'bg-transparent',
+                ]"
+              ></span>
+              {{ title }}
+            </button>
+          </Tab>
+        </TabList>
+
+        <TabPanels class="mt-2">
+          <TabPanel :class="['py-8 grid grid-cols-4 gap-6']">
+            <DatasetCard
+              v-for="(token, i) in tokens"
+              :key="token.id"
+              :dataset="token"
+              :index="i"
+            >
+            </DatasetCard>
+          </TabPanel>
+          <TabPanel :class="['py-8']">
+            <History :events="events" />
+          </TabPanel>
+        </TabPanels>
+      </TabGroup>
     </div>
   </div>
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import { useRoute } from "vue-router";
-import { getTokenMetadataByCreator } from "@/services/graphql/queries";
+import {
+  getTokenMetadataByCreator,
+  getEventsByCreator,
+} from "@/services/graphql/queries";
 import { ACCOUNT_IMAGE_PATH } from "@/constants";
 import { useQuery, useResult } from "@vue/apollo-composable";
 import DatasetCard from "@/components/Dataset/DatasetCard.vue";
-import RouterTab from "@/components/Utils/RouterTab/RouterTab.vue";
-import RouterTabGroup from "@/components/Utils/RouterTab/RouterTabGroup.vue";
+import { TabGroup, TabList, TabPanel, Tab } from "@headlessui/vue";
+import History from "@/components/History/History.vue";
 
 export default defineComponent({
   components: {
-    RouterTabGroup,
-    RouterTab,
+    TabGroup,
+    TabList,
+    TabPanel,
+    Tab,
     DatasetCard,
+    History,
   },
   setup() {
     const route = useRoute();
+    const creatorId = route.params.address;
 
-    const { result } = useQuery(
+    const { result: tokenResult } = useQuery(
       getTokenMetadataByCreator,
       () => ({
-        creatorId: route.params.address,
+        creatorId,
         offset: 0,
         limit: 12,
       }),
@@ -61,19 +93,24 @@ export default defineComponent({
         fetchPolicy: "cache-and-network",
       }
     );
-    // stores result in tokens when result is loaded
-    const tokens = useResult(result, null, ({ token }) => token);
 
-    let tabs = ref({
-      Collected: tokens,
-      Created: tokens,
-      Certified: tokens,
-      Activity: tokens,
-    });
+    const { result: eventResult } = useQuery(
+      getEventsByCreator,
+      () => ({
+        creatorId,
+      }),
+      {
+        fetchPolicy: "cache-and-network",
+      }
+    );
+
+    const tokens = useResult(tokenResult, null, ({ token }) => token);
+    const events = useResult(eventResult, null, ({ event }) => event);
 
     return {
       route,
-      tabs,
+      tokens,
+      events,
       ACCOUNT_IMAGE_PATH,
     };
   },

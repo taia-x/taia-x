@@ -1,6 +1,5 @@
 import gql from "graphql-tag";
 
-
 export const getTokenMetadata = gql`
   query GetAllTokenMetadata($offset: Int = 0, $limit: Int = 12) {
     token(
@@ -48,9 +47,16 @@ export const getSingleTokenMetadata = gql`
 `;
 
 export const getTokenMetadataByCreator = gql`
-  query GetAllTokenMetadataByCreator($creatorId: String, $offset: Int = 0, $limit: Int = 12) {
+  query GetAllTokenMetadataByCreator(
+    $creatorId: String
+    $offset: Int = 0
+    $limit: Int = 12
+  ) {
     token(
-      where: { metadata: { _is_null: false }, _and: {creator_id: {_eq: $creatorId}}}
+      where: {
+        metadata: { _is_null: false }
+        _and: { creator_id: { _eq: $creatorId } }
+      }
       limit: $limit
       order_by: { timestamp: desc }
       offset: $offset
@@ -60,6 +66,29 @@ export const getTokenMetadataByCreator = gql`
       name
       tags
       metadata
+    }
+  }
+`;
+
+export const getEventsByCreator = gql`
+  query getEventsByCreator($creatorId: String) {
+    event(
+      where: {
+        _or: [
+          { caller_id: { _eq: $creatorId } }
+          { recipient_id: { _eq: $creatorId } }
+        ]
+      }
+    ) {
+      token_id
+      timestamp
+      recipient_id
+      price
+      ophash
+      level
+      id
+      event_type
+      caller_id
     }
   }
 `;

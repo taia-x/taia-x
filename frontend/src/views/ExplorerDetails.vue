@@ -109,7 +109,7 @@
       </div>
     </div>
     <div v-if="token">
-      <History :token="token" />
+      <History :token="token.events" />
     </div>
   </div>
 </template>

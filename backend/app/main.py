@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from uuid import uuid4
 from pathlib import Path
 from pyblake2 import blake2b
-from encoding import scrub_input, base58_decode, base58_encode
+from .encoding import scrub_input, base58_decode, base58_encode
 
 import glob
 import socket

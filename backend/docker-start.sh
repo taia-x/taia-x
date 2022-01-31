@@ -1,7 +1,9 @@
 #!/bin/bash
 
+apt-get install -y libsodium-dev libsecp256k1-dev libgmp-dev
 pip install --upgrade pip
 pip install -r requirements.txt
+
 
 if [[ "$DEBUG" = true ]]; then
     pip install debugpy

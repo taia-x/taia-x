@@ -1,4 +1,7 @@
 # app
+base58==1.0.3
+pysodium==0.7.10
+pyblake2==1.1.2
 fastapi==0.70.0
 uvicorn==0.15.0
 pydantic==1.8.2

@@ -20,17 +20,6 @@ export const getTokenMetadata = gql`
 export const getSingleTokenMetadata = gql`
   query GetSingleTokenMetadata($id: bigint = 1) {
     token_by_pk(id: $id) {
-      events {
-        creator_id
-        event_type
-        level
-        ophash
-        price
-        timestamp
-        id
-        recipient_id
-        token_id
-      }
       artifact_uri
       creator_id
       description
@@ -42,6 +31,22 @@ export const getSingleTokenMetadata = gql`
       name
       tags
       timestamp
+    }
+  }
+`;
+
+export const subscribeToTokenEvent = gql`
+  subscription MySubscription($token_id: bigint = 1) {
+    event(where: { token_id: { _eq: $token_id } }) {
+      caller_id
+      event_type
+      id
+      level
+      ophash
+      price
+      recipient_id
+      timestamp
+      token_id
     }
   }
 `;

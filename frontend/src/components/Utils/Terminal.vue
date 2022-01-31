@@ -10,7 +10,7 @@
         </div>
         <span
           class="mx-auto text-sm text-white transform -translate-x-5 text-opacity-30"
-          >{{ file.fileName }}</span
+          >{{ hasPreview ? file.fileName : "" }}</span
         >
       </div>
       <div
@@ -26,7 +26,13 @@
             <div v-else class="flex h-full">
               <div style="width: 50px"></div>
               <div class="flex items-center justify-center h-full mx-auto">
-                <LoadingSpinner :size="8" />
+                <div
+                  v-if="!hasPreview"
+                  class="text-white transform -translate-x-5 text-opacity-30"
+                >
+                  No Preview available
+                </div>
+                <LoadingSpinner :size="8" v-else />
               </div>
             </div>
           </div>
@@ -37,7 +43,7 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, computed } from "vue";
 import Code from "@/components/Utils/Code.vue";
 import LoadingSpinner from "@/components/Utils/LoadingSpinner.vue";
 
@@ -55,6 +61,20 @@ export default defineComponent({
       type: Object,
       required: true,
     },
+    token: {
+      type: [Object, null],
+      required: true,
+    },
+  },
+  setup(props) {
+    const hasPreview = computed(() => {
+      if (props.token) {
+        return props.token.files.some((file) => file.previewUri);
+      }
+      return true;
+    });
+
+    return { hasPreview };
   },
 });
 </script>

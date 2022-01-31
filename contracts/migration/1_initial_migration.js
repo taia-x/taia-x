@@ -11,7 +11,7 @@ module.exports = async (Tezos) => {
   const market = {
     datasets: empty_datasets,
     datasetIds: empty_dataset_ids,
-    nextDatasetId: 0,
+    nextDatasetId: 1,
     owners: empty_owners,
   };
 
@@ -20,17 +20,16 @@ module.exports = async (Tezos) => {
   const token_metadata = new MichelsonMap();
   const empty_ledger = new MichelsonMap();
   const empty_operators = new MichelsonMap();
-  const users = new MichelsonMap()
+  const users = new MichelsonMap();
 
   // Set deployment account address as the only certifier
   users.set(
     {
-      0: await Tezos.wallet.pkh(), // addresss
-      1: { "certifier": {} }, // role
+      0: "tz1ggvpTMyxX5QVYqbpLVmNGCsgDpDyUMawq", // addresss of jon
+      1: { certifier: {} }, // role
     },
-    [['unit']]
+    [["unit"]]
   );
-  
 
   return {
     market: market,

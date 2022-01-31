@@ -111,6 +111,7 @@ $ yarn install
 2. Rename the `.env.template` in `./contracts` to `.env` file. The file should include the following data.
 
 ```bash
+FAUCET={"mnemonic":["...","..."],"secret":"...","amount": "...","pkh":"...","password":"...","email":"..."}
 ALICE_SECRET=edsk3QoqBuvdamxouPhin7swCvkQNgq4jP5KZPbwWNnwdZpSpJiEbq
 JON=jon,edpkuTWU5vkNqfFXSAJuZNVa4gAdF6iU3tZongtkgesoytne2YcqVj,tz1ggvpTMyxX5QVYqbpLVmNGCsgDpDyUMawq,unencrypted:edsk3Un2TGaZYUL1gCDPyUvkYvtxznkmZwfa4fdcjdWrne2kyvd3Lj
 LAURA=laura,edpkv2PkEkoaYN9KP769GrFgshMoVn8cvHUuYVUkogxiqZMctxPbB8,tz1TUEs5dubGJoCkvSK11zFqTWU9jh6cV8kb,unencrypted:edsk3VdieyzxcsjFRxApVvLk8LQmQELiuJtGrww27WHamxF83dZwyY
@@ -133,14 +134,7 @@ $ yarn run deploy:sandbox
 
 5. Copy the contract address from the console output and assign it to `VUE_APP_CONTRACT_ADDRESS` in `./frontend/.env.template` and rename the file to `.env`.
 
-6. Set the same contract address in `./dipdup/dipdup.yml`:
-
-```yml
-contracts:
-  taia_x_sandbox:
-    address: <contract address>
-    typename: taia_x_fa2
-```
+6. Rename the `.env.template` in `./dipdup` to `.env` file and assign the contract address to `CONTRACT_ADDRESS`.
 
 7. In the `./ipfs` folder run the ipfs cluster:
 
@@ -148,22 +142,34 @@ contracts:
 $ docker compose up
 ```
 
-See [here](https://github.com/taia-x/taia-x/tree/main/ipfs) how to fix CORS error if it happens.
-
-8. In the `./tzkt` folder run the tzkt indexer:
+8. In the `./backend` folder run the backend:
 
 ```bash
 $ docker compose up
 ```
 
-9. In the `./dipdup` folder build and run the selective contract indexer:
+See [here](https://github.com/taia-x/taia-x/tree/main/ipfs) how to fix CORS error if it happens.
+
+9. In the `./backend` folder run the backend:
+
+```bash
+$ docker compose up
+```
+
+10. In the `./tzkt` folder run the tzkt indexer:
+
+```bash
+$ docker compose up
+```
+
+11. In the `./dipdup` folder build and run the selective contract indexer:
 
 ```bash
 $ docker compose build
 $ docker compose up
 ```
 
-10. In the `./frontend` folder build and run taia-x:
+12. In the `./frontend` folder build and run taia-x:
 
 ```bash
 $ docker compose build
@@ -172,7 +178,7 @@ $ docker compose up
 
 or run without docker via `npm run serve`
 
-11. Stop all containers by running `docker compose down` in the respective folders.
+13. Stop all containers by running `docker compose down` in the respective folders.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 

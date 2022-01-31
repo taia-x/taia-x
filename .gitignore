@@ -160,3 +160,4 @@ backend/assets
 backend/app/__pycache__
 # dipdup
 dipdup/taia_x.sqlite3
+dipdup/.env

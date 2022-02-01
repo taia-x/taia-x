@@ -38,11 +38,11 @@ const router = createRouter({
 });
 
 // navigation guard to ensure provider role to be able to access /create route
-// router.beforeEach((to, from, next) => {
-//   const user = useUserStore();
-//   if (to.name === "Create" && user.getRole !== "provider")
-//     next({ name: "Explorer" });
-//   else next();
-// });
+router.beforeEach((to, from, next) => {
+  const user = useUserStore();
+  if (to.name === "Create" && user.getRole !== "provider")
+    next({ name: "Explorer" });
+  else next();
+});
 
 export default router;

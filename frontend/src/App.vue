@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
+import { defineComponent, onMounted, watch } from "vue";
 import Header from "@/components/Header/Header.vue";
 import AlertWrapper from "@/components/Utils/AlertWrapper.vue";
 import { useUserStore } from "@/stores/useUser";
@@ -29,7 +29,7 @@ export default defineComponent({
     const { initializeUser } = user;
     const { address } = storeToRefs(user);
 
-    const setRole = async () => {
+    watch(address, async () => {
       const result = await fetch(HTTP_METADATA_API_URL, {
         method: "POST",
         headers: {
@@ -52,13 +52,12 @@ export default defineComponent({
       const { data } = await result.json();
       if (data?.account_by_pk?.role)
         user.$patch((state) => (state.role = data.account_by_pk.role));
-    };
+    });
 
-    onMounted(async () => {
+    onMounted(() => {
       try {
-        await initInterfaces();
-        await initializeUser();
-        if (address.value) setRole();
+        initInterfaces();
+        initializeUser();
       } catch (e: any) {
         throw new Error(e.toString());
       }

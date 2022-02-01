@@ -3,7 +3,7 @@
     <div class="grid grid-cols-1 space-y-1.5 text-gray-600 w-full">
       <div class="border-b-2">
         <router-link
-          :to="profileUrl + '/collected'"
+          :to="profileUrl + '?tab=0'"
           class="w-full font-medium relative flex items-center justify-center px-12 py-2 mb-1.5 text-center rounded-md cursor-pointer hover:bg-gray-100 space-x-2 hover:text-gray-800 transition-colors duration-100 ease-out"
         >
           <CollectionIcon class="absolute w-5 h-5 left-2" />
@@ -12,7 +12,7 @@
       </div>
       <div class="border-b-2">
         <router-link
-          :to="profileUrl + '/created'"
+          :to="profileUrl + '?tab=1'"
           class="w-full font-medium relative flex items-center justify-center px-12 py-2 mb-1.5 text-center rounded-md cursor-pointer hover:bg-gray-100 hover:text-gray-800 transition-colors duration-100 ease-out"
         >
           <DocumentAddIcon class="absolute w-5 h-5 left-2" />
@@ -21,7 +21,7 @@
       </div>
       <div class="border-b-2">
         <router-link
-          :to="profileUrl + '/certified'"
+          :to="profileUrl + '?tab=2'"
           class="w-full font-medium relative flex items-center justify-center px-12 py-2 mb-1.5 text-center rounded-md cursor-pointer hover:bg-gray-100 hover:text-gray-800 transition-colors duration-100 ease-out"
         >
           <BadgeCheckIcon class="absolute w-5 h-5 left-2" />
@@ -30,7 +30,7 @@
       </div>
       <div class="border-b-2">
         <router-link
-          :to="profileUrl + '/activity'"
+          :to="profileUrl + '?tab=3'"
           class="w-full font-medium relative flex items-center justify-center px-12 py-2 mb-1.5 text-center rounded-md cursor-pointer hover:bg-gray-100 hover:text-gray-800 transition-colors duration-100 ease-out"
         >
           <ClockIcon class="absolute w-5 h-5 left-2" />

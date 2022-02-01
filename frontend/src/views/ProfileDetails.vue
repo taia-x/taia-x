@@ -7,20 +7,20 @@
           class="h-32 w-32 rounded-full"
         />
       </div>
-      <h1>{{ route.params.address }}</h1>
+      <h1>{{ address }}</h1>
     </div>
     <div>
       <TabGroup>
         <TabList class="flex border-b space-x-10">
           <Tab
-            v-for="title in ['Collected', 'Created', 'Certified', 'Activity']"
+            v-for="title in Object.keys(tabs)"
             as="template"
             :key="title"
             v-slot="{ selected }"
           >
             <button
               :class="[
-                'py-4 text-black relative font-semibold transition duration-300 ease-in-out',
+                'py-4 text-black relative font-semibold transition duration-300 ease-in-out capitalize',
                 selected ? '' : 'text-opacity-25 hover:text-opacity-100',
               ]"
             >
@@ -39,10 +39,10 @@
 
         <TabPanels class="mt-2">
           <TabPanel>
-            <div :class="['py-8 grid grid-cols-4 gap-6']" v-if="tokens">
+            <div :class="['py-8 grid grid-cols-4 gap-6']" v-if="tabs.collected">
               <router-link
                 class="w-full h-56 transition duration-200 transform border-2 border-gray-100 rounded-lg hover:shadow-xl hover:-translate-y-2 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                v-for="(token, index) in tokens"
+                v-for="(token, index) in tabs.collected"
                 :key="'collected-' + token.id"
                 :index="index"
                 :to="'/explore/' + token.id"
@@ -53,10 +53,10 @@
           </TabPanel>
 
           <TabPanel>
-            <div :class="['py-8 grid grid-cols-4 gap-6']" v-if="tokens">
+            <div :class="['py-8 grid grid-cols-4 gap-6']" v-if="tabs.created">
               <router-link
                 class="w-full h-56 transition duration-200 transform border-2 border-gray-100 rounded-lg hover:shadow-xl hover:-translate-y-2 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                v-for="(token, index) in tokens"
+                v-for="(token, index) in tabs.created"
                 :key="'created-' + token.id"
                 :index="index"
                 :to="'/explore/' + token.id"
@@ -67,10 +67,10 @@
           </TabPanel>
 
           <TabPanel>
-            <div :class="['py-8 grid grid-cols-4 gap-6']" v-if="tokens">
+            <div :class="['py-8 grid grid-cols-4 gap-6']" v-if="tabs.certified">
               <router-link
                 class="w-full h-56 transition duration-200 transform border-2 border-gray-100 rounded-lg hover:shadow-xl hover:-translate-y-2 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                v-for="(token, index) in tokens"
+                v-for="(token, index) in tabs.certified"
                 :key="'certified-' + token.id"
                 :index="index"
                 :to="'/explore/' + token.id"
@@ -80,8 +80,8 @@
             </div>
           </TabPanel>
 
-          <TabPanel :class="['py-8']">
-            <History :events="events" />
+          <TabPanel :class="['py-8']" v-if="tabs.activity">
+            <History :events="tabs.activity" />
           </TabPanel>
         </TabPanels>
       </TabGroup>
@@ -90,13 +90,18 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, reactive } from "vue";
 import { useRoute } from "vue-router";
-import { getSingleCreator } from "@/services/graphql/queries";
+import {
+  getTokenMetadataByCreator,
+  getTokenMetadataByCollector,
+  getUncertifiedTokenMetadata,
+  getEventsByAccount,
+} from "@/services/graphql/queries";
 import { ACCOUNT_IMAGE_PATH } from "@/constants";
 import { useQuery, useResult } from "@vue/apollo-composable";
 import TokenCard from "@/components/TokenCard/TokenCard.vue";
-import { TabGroup, TabList, TabPanel, Tab } from "@headlessui/vue";
+import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import History from "@/components/History/History.vue";
 
 export default defineComponent({
@@ -104,32 +109,69 @@ export default defineComponent({
     TabGroup,
     TabList,
     TabPanel,
+    TabPanels,
     Tab,
     TokenCard,
     History,
   },
   setup() {
     const route = useRoute();
-    const creatorId = route.params.address;
+    const address = route.params.address;
 
-    const { result } = useQuery(
-      getSingleCreator,
-      () => ({
-        creatorId,
-      }),
-      {
+    const tabs = reactive({
+      collected: [],
+      created: [],
+      certified: [],
+      activity: [],
+    });
+
+    const queryResult = (option, query, id) => {
+      const { result } = useQuery(query, () => option, {
         fetchPolicy: "cache-and-network",
-      }
+      });
+      const value = useResult(result, null, (v) => v[id]);
+      return value;
+    };
+    tabs.created = queryResult(
+      {
+        creatorId: address,
+      },
+      getTokenMetadataByCreator,
+      "token"
     );
 
-    const tokens = useResult(result, null, ({ token }) => token);
-    const events = useResult(result, null, ({ event }) => event);
+    tabs.collected = queryResult(
+      {
+        collectorId: address,
+      },
+      getTokenMetadataByCollector,
+      "token"
+    );
+
+    tabs.certified = queryResult({}, getUncertifiedTokenMetadata, "token");
+
+    tabs.activity = queryResult(
+      {
+        accountId: address,
+      },
+      getEventsByAccount,
+      "event"
+    );
+
+    // const collected = queryResult(`{creator_id: { _eq: ${creatorId}}}`);
+    // const created = queryResult(`{creator_id: { _eq: ${creatorId}}}`);
+    // const certified = queryResult(`{ cert_state: {_eq: "pending"}}`);
+    // const events = queryResult(
+    //   `{_or: [{ caller_id: { _eq: ${creatorId} } }{ recipient_id: { _eq: ${creatorId} } }]}`,
+    //   getFilteredEvents,
+    //   "event"
+    // );
 
     return {
       route,
-      tokens,
-      events,
+      tabs,
       ACCOUNT_IMAGE_PATH,
+      address,
     };
   },
 });

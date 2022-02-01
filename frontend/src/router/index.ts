@@ -44,22 +44,26 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: "",
-        component: Created,
+        redirect: { name: "created" },
       },
       {
         path: "created",
+        name: "created",
         component: Created,
       },
       {
         path: "collected",
+        name: "collected",
         component: Collected,
       },
       {
         path: "certified",
+        name: "certified",
         component: Certified,
       },
       {
         path: "activity",
+        name: "activity",
         component: Activity,
       },
     ],

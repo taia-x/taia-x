@@ -10,36 +10,36 @@
       <h1>{{ address }}</h1>
     </div>
     <div>
-      <TabGroup manual :defaultIndex="2">
-        <TabList class="flex border-b space-x-10">
-          <Tab
-            v-for="title in tabs"
-            as="template"
-            :key="title"
-            v-slot="{ selected }"
-          >
-            <router-link
+      <ul class="flex border-b space-x-10">
+        <router-link
+          v-for="title in tabs"
+          :key="title"
+          :to="title.toLowerCase()"
+          v-slot="{ href, navigate, isExactActive }"
+        >
+          <li class="block relative">
+            <a
               :class="[
-                'py-4 text-black relative font-semibold transition duration-300 ease-in-out capitalize',
-                selected ? '' : 'text-opacity-25 hover:text-opacity-100',
+                'block py-4 text-black font-semibold transition duration-300 ease-in-out capitalize text-opacity-25 hover:text-opacity-100',
+                isExactActive && 'text-opacity-100',
               ]"
-              :to="title.toLowerCase()"
+              :href="href"
+              @click="navigate"
             >
-              <span
-                class=""
-                aria-hidden="true"
-                :class="[
-                  'block absolute w-full h-0.5 -bottom-0.5 left-0 transition duration-300 ease-in-out',
-                  selected ? 'bg-cyan-500' : 'bg-transparent',
-                ]"
-              ></span>
-              {{ title }}
-            </router-link>
-          </Tab>
-        </TabList>
-      </TabGroup>
+              {{ title }}</a
+            >
+            <span
+              aria-hidden="true"
+              :class="[
+                'block absolute w-full h-0.5 -bottom-0.5 left-0 transition duration-300 ease-in-out',
+                isExactActive ? 'bg-cyan-500' : 'bg-transparent',
+              ]"
+            ></span>
+          </li>
+        </router-link>
+      </ul>
 
-      <div class="mt-2">
+      <div class="mt-2 py-8">
         <router-view></router-view>
       </div>
     </div>
@@ -50,14 +50,8 @@
 import { defineComponent } from "vue";
 import { useRoute } from "vue-router";
 import { ACCOUNT_IMAGE_PATH } from "@/constants";
-import { TabGroup, TabList, Tab } from "@headlessui/vue";
 
 export default defineComponent({
-  components: {
-    TabGroup,
-    TabList,
-    Tab,
-  },
   setup() {
     const route = useRoute();
     const address = route.params.address;

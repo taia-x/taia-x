@@ -1,5 +1,5 @@
 <template>
-  <div :class="['py-8']" v-if="events">
+  <div v-if="events">
     <History :events="events" />
   </div>
 </template>

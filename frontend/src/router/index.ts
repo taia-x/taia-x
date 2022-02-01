@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import { useUserStore } from "@/stores/useUser";
 import Explorer from "@/views/Explorer.vue";
+import Created from "@/views/ProfileDetailsTabs/Created.vue";
+import Collected from "@/views/ProfileDetailsTabs/Collected.vue";
+import Certified from "@/views/ProfileDetailsTabs/Certified.vue";
+import Activity from "@/views/ProfileDetailsTabs/Activity.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -34,7 +37,32 @@ const routes: Array<RouteRecordRaw> = [
     path: "/profile/:address",
     name: "ProfileDetails",
     component: () =>
-      import(/* webpackChunkName: "profile-details" */ "@/views/ProfileDetails.vue"),
+      import(
+        /* webpackChunkName: "profile-details" */ "@/views/ProfileDetails.vue"
+      ),
+    props: true,
+    children: [
+      {
+        path: "",
+        component: Created,
+      },
+      {
+        path: "created",
+        component: Created,
+      },
+      {
+        path: "collected",
+        component: Collected,
+      },
+      {
+        path: "certified",
+        component: Certified,
+      },
+      {
+        path: "activity",
+        component: Activity,
+      },
+    ],
   },
 ];
 

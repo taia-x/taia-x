@@ -39,6 +39,43 @@
           ><div><History :events="events" /></div></template
       ></Section>
     </div>
+    <div class="space-y-4" v-if="token && token.files">
+      <h3
+        class="flex items-center space-x-1 text-xl font-semibold text-gray-900"
+      >
+        <span>Files</span>
+        <InformationCircleIcon
+          class="w-5 h-5 text-gray-400 transform -translate-y-1"
+        />
+      </h3>
+      <div
+        class="flex items-center justify-between w-full p-2 mt-1 bg-gray-100 rounded-md"
+        v-for="file in token.files"
+        :key="file.fileName"
+      >
+        <div class="flex items-center space-x-2">
+          <DocumentTextIcon class="w-5 h-5 text-gray-700" />
+          <span class="font-mono truncate">{{ file.fileName }}</span>
+        </div>
+        <div class="flex items-center space-x-4">
+          <span class="font-mono">{{ file.fileSize }} Byte</span>
+          <Tooltip
+            class="group"
+            @click.prevent="fetchPreview(file)"
+            v-if="file.previewUri"
+          >
+            <template #element
+              ><EyeIcon
+                class="w-5 h-5 text-gray-400 transition-colors duration-150 hover:text-gray-700"
+            /></template>
+            <template #text>Show Preview</template>
+          </Tooltip>
+        </div>
+      </div>
+    </div>
+    <div v-if="token">
+      <History :token="token.events" />
+    </div>
   </div>
 </template>
 

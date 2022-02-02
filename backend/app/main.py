@@ -9,6 +9,7 @@ from uuid import uuid4
 from pathlib import Path
 from pyblake2 import blake2b
 from .encoding import scrub_input, base58_decode, base58_encode
+from .database import SessionLocal, engine
 
 import glob
 import socket
@@ -45,7 +46,7 @@ def public_key_hash(public_point) -> str:
 
 # get digital twin data by unique id
 @app.post("/download/{unique_id}")
-async def fetch_data(unique_id: int, data: AuthData):
+async def fetch_data(unique_id: int, data: AuthData, db: Session = Depends(get_db)):
     results = {"unique_id": unique_id}
     # results = {"unique_id": unique_id, "nft_id": data.nft_id, "sig": data.sig, "public key": data.pbkey}
     results.update({"data": data})

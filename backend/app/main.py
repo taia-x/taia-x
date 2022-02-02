@@ -1,18 +1,20 @@
 import uvicorn
-import pysodium
+
+import glob
+import socket
+
 from datetime import datetime
 from fastapi import FastAPI, Depends, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
+from sqlalchemy.orm import Session
 from uuid import uuid4
 from pathlib import Path
-from pyblake2 import blake2b
-from .encoding import scrub_input, base58_decode, base58_encode
-from .database import SessionLocal, engine
 
-import glob
-import socket
+from .database import SessionLocal, engine
+from .utils import signature_verification
+
 
 app = FastAPI()
 
@@ -34,52 +36,12 @@ class AuthData(BaseModel):
     pbkey: str
 
 
-def public_key_hash(public_point) -> str:
-    """Creates base58 encoded public key hash for this key.
-
-    :returns: the public key hash for this key
-    """
-    pkh = blake2b(data=public_point, digest_size=20).digest()
-    prefix = b'tz1'
-    return base58_encode(pkh, prefix).decode()
-
-
 # get digital twin data by unique id
 @app.post("/download/{unique_id}")
 async def fetch_data(unique_id: int, data: AuthData, db: Session = Depends(get_db)):
-    results = {"unique_id": unique_id}
-    # results = {"unique_id": unique_id, "nft_id": data.nft_id, "sig": data.sig, "public key": data.pbkey}
-    results.update({"data": data})
-    print(results)
-
     # hash pbkey and check if it matches to account address that purchased nft_id
-    pbk = scrub_input(data.pbkey)
-    pbk2 = base58_decode(pbk)
-    pkh = blake2b(data=pbk2, digest_size=20).digest()
-    prefix = b'tz1'
-    pbh2 = base58_encode(pkh, prefix).decode()
-    pbh_of_buyer = ""  # to be called from database
-    print("Check matching onchain PBK from buyer with consumer pbk..")
-    if pbh2 == pbh_of_buyer:
-        print("Verified account!")
-    else:
-        print("Not the same account!")
-        # Change to return, but for test purposes, pass
-        pass
-
-    # verify signature to check authenticity of requester
-    signature = scrub_input(data.sig)
-    message = scrub_input(data.nft_id)
-
-    signature = base58_decode(signature)
-
-    digest = pysodium.crypto_generichash(message)
-    try:
-        pysodium.crypto_sign_verify_detached(signature, digest, pbk2)
-    except ValueError:
-        raise ValueError('Signature is invalid.')
-    print("Signature is valid!")
-
+    signature_verification(unique_id, **data)
+    
     # file = glob.glob(f'assets/{unique_id}/*.zip')[0]
     return None  # return file
 

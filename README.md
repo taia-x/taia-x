@@ -151,10 +151,15 @@ $ docker compose build
 $ docker compose up
 ```
 
-See here how to fix CORS error if it happens.
+If building the docker-compose your device run out of memory perform following command
 
+```bash
+$ docker system prune
+```
 
-7.  Stop all containers by running `docker compose down` in the respective folders.
+### Tear Down
+
+1.  Stop all containers by running `docker compose down` in the respective folders.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 

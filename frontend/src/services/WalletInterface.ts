@@ -73,20 +73,20 @@ class WalletInterface {
    *
    * @returns tezos account balance
    */
-  async getBalance(): Promise<number> {
-    try {
-      if (typeof this.Tezos !== undefined && typeof wallet !== undefined) {
-        const address = await this.getAddress();
-        if (address) {
-          const balance = await this.Tezos.tz.getBalance(address);
-          if (balance) return balance.toNumber();
-        }
-      }
-    } catch (e: any) {
-      throw new Error(e.toString());
-    }
-    return 0;
-  }
+  // async getBalance(): Promise<number> {
+  //   try {
+  //     if (typeof this.Tezos !== undefined && typeof wallet !== undefined) {
+  //       const address = await this.getAddress();
+  //       if (address) {
+  //         const balance = await this.Tezos.tz.getBalance(address);
+  //         if (balance) return balance.toNumber();
+  //       }
+  //     }
+  //   } catch (e: any) {
+  //     throw new Error(e.toString());
+  //   }
+  //   return 0;
+  // }
 
   /**
    * function to disconnect from wallet and clear active account

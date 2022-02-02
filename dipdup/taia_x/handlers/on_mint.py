@@ -44,8 +44,8 @@ async def on_mint(
     # save mint event in db
     event = models.Event(
         token=token,
-        caller=creator,
-        recipient=recipient,
+        _from=creator,
+        _to=recipient,
         event_type=models.EventType.mint,
         ophash=mint.data.hash,
         level=mint.data.level,

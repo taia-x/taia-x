@@ -47,36 +47,34 @@
       </span>
     </div>
     <div v-if="event" class="flex">
-      <a
-        :href="`https://tzkt.io/${event.caller_id}`"
-        target="_blank"
-        class="flex items-center space-x-2"
+      <div
+        @click.prevent="$router.push(`/profile/${event._from_id}`)"
+        class="flex items-center space-x-2 cursor-pointer"
       >
         <img
-          v-if="event.caller_id"
-          :src="`https://services.tzkt.io/v1/avatars/${event.caller_id}`"
+          v-if="event._from_id"
+          :src="`https://services.tzkt.io/v1/avatars/${event._from_id}`"
           class="w-10 h-10 my-auto"
         />
         <span class="truncate">{{
-          event.caller_id ? getPrivatizedAddress(event.caller_id) : "-"
+          event._from_id ? getPrivatizedAddress(event._from_id) : "-"
         }}</span>
-      </a>
+      </div>
     </div>
     <div v-if="event" class="flex">
-      <a
-        target="_blank"
-        :href="`https://tzkt.io/${event.recipient_id}`"
-        class="flex items-center space-x-2"
+      <div
+        @click.prevent="$router.push(`/profile/${event._to_id}`)"
+        class="flex items-center space-x-2 cursor-pointer"
       >
         <img
-          v-if="event.recipient_id"
-          :src="`https://services.tzkt.io/v1/avatars/${event.recipient_id}`"
+          v-if="event._to_id"
+          :src="`https://services.tzkt.io/v1/avatars/${event._to_id}`"
           class="w-10 h-10 my-auto"
         />
         <span class="truncate">{{
-          event.recipient_id ? getPrivatizedAddress(event.recipient_id) : "-"
+          event._to_id ? getPrivatizedAddress(event._to_id) : "-"
         }}</span>
-      </a>
+      </div>
     </div>
     <div class="flex items-center">
       <span class="truncate">{{

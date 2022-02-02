@@ -1,9 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Explorer from "@/views/Explorer.vue";
-import Created from "@/views/ProfileDetailsTabs/Created.vue";
-import Collected from "@/views/ProfileDetailsTabs/Collected.vue";
-import Certified from "@/views/ProfileDetailsTabs/Certified.vue";
-import Activity from "@/views/ProfileDetailsTabs/Activity.vue";
+import { useUserStore } from "@/stores/useUser";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -49,22 +46,34 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "created",
         name: "created",
-        component: Created,
+        component: () =>
+          import(
+            /* webpackChunkName: "created" */ "@/views/ProfileDetailsTabs/Created.vue"
+          ),
       },
       {
         path: "collected",
         name: "collected",
-        component: Collected,
+        component: () =>
+          import(
+            /* webpackChunkName: "created" */ "@/views/ProfileDetailsTabs/Collected.vue"
+          ),
       },
       {
         path: "certified",
         name: "certified",
-        component: Certified,
+        component: () =>
+          import(
+            /* webpackChunkName: "created" */ "@/views/ProfileDetailsTabs/Certified.vue"
+          ),
       },
       {
         path: "activity",
         name: "activity",
-        component: Activity,
+        component: () =>
+          import(
+            /* webpackChunkName: "created" */ "@/views/ProfileDetailsTabs/Activity.vue"
+          ),
       },
     ],
   },
@@ -78,8 +87,9 @@ const router = createRouter({
 // navigation guard to ensure provider role to be able to access /create route
 router.beforeEach((to, from, next) => {
   const user = useUserStore();
-  if (to.name === "Create" && user.getRole !== "provider")
+  if (to.name === "Create" && user.role !== "provider")
     next({ name: "Explorer" });
+  if (to.name === "certified" && user.role !== "certifier") next(false);
   else next();
 });
 

@@ -40,15 +40,15 @@ export const getSingleTokenMetadata = gql`
 `;
 
 export const subscribeToTokenEvent = gql`
-  subscription MySubscription($token_id: bigint = 1) {
+  subscription SubscribeToTokenEvent($token_id: bigint = 1) {
     event(where: { token_id: { _eq: $token_id } }) {
-      caller_id
+      _from_id
       event_type
       id
       level
       ophash
       price
-      recipient_id
+      _to_id
       timestamp
       token_id
     }
@@ -56,22 +56,23 @@ export const subscribeToTokenEvent = gql`
 `;
 
 export const getEventsByAccount = gql`
-  query getEventsByAccount($accountId: String) {
+  query GetEventsByAccount($accountId: String) {
     event(
       where: {
         _or: [
-          { caller_id: { _eq: $accountId } }
-          { recipient_id: { _eq: $accountId } }
+          { _from_id: { _eq: $accountId } }
+          { _to_id: { _eq: $accountId } }
         ]
       }
+      order_by: { timestamp: desc }
     ) {
-      caller_id
+      _from_id
       event_type
       id
       level
       ophash
       price
-      recipient_id
+      _to_id
       timestamp
       token_id
     }
@@ -89,6 +90,38 @@ export const getFilteredTokenMetadata = (where: string) => gql`
       name
       price
       tags
+    }
+  }
+`;
+
+export const getCreations = gql`
+  query GetCreations($address: String = "") {
+    account_by_pk(address: $address) {
+      creations {
+        creator_id
+        id
+        description
+        files
+        cert_state
+        name
+        price
+      }
+    }
+  }
+`;
+
+export const getPurchases = gql`
+  query GetPurchases($address: String = "") {
+    account_by_pk(address: $address) {
+      purchases {
+        creator_id
+        id
+        description
+        files
+        cert_state
+        name
+        price
+      }
     }
   }
 `;

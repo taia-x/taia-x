@@ -16,11 +16,10 @@
         </div>
       </div>
     </div>
-    <a
+    <div
       v-if="token && token.creator_id"
-      :href="`https://tzkt.io/${token?.creator_id}`"
-      target="_blank"
-      class="z-10 flex items-center space-x-2"
+      @click.prevent="$router.push(`/profile/${token?.creator_id}`)"
+      class="z-10 flex items-center space-x-2 cursor-pointer"
     >
       <div class="flex flex-col">
         <div class="font-medium text-right text-gray-700">Owner</div>
@@ -32,7 +31,7 @@
         :src="`https://services.tzkt.io/v1/avatars/${token?.creator_id}`"
         class="w-16 h-16 my-auto"
       />
-    </a>
+    </div>
   </div>
 </template>
 

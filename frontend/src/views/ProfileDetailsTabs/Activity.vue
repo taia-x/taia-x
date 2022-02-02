@@ -1,5 +1,5 @@
 <template>
-  <div v-if="events">
+  <div v-if="events && events.length">
     <History :events="events" />
   </div>
 </template>
@@ -19,9 +19,15 @@ export default defineComponent({
     const route = useRoute();
     const address = route.params.address;
 
-    const { result } = useQuery(getEventsByAccount, {
-      accountId: address,
-    });
+    const { result } = useQuery(
+      getEventsByAccount,
+      {
+        accountId: address,
+      },
+      {
+        fetchPolicy: "cache-and-network",
+      }
+    );
     const events = useResult(result, null, ({ event }) => event);
 
     return {

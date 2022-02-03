@@ -1,0 +1,61 @@
+version: "3.4"
+
+services:
+  db_dipdup:
+    image: postgres:13
+    networks:
+      - taia-x
+    restart: always
+    ports:
+      - 127.0.0.1:5433:5432
+    container_name: db_dipdup
+    environment:
+      - POSTGRES_USER=dipdup
+      - POSTGRES_DB=dipdup
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  hasura:
+    image: fedormelexin/graphql-engine-arm64
+    networks:
+      - taia-x
+    container_name: hasura
+    ports:
+      - 127.0.0.1:42000:8080
+    depends_on:
+      - db_dipdup
+    restart: always
+    environment:
+      - HASURA_GRAPHQL_DATABASE_URL=postgres://dipdup:${POSTGRES_PASSWORD:-changeme}@db_dipdup:5432/dipdup
+      - HASURA_GRAPHQL_ENABLE_CONSOLE=true
+      - HASURA_GRAPHQL_DEV_MODE=false
+      - HASURA_GRAPHQL_ENABLED_LOG_TYPES=startup, http-log, webhook-log, websocket-log, query-log
+      - HASURA_GRAPHQL_ADMIN_SECRET=${ADMIN_SECRET:-changeme}
+      - HASURA_GRAPHQL_UNAUTHORIZED_ROLE=user
+
+  indexer:
+    build: .
+    networks:
+      - taia-x
+    container_name: indexer
+    depends_on:
+      - hasura
+      - db_dipdup
+    restart: "no"
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
+      - ADMIN_SECRET=${ADMIN_SECRET:-changeme}
+      - DB_HOST=${DB_HOST:-db_dipdup}
+      - DB_PORT=${DB_PORT:-5432}
+      - IPFS_HOST=${IPFS_HOST:-ipfs}
+      - API_TZKT=${API_TZKT:-http://api_tzkt:5000}
+
+networks:
+  taia-x:
+    name: taia-x

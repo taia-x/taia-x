@@ -1,7 +1,7 @@
 let set_cert_state (p, issuer, state, storage : cert_params * address * cert_state * taia_x_storage): cert_storage =
   let _dataset : dataset =  match Big_map.find_opt p.dataset_id storage.market.datasets with
     | Some d -> if(d.owner = issuer) then (failwith("Dataset owner is not allowed to change his certificate state") : dataset) else (d)
-    | None -> (failwith("No corresponding dataset found for this dataset id") : dataset)
+    | None -> (failwith("No dataset found for this dataset id") : dataset)
   in
 
   let new_cert : cert =  match Big_map.find_opt p.dataset_id storage.certificates with

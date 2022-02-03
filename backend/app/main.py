@@ -4,7 +4,7 @@ import glob
 import socket
 
 from datetime import datetime
-from fastapi import FastAPI, Depends, File, UploadFile
+from fastapi import FastAPI, Depends, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
@@ -40,10 +40,11 @@ class AuthData(BaseModel):
 @app.post("/download/{unique_id}")
 async def fetch_data(unique_id: int, data: AuthData, db: Session = Depends(get_db)):
     # hash pbkey and check if it matches to account address that purchased nft_id
-    signature_verification(unique_id, **data)
-    
-    # file = glob.glob(f'assets/{unique_id}/*.zip')[0]
-    return None  # return file
+    if signature_verification(**data, db):
+        file = glob.glob(f'assets/{unique_id}/*.zip')[0]
+        return file
+    else:
+        raise HTTPException(status_code=403, detail="Forbidden")
 
 
 # upload new digital twin data and save on file system

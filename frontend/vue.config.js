@@ -3,6 +3,7 @@ const openInEditor = require("launch-editor-middleware");
 
 module.exports = {
   devServer: {
+    disableHostCheck: true,
     setup(app) {
       app.use("/__open-in-editor", openInEditor("code"));
     },

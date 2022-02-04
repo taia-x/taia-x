@@ -180,12 +180,16 @@ or run without docker via `npm run serve`
 
 1. Create a new Network for your local Sandbox with a local RPC endpoint. Set the RPC-Url to `http://localhost:20000` and the name to an arbitrary name.
 
+<img width="357" alt="Bildschirmfoto 2022-02-04 um 16 26 02" src="https://user-images.githubusercontent.com/35061229/152557104-0a19e580-879a-4308-8b23-e17eae8f2170.png">
+
 2. Import all accounts from the `.env` file in `./contracts` by it's private key, which starts with `edsk...`. The `.env` includes 4 predefined users:
 
 - ALICE
 - MAGGY
 - JON
 - LAURA
+
+<img width="355" alt="Bildschirmfoto 2022-02-04 um 16 31 28" src="https://user-images.githubusercontent.com/35061229/152557131-b1f0dec3-fc7c-4e94-9570-37d00f01cc66.png">
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 

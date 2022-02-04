@@ -37,6 +37,15 @@
           Activity
         </router-link>
       </div>
+      <div class="border-b-2">
+        <router-link
+          :to="profileUrl + '/downloads'"
+          class="w-full font-medium relative flex items-center justify-center px-12 py-2 mb-1.5 text-center rounded-md cursor-pointer hover:bg-gray-100 hover:text-gray-800 transition-colors duration-100 ease-out"
+        >
+          <DownloadIcon class="absolute w-5 h-5 left-2" />
+          Downloads
+        </router-link>
+      </div>
       <div>
         <button
           @click.prevent="disconnect()"
@@ -60,6 +69,7 @@ import {
   DocumentAddIcon,
   LogoutIcon,
   ClockIcon,
+  DownloadIcon,
 } from "@heroicons/vue/outline";
 
 export default defineComponent({
@@ -79,6 +89,7 @@ export default defineComponent({
     DocumentAddIcon,
     LogoutIcon,
     ClockIcon,
+    DownloadIcon,
   },
   setup(props) {
     const user = useUserStore();

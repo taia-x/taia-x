@@ -14,6 +14,11 @@
           )}`
         }}
       </a>
+      <div
+        class="px-2 text-xs font-semibold text-center text-white bg-gray-900 rounded-md"
+      >
+        {{ role }}
+      </div>
     </div>
     <div>
       <nav class="flex space-x-10 border-b-2 border-gray-100">
@@ -64,9 +69,9 @@
 </template>
 
 <script>
-import { defineComponent, computed } from "vue";
+import { defineComponent, computed, ref, watchEffect } from "vue";
 import { useRoute } from "vue-router";
-import { ACCOUNT_IMAGE_PATH } from "@/constants";
+import { ACCOUNT_IMAGE_PATH, HTTP_METADATA_API_URL } from "@/constants";
 import { LockClosedIcon } from "@heroicons/vue/outline";
 import { useUserStore } from "@/stores/useUser";
 
@@ -74,13 +79,41 @@ export default defineComponent({
   components: {
     LockClosedIcon,
   },
-  setup() {
+  setup(props) {
     const route = useRoute();
     const user = useUserStore();
-
+    const role = ref("");
     const address = computed(() => route.params.address);
 
-    const tabs = ["collected", "created", "certified", "activity"];
+    watchEffect(async () => {
+      const result = await fetch(HTTP_METADATA_API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: `
+              query GetAccount($address: String = "") {
+                account_by_pk(address: $address) {
+                  address
+                  role
+                }
+              }
+            `,
+          variables: {
+            address: route.params.address,
+          },
+        }),
+      });
+      const { data } = await result.json();
+      if (data?.account_by_pk?.role) role.value = data.account_by_pk.role;
+    });
+
+    const tabs = computed(() =>
+      route.params.address === user.address
+        ? ["collected", "created", "certified", "activity", "downloads"]
+        : ["collected", "created", "certified", "activity"]
+    );
 
     return {
       route,
@@ -88,6 +121,7 @@ export default defineComponent({
       user,
       ACCOUNT_IMAGE_PATH,
       address,
+      role,
     };
   },
 });

@@ -50,3 +50,7 @@ indexes:
         pattern:
           - destination: taia_x_sandbox
             entrypoint: buy
+      - callback: on_update_cert
+        pattern:
+          - destination: taia_x_sandbox
+            entrypoint: update_certs

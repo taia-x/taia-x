@@ -11,8 +11,20 @@
           <span>{{ token?.files.length }} Files</span>
         </div>
         <div class="flex items-center space-x-1">
-          <ClockIcon class="w-5 h-5" />
-          <span>30s</span>
+          <LoadingSpinner
+            v-if="token?.cert_state === 'pending'"
+            :size="5"
+            :color="'text-gray-400'"
+            class="mr-1"
+          />
+          <BadgeCheckIcon
+            v-if="token?.cert_state === 'certified'"
+            class="w-5 h-5"
+          />
+          <BanIcon v-if="token?.cert_state === 'rejected'" class="w-5 h-5" />
+          <span>{{
+            token?.cert_state[0].toUpperCase() + token?.cert_state.slice(1)
+          }}</span>
         </div>
       </div>
     </div>
@@ -37,12 +49,15 @@
 
 <script>
 import { defineComponent } from "vue";
-import { ClockIcon, DocumentIcon } from "@heroicons/vue/outline";
+import { DocumentIcon, BadgeCheckIcon, BanIcon } from "@heroicons/vue/outline";
+import LoadingSpinner from "@/components/Utils/LoadingSpinner.vue";
 
 export default defineComponent({
   components: {
-    ClockIcon,
     DocumentIcon,
+    BadgeCheckIcon,
+    BanIcon,
+    LoadingSpinner,
   },
   props: {
     token: {

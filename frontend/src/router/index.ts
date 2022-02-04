@@ -33,11 +33,13 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/profile/:address",
     name: "ProfileDetails",
+    props: (route) => ({
+      tzAddress: route.params.address,
+    }),
     component: () =>
       import(
         /* webpackChunkName: "profile-details" */ "@/views/ProfileDetails.vue"
       ),
-    props: true,
     children: [
       {
         path: "",
@@ -56,7 +58,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "collected",
         component: () =>
           import(
-            /* webpackChunkName: "created" */ "@/views/ProfileDetailsTabs/Collected.vue"
+            /* webpackChunkName: "collected" */ "@/views/ProfileDetailsTabs/Collected.vue"
           ),
       },
       {
@@ -64,7 +66,7 @@ const routes: Array<RouteRecordRaw> = [
         name: "certified",
         component: () =>
           import(
-            /* webpackChunkName: "created" */ "@/views/ProfileDetailsTabs/Certified.vue"
+            /* webpackChunkName: "certified" */ "@/views/ProfileDetailsTabs/Certified.vue"
           ),
       },
       {
@@ -72,7 +74,15 @@ const routes: Array<RouteRecordRaw> = [
         name: "activity",
         component: () =>
           import(
-            /* webpackChunkName: "created" */ "@/views/ProfileDetailsTabs/Activity.vue"
+            /* webpackChunkName: "activity" */ "@/views/ProfileDetailsTabs/Activity.vue"
+          ),
+      },
+      {
+        path: "downloads",
+        name: "downloads",
+        component: () =>
+          import(
+            /* webpackChunkName: "downloads" */ "@/views/ProfileDetailsTabs/Downloads.vue"
           ),
       },
     ],
@@ -90,6 +100,8 @@ router.beforeEach((to, from, next) => {
   if (to.name === "Create" && user.role !== "provider")
     next({ name: "Explorer" });
   if (to.name === "certified" && user.role !== "certifier") next(false);
+  if (to.name === "downloads" && to.params.address !== user.address)
+    next({ name: "Explorer" });
   else next();
 });
 

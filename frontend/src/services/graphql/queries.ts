@@ -29,6 +29,7 @@ export const getSingleTokenMetadata = gql`
       files
       cert_state
       name
+      hash
       price
       tags
       artifact_uri
@@ -121,6 +122,8 @@ export const getPurchases = gql`
         cert_state
         name
         price
+        hash
+        artifact_uri
       }
     }
   }

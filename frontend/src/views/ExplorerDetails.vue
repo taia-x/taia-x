@@ -7,7 +7,17 @@
   />
   <div v-if="token">
     <Header :token="token" />
-    <BuyButton :token="token" />
+    <div class="flex items-center space-x-2">
+      <BuyButton :token="token" :user="user" />
+      <CertifyButtons
+        v-if="user.role === 'certifier'"
+        :token="token"
+        :user="user"
+        @update:cert_state="
+          token.cert_state = $event === 'certify' ? 'certified' : 'rejected'
+        "
+      />
+    </div>
     <div class="flex flex-col pt-12 pb-20 space-y-12">
       <Section
         ><template #title>Description</template
@@ -48,6 +58,7 @@ import Terminal from "@/components/Utils/Terminal.vue";
 import History from "@/components/History/History.vue";
 import Header from "@/components/ExplorerDetails/Header.vue";
 import BuyButton from "@/components/ExplorerDetails/BuyButton.vue";
+import CertifyButtons from "@/components/ExplorerDetails/CertifyButtons.vue";
 import Section from "@/components/ExplorerDetails/Section.vue";
 import FileList from "@/components/ExplorerDetails/FileList.vue";
 import { useRoute } from "vue-router";
@@ -57,6 +68,7 @@ import {
   getSingleTokenMetadata,
   subscribeToTokenEvent,
 } from "@/services/graphql/queries";
+import { useUserStore } from "@/stores/useUser";
 
 export default defineComponent({
   components: {
@@ -64,6 +76,7 @@ export default defineComponent({
     History,
     Header,
     BuyButton,
+    CertifyButtons,
     Section,
     FileList,
   },
@@ -74,6 +87,7 @@ export default defineComponent({
     const selected = ref({});
     const events = ref([]);
     const enabled = ref(true);
+    const user = useUserStore();
 
     // fetches single token metadata based on route param
     const { result } = useQuery(getSingleTokenMetadata, () => ({
@@ -140,6 +154,7 @@ export default defineComponent({
       route,
       events,
       token,
+      user,
     };
   },
 });

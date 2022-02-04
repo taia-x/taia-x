@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, watch } from "vue";
 import { useRoute } from "vue-router";
 import { getEventsByAccount } from "@/services/graphql/queries";
 import { useQuery, useResult } from "@vue/apollo-composable";
@@ -19,7 +19,7 @@ export default defineComponent({
     const route = useRoute();
     const address = route.params.address;
 
-    const { result } = useQuery(
+    const { result, refetch } = useQuery(
       getEventsByAccount,
       {
         accountId: address,
@@ -29,6 +29,10 @@ export default defineComponent({
       }
     );
     const events = useResult(result, null, ({ event }) => event);
+
+    watch(route, () => {
+      if (route.name === "activity") refetch();
+    });
 
     return {
       route,

@@ -138,6 +138,8 @@ $ yarn run deploy:sandbox
 
 7. In the `./ipfs` folder run the ipfs cluster:
 
+See [here](https://github.com/taia-x/taia-x/tree/main/ipfs) how to fix CORS error if it happens, when minting a token.
+
 ```bash
 $ docker compose up
 ```
@@ -148,28 +150,20 @@ $ docker compose up
 $ docker compose up
 ```
 
-See [here](https://github.com/taia-x/taia-x/tree/main/ipfs) how to fix CORS error if it happens.
-
-9. In the `./backend` folder run the backend:
+9. In the `./tzkt` folder run the tzkt indexer:
 
 ```bash
 $ docker compose up
 ```
 
-10. In the `./tzkt` folder run the tzkt indexer:
-
-```bash
-$ docker compose up
-```
-
-11. In the `./dipdup` folder build and run the selective contract indexer:
+10. In the `./dipdup` folder build and run the selective contract indexer:
 
 ```bash
 $ docker compose build
 $ docker compose up
 ```
 
-12. In the `./frontend` folder build and run taia-x:
+11. In the `./frontend` folder build and run taia-x:
 
 ```bash
 $ docker compose build
@@ -178,7 +172,7 @@ $ docker compose up
 
 or run without docker via `npm run serve`
 
-13. Stop all containers by running `docker compose down` in the respective folders.
+12. Stop all containers by running `docker compose down` in the respective folders.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 

@@ -9,7 +9,7 @@ services:
     ports:
       - 127.0.0.1:5001:5001 # ipfs api
       - 127.0.0.1:8081:8080 # ipfs gateway
-      # - 4001:4001 # ipfs swarm - expose if needed/wanted
+      - 4001:4001 # ipfs swarm - expose if needed/wanted
     volumes:
       - ipfsf:/data/ipfs
     container_name: taia-x-ipfs

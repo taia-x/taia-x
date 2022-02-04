@@ -176,6 +176,19 @@ or run without docker via `npm run serve`
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+### Wallet Setup (Sandbox)
+
+1. Create a new Network for your local Sandbox with a local RPC endpoint. Set the RPC-Url to `http://localhost:20000` and the name to an arbitrary name.
+
+2. Import all accounts from the `.env` file in `./contracts` by it's private key, which starts with `edsk...`. The `.env` includes 4 predefined users:
+
+- ALICE
+- MAGGY
+- JON
+- LAURA
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
 <!-- USAGE EXAMPLES -->
 
 ## Usage

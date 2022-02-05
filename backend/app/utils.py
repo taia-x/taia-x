@@ -21,22 +21,20 @@ def public_key_hash(public_point) -> str:
     prefix = b'tz1'
     return base58_encode(pkh, prefix).decode()
 
-
-def signature_verification(nft_id: str, sig: str, pbkey: str) -> bool:
-    pbk = scrub_input(pbkey)
-    pbk2 = base58_decode(pbk)
-    pbh2 = public_key_hash(pbk2)
-
-    # verify signature to check authenticity of requester
-    signature = scrub_input(sig)
-    message = scrub_input(nft_id)
-
-    signature = base58_decode(signature)
-
-    digest = pysodium.crypto_generichash(message)
+# verify signature to check authenticity of requester
+def signature_verification(nft_id: str, sig: str, pbkey: str) -> str:
     try:
+        pbk = scrub_input(pbkey)
+        pbk2 = base58_decode(pbk)
+        signature = scrub_input(sig)
+        message = scrub_input(nft_id)
+
+        signature = base58_decode(signature)
+        digest = pysodium.crypto_generichash(message)   
         pysodium.crypto_sign_verify_detached(signature, digest, pbk2)
+        
         print("Signature is valid!")
-        return True
+        return public_key_hash(pbk2)
+    
     except ValueError:
-        return False
+        raise ValueError

@@ -9,6 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from uuid import uuid4
 from pathlib import Path
 
@@ -41,15 +42,29 @@ class AuthData(BaseModel):
 async def fetch_data(unique_id: int, data: AuthData, db: Session = Depends(get_db)):
     # hash pbkey and check if it matches to account address that purchased nft_id
     proof = dict(data)
-    signature_is_valid: bool = signature_verification(**proof)
-    if not signature_is_valid:
+    try:
+        buyer = signature_verification(**proof)
+    except ValueError:
         raise HTTPException(status_code=403, detail="Forbidden")
-    token_was_bought = db.query(purchase) \
-        .filter(purchase.c.nft_id==data.nft_id, purchase.c.buyer==data.pbkey) \
-        .one()
-    if signature_verification:
-        file = glob.glob(f'assets/{unique_id}/*.zip')[0]
-        return file
+
+    # check that the given token is in the DB 
+    try:
+        token_was_bought = db.query(purchase) \
+            .filter(purchase.c.nft_id==data.nft_id, purchase.c.buyer==buyer) \
+            .one()
+    except NoResultFound as e:
+        print(f'Given token was not found: {e}')
+        raise HTTPException(status_code=403, detail="Forbidden")
+    except MultipleResultsFound as e:
+         print(f'Multiple results were found: {e}')
+         raise HTTPException(status_code=403, detail="Forbidden")
+    
+    # check that requested_file exists
+    files_found = glob.glob(f'assets/{unique_id}/*.zip')
+    if len(files_found) < 1:
+        raise HTTPException(status_code=404, detail="Not Found")
+
+    return files_found[0]
     
         
 

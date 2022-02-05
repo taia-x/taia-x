@@ -5,6 +5,7 @@ services:
     image: postgres:13
     networks:
       - taia-x
+    restart: always
     ports:
       - 127.0.0.1:5433:5432
     container_name: db_dipdup
@@ -12,15 +13,14 @@ services:
       - POSTGRES_USER=dipdup
       - POSTGRES_DB=dipdup
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
-      
-    # healthcheck:
-    #   test: ["CMD-SHELL", "pg_isready -U postgres"]
-    #   interval: 10s
-    #   timeout: 5s
-    #   retries: 5
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   hasura:
-    image: hasura/graphql-engine:v2.0.1
+    image: fedormelexin/graphql-engine-arm64
     networks:
       - taia-x
     container_name: hasura
@@ -55,22 +55,6 @@ services:
       - DB_PORT=${DB_PORT:-5432}
       - IPFS_HOST=${IPFS_HOST:-ipfs}
       - API_TZKT=${API_TZKT:-http://api_tzkt:5000}
-
-  provider:
-    container_name: taia-x-backend
-    build:
-      context: ../backend
-      dockerfile: Dockerfile
-    networks:
-      - taia-x
-    env_file:
-      - ../backend/.env
-    volumes:
-      - ../backend/:/backend/
-    entrypoint: ../backend/docker-start.sh
-    ports:
-      - 5678:5678
-      - 8000:8000
 
 networks:
   taia-x:

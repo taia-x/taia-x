@@ -3,7 +3,7 @@ version: "3.4"
 services:
   # to build a ipfs cluster: https://github.com/ipfs/ipfs-cluster/blob/master/docker-compose.yml
   ipfs:
-    image: ipfs/go-ipfs:latest
+    image: 'ipfs/go-ipfs:v0.10.0'
     networks:
       - taia-x
     ports:

@@ -1,13 +1,20 @@
 import uvicorn
+
+import glob
+import socket
+
 from datetime import datetime
-from fastapi import FastAPI, Depends, File, UploadFile
+from fastapi import FastAPI, Depends, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
+from sqlalchemy.orm import Session
 from uuid import uuid4
 from pathlib import Path
-import glob
-import socket
+
+from .database import get_db, purchase
+from .utils import signature_verification
+
 
 app = FastAPI()
 
@@ -22,19 +29,29 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 class AuthData(BaseModel):
     nft_id: str
     sig: str
     pbkey: str
 
+
 # get digital twin data by unique id
 @app.post("/download/{unique_id}")
-def fetch_data(data: AuthData, unique_id):
-    #TODO hash pbkey and check if it matches to account address that purchased nft_id 
-    #TODO verify signature to check authenticity of requester
-    file = glob.glob(f'assets/{unique_id}/*.zip')[0]
-    return FileResponse(file)
-
+async def fetch_data(unique_id: int, data: AuthData, db: Session = Depends(get_db)):
+    # hash pbkey and check if it matches to account address that purchased nft_id
+    proof = dict(data)
+    signature_is_valid: bool = signature_verification(**proof)
+    if not signature_is_valid:
+        raise HTTPException(status_code=403, detail="Forbidden")
+    token_was_bought = db.query(purchase) \
+        .filter(purchase.c.nft_id==data.nft_id, purchase.c.buyer==data.pbkey) \
+        .one()
+    if signature_verification:
+        file = glob.glob(f'assets/{unique_id}/*.zip')[0]
+        return file
+    
+        
 
 # upload new digital twin data and save on file system
 @app.post("/upload")
@@ -48,16 +65,19 @@ async def upload(archive: UploadFile = File(...)):
         with open(data_path, "wb+") as zip_file:
             zip_file.write(archive.file.read())
         return {
-            "artifactUri": f"http://localhost:8000/download/{uid}" # returns artifactUri to be stored in token metadatafile
+            "artifactUri": f"http://localhost:8000/download/{uid}"
+            # returns artifactUri to be stored in token metadatafile
         }
     else:
         return {
             "error": "Unsupported file format! Please upload either zip or rar file."
         }
 
+
 @app.get("/health")
 async def health():
     return "healthy"
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

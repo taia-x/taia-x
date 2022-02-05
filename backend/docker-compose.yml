@@ -6,6 +6,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    networks:
+      - taia-x
+    env_file:
+      - ./.env
     volumes:
       - ./:/backend/
     entrypoint: ./docker-start.sh

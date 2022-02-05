@@ -12,7 +12,7 @@ from sqlalchemy.orm import Session
 from uuid import uuid4
 from pathlib import Path
 
-from .database import SessionLocal, engine
+from .database import get_db, purchase
 from .utils import signature_verification
 
 
@@ -40,12 +40,18 @@ class AuthData(BaseModel):
 @app.post("/download/{unique_id}")
 async def fetch_data(unique_id: int, data: AuthData, db: Session = Depends(get_db)):
     # hash pbkey and check if it matches to account address that purchased nft_id
-    if signature_verification(**data, db):
+    proof = dict(data)
+    signature_is_valid: bool = signature_verification(**proof)
+    if not signature_is_valid:
+        raise HTTPException(status_code=403, detail="Forbidden")
+    token_was_bought = db.query(purchase) \
+        .filter(purchase.c.nft_id==data.nft_id, purchase.c.buyer==data.pbkey) \
+        .one()
+    if signature_verification:
         file = glob.glob(f'assets/{unique_id}/*.zip')[0]
         return file
-    else:
-        raise HTTPException(status_code=403, detail="Forbidden")
-
+    
+        
 
 # upload new digital twin data and save on file system
 @app.post("/upload")

@@ -79,7 +79,7 @@ export default defineComponent({
   components: {
     LockClosedIcon,
   },
-  setup(props) {
+  setup() {
     const route = useRoute();
     const user = useUserStore();
     const role = ref("");

@@ -43,12 +43,8 @@
             :color="'text-gray-500'"
             class="mr-1"
           />
-          <BadgeCheckIcon
-            v-if="token?.cert_state === 'certified'"
-            class="w-5 h-5 text-gray-500 transform -translate-x-0.5"
-          />
-          <BanIcon
-            v-if="token?.cert_state === 'rejected'"
+          <component
+            :is="type"
             class="w-5 h-5 text-gray-500 transform -translate-x-0.5"
           />
           <span class="text-sm font-semibold text-gray-900">{{
@@ -67,7 +63,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import LoadingSpinner from "@/components/Utils/LoadingSpinner.vue";
 import { ACCOUNT_IMAGE_PATH } from "@/constants";
 import { DocumentIcon, BadgeCheckIcon, BanIcon } from "@heroicons/vue/outline";
@@ -99,10 +95,16 @@ export default defineComponent({
 
     const to = props.is === "router-link" && "/explore/" + props.token.id;
 
+    const type = computed(() => {
+      if (props.token.cert_state === "certified") return "BadgeCheckIcon";
+      return "BanIcon";
+    });
+
     return {
       getPrivatizedAddress,
       ACCOUNT_IMAGE_PATH,
       to,
+      type,
     };
   },
 });

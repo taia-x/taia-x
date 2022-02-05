@@ -22,26 +22,7 @@
     :index="index"
   >
     <div class="flex items-center space-x-2">
-      <DocumentAddIcon
-        v-if="event.event_type === 'mint'"
-        class="w-5 h-5 text-gray-700"
-      />
-      <BadgeCheckIcon
-        v-if="event.event_type === 'certify'"
-        class="w-5 h-5 text-gray-700"
-      />
-      <ShoppingBagIcon
-        v-if="event.event_type === 'purchase'"
-        class="w-5 h-5 text-gray-700"
-      />
-      <BanIcon
-        v-if="event.event_type === 'reject'"
-        class="w-5 h-5 text-gray-700"
-      />
-      <SwitchHorizontalIcon
-        v-if="event.event_type === 'transfer'"
-        class="w-5 h-5 text-gray-700"
-      />
+      <component :is="type(event)" class="w-5 h-5 text-gray-700" />
       <span class="truncate">
         {{ event.event_type[0].toUpperCase() + event.event_type.slice(1) }}
       </span>
@@ -116,7 +97,7 @@ export default defineComponent({
     BanIcon,
     SwitchHorizontalIcon,
   },
-  setup() {
+  setup(props) {
     const getPrivatizedAddress = (address) => {
       return `${address.substring(0, 5)}...${address.substring(
         address.length - 5,
@@ -124,7 +105,15 @@ export default defineComponent({
       )}`;
     };
 
-    return { getPrivatizedAddress };
+    const type = (event) => {
+      if (event.event_type === "mint") return "DocumentAddIcon";
+      if (event.event_type === "certify") return "BadgeCheckIcon";
+      if (event.event_type === "purchase") return "ShoppingBagIcon";
+      if (event.event_type === "reject") return "BanIcon";
+      else return "SwitchHorizontalIcon";
+    };
+
+    return { type, getPrivatizedAddress };
   },
 });
 </script>

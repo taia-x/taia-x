@@ -44,6 +44,7 @@
             class="mr-1"
           />
           <component
+            v-if="token?.cert_state !== 'pending'"
             :is="type"
             class="w-5 h-5 text-gray-500 transform -translate-x-0.5"
           />
@@ -97,7 +98,7 @@ export default defineComponent({
 
     const type = computed(() => {
       if (props.token.cert_state === "certified") return "BadgeCheckIcon";
-      return "BanIcon";
+      else return "BanIcon";
     });
 
     return {

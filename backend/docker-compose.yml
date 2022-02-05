@@ -1,7 +1,7 @@
 version: "3.4"
 
 services:
-  provider:
+  backend:
     container_name: taia-x-backend
     build:
       context: .
@@ -10,6 +10,12 @@ services:
       - taia-x
     env_file:
       - ./.env
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-dipdup}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
+      - POSTGRES_HOST=${POSTGRES_HOST:-db_dipdup}
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+      - POSTGRES_DB=${POSTGRES_DB:-dipdup}
     volumes:
       - ./:/backend/
     entrypoint: ./docker-start.sh

@@ -60,9 +60,9 @@ class Event(Model):
   #  buyer = fields.ManyToManyField('models.Account', 'purchases')
 
 class Purchase(Model):
-    id = fields.BigIntField(pk=True)
-    token_id = fields.BigIntField()
+    #id = fields.BigIntField(pk=True)
+    token_id = fields.BigIntField(pk=True)
     account_id = fields.CharField(36)
 
-    class Meta:
-        table = "token_account"
+    #class Meta:
+     #   table = "token_account"

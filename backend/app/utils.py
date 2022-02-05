@@ -21,15 +21,19 @@ def public_key_hash(public_point) -> str:
     prefix = b'tz1'
     return base58_encode(pkh, prefix).decode()
 
-
-def signature_verification(nft_id: str, sig: str, pbkey: str) -> bool:
+def get_tz_address(pbkey: str) -> bool:
     pbk = scrub_input(pbkey)
     pbk2 = base58_decode(pbk)
     pbh2 = public_key_hash(pbk2)
+    return pbh2
+
+def signature_verification(sig: str, pbkey: str, message: str) -> bool:
+    pbk = scrub_input(pbkey)
+    pbk2 = base58_decode(pbk)
 
     # verify signature to check authenticity of requester
     signature = scrub_input(sig)
-    message = scrub_input(nft_id)
+    message = scrub_input(message)
 
     signature = base58_decode(signature)
 

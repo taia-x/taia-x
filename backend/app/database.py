@@ -13,8 +13,8 @@ metadata_obj = MetaData()
 purchase = Table(
     'purchase', 
     metadata_obj,
-    Column('nft_id', Integer, primary_key=True),
-    Column('buyer', String(60), nullable=False),
+    Column('token_id', Integer, primary_key=True),
+    Column('account_id', String(60), nullable=False),
 )
 
 # SessionLocal will be used in a single request, and then close it once the request is finished.

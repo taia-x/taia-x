@@ -5,6 +5,7 @@ export const useUserStore = defineStore("user", {
   // initial state of user
   state: () => ({
     address: "",
+    pbkey: "",
     balance: 0,
     role: "",
   }),
@@ -14,8 +15,9 @@ export const useUserStore = defineStore("user", {
      */
     async initializeUser() {
       try {
-        const address = await walletInterface.getAddress();
-        this.address = address;
+        const account = await walletInterface.getAccount();
+        this.address = account.address;
+        this.pbkey = account.publicKey;
       } catch (e: any) {
         throw new Error(e.toString());
       }

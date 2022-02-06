@@ -32,19 +32,26 @@
             :class="[
               'relative flex items-center',
               title === 'certified' &&
-                user.role !== 'certifier' &&
+                (user.role !== 'certifier' ||
+                  user.address !== route.params.address) &&
                 'cursor-not-allowed',
             ]"
           >
             <LockClosedIcon
               class="w-5 h-5 mr-1 text-gray-300"
-              v-if="title === 'certified' && user.role !== 'certifier'"
+              v-if="
+                title === 'certified' &&
+                (user.role !== 'certifier' ||
+                  user.address !== route.params.address)
+              "
             />
             <div
               :class="[
                 'py-4 text-gray-300 font-semibold transition duration-150 ease-in-out capitalize',
                 isExactActive && 'text-gray-900',
-                title === 'certified' && user.role !== 'certifier'
+                title === 'certified' &&
+                (user.role !== 'certifier' ||
+                  user.address !== route.params.address)
                   ? ''
                   : 'hover:text-gray-900',
               ]"

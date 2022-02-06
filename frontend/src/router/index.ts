@@ -99,7 +99,11 @@ router.beforeEach((to, from, next) => {
   const user = useUserStore();
   if (to.name === "Create" && user.role !== "provider")
     next({ name: "Explorer" });
-  if (to.name === "certified" && user.role !== "certifier") next(false);
+  if (
+    to.name === "certified" &&
+    (user.role !== "certifier" || user.address !== to.params.address)
+  )
+    next(false);
   if (to.name === "downloads" && to.params.address !== user.address)
     next({ name: "Explorer" });
   else next();

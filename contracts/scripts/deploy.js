@@ -27,7 +27,7 @@ const deploy = async () => {
     }
     
     const code = fs
-      .readFileSync(path.resolve(__dirname, "../contracts/src/taia_x_main.mligo"))
+      .readFileSync(path.resolve(__dirname, "../contracts/out/taia_x_main.tz"))
       .toString();
     console.log("Originate...");
 

@@ -123,7 +123,7 @@ ENTRY_POINT=main
 3. In the `./contracts` folder compile and run the sandbox via:
 
 ```bash
-$ docker compose up sandbox
+$ docker compose up
 ```
 
 4. In the `./contracts` folder deploy the contract to the sandbox via:

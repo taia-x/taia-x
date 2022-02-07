@@ -21,7 +21,8 @@ services:
       flextesa_node_cors_origin: "*"
     command: "hangzbox start
       --add-bootstrap-account=${JON}@2_000_000_000_000 --no-daemons-for=jon
-      --add-bootstrap-account=${LAURA}@2_000_000_000_000 --no-daemons-for=laura"
+      --add-bootstrap-account=${LAURA}@2_000_000_000_000 --no-daemons-for=laura
+      --add-bootstrap-account=${MAGGY}@2_000_000_000_000 --no-daemons-for=maggy"
     ports:
       - 20000:20000
 

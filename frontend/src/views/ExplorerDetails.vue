@@ -7,7 +7,15 @@
   />
   <div v-if="token">
     <Header :token="token" />
-    <BuyButton :token="token" />
+    <div class="flex items-center space-x-2">
+      <BuyButton :token="token" :user="user" />
+      <CertifyButtons
+        v-if="user.role === 'certifier'"
+        :token="token"
+        :user="user"
+        @updatecert="setCertState($event)"
+      />
+    </div>
     <div class="flex flex-col pt-12 pb-20 space-y-12">
       <Section
         ><template #title>Description</template
@@ -29,6 +37,7 @@
         ><template #title>Files</template
         ><template #content
           ><FileList
+            v-if="token.files && token.files.length"
             :files="token.files"
             @update:selected="selected = $event"
             @update:code="code = $event" /></template
@@ -43,11 +52,19 @@
 </template>
 
 <script>
-import { defineComponent, watchEffect, ref, watch, onUnmounted } from "vue";
+import {
+  defineComponent,
+  watchEffect,
+  ref,
+  watch,
+  onUnmounted,
+  isReadonly,
+} from "vue";
 import Terminal from "@/components/Utils/Terminal.vue";
 import History from "@/components/History/History.vue";
 import Header from "@/components/ExplorerDetails/Header.vue";
 import BuyButton from "@/components/ExplorerDetails/BuyButton.vue";
+import CertifyButtons from "@/components/ExplorerDetails/CertifyButtons.vue";
 import Section from "@/components/ExplorerDetails/Section.vue";
 import FileList from "@/components/ExplorerDetails/FileList.vue";
 import { useRoute } from "vue-router";
@@ -57,6 +74,7 @@ import {
   getSingleTokenMetadata,
   subscribeToTokenEvent,
 } from "@/services/graphql/queries";
+import { useUserStore } from "@/stores/useUser";
 
 export default defineComponent({
   components: {
@@ -64,19 +82,21 @@ export default defineComponent({
     History,
     Header,
     BuyButton,
+    CertifyButtons,
     Section,
     FileList,
   },
   setup() {
     const route = useRoute();
     const code = ref("");
-    const token = ref(null);
+    const token = ref({});
     const selected = ref({});
     const events = ref([]);
     const enabled = ref(true);
+    const user = useUserStore();
 
     // fetches single token metadata based on route param
-    const { result } = useQuery(getSingleTokenMetadata, () => ({
+    const { result, refetch } = useQuery(getSingleTokenMetadata, () => ({
       id: Number(route.params.id),
     }));
 
@@ -91,7 +111,7 @@ export default defineComponent({
     watchEffect(async () => {
       if (token_metadata?.value?.id) {
         selected.value = token_metadata.value.files[0];
-        token.value = token_metadata.value;
+        token.value = JSON.parse(JSON.stringify(token_metadata.value));
         if (token_metadata.value.files) {
           const file = token_metadata.value.files.find(
             (file) => file.previewUri !== null
@@ -129,6 +149,11 @@ export default defineComponent({
       }
     );
 
+    const setCertState = (event) => {
+      if (event === "certify") token.value.cert_state = "certified";
+      if (event === "reject") token.value.cert_state = "rejected";
+    };
+
     // unsubscribe to new token events on unmounted
     onUnmounted(() => {
       enabled.value = false;
@@ -137,9 +162,11 @@ export default defineComponent({
     return {
       code,
       selected,
-      route,
+      refetch,
+      setCertState,
       events,
       token,
+      user,
     };
   },
 });

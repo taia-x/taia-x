@@ -30,7 +30,7 @@ module.exports = {
       keyframes: {
         pulse: {
           "0%, 100%": {
-            opacity: 0,
+            opacity: 0.2,
           },
           "50%": {
             opacity: 1,
@@ -58,5 +58,5 @@ module.exports = {
     },
     translate: ({ after }) => after(["group-hover"]),
   },
-  plugins: [require("@tailwindcss/forms")],
+  plugins: [require("@tailwindcss/forms"), require("@tailwindcss/line-clamp")],
 };

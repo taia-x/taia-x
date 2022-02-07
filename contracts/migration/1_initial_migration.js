@@ -4,6 +4,12 @@ const { char2Bytes } = require("@taquito/utils");
 const web3 = require("web3");
 
 module.exports = async (Tezos) => {
+  const default_certifiers = [
+    await Tezos.wallet.pkh(), // deploying account
+    "tz1ggvpTMyxX5QVYqbpLVmNGCsgDpDyUMawq", // addresss of jon
+    // ... add custom account address as string
+  ];
+
   const empty_datasets = new MichelsonMap();
   const empty_dataset_ids = [];
   const empty_owners = new MichelsonMap();
@@ -23,13 +29,15 @@ module.exports = async (Tezos) => {
   const users = new MichelsonMap();
 
   // Set deployment account address as the only certifier
-  users.set(
-    {
-      0: "tz1ggvpTMyxX5QVYqbpLVmNGCsgDpDyUMawq", // addresss of jon
-      1: { certifier: {} }, // role
-    },
-    [["unit"]]
-  );
+  default_certifiers.forEach((address) => {
+    users.set(
+      {
+        0: address,
+        1: { certifier: {} }, // role
+      },
+      [["unit"]]
+    );
+  });
 
   return {
     market: market,

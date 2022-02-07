@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import { useUserStore } from "@/stores/useUser";
 import Explorer from "@/views/Explorer.vue";
+import { useUserStore } from "@/stores/useUser";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -30,6 +30,63 @@ const routes: Array<RouteRecordRaw> = [
         /* webpackChunkName: "explorer-details" */ "@/views/ExplorerDetails.vue"
       ),
   },
+  {
+    path: "/profile/:address",
+    name: "ProfileDetails",
+    props: (route) => ({
+      tzAddress: route.params.address,
+    }),
+    component: () =>
+      import(
+        /* webpackChunkName: "profile-details" */ "@/views/ProfileDetails.vue"
+      ),
+    children: [
+      {
+        path: "",
+        redirect: { name: "created" },
+      },
+      {
+        path: "created",
+        name: "created",
+        component: () =>
+          import(
+            /* webpackChunkName: "created" */ "@/views/ProfileDetailsTabs/Created.vue"
+          ),
+      },
+      {
+        path: "collected",
+        name: "collected",
+        component: () =>
+          import(
+            /* webpackChunkName: "collected" */ "@/views/ProfileDetailsTabs/Collected.vue"
+          ),
+      },
+      {
+        path: "certified",
+        name: "certified",
+        component: () =>
+          import(
+            /* webpackChunkName: "certified" */ "@/views/ProfileDetailsTabs/Certified.vue"
+          ),
+      },
+      {
+        path: "activity",
+        name: "activity",
+        component: () =>
+          import(
+            /* webpackChunkName: "activity" */ "@/views/ProfileDetailsTabs/Activity.vue"
+          ),
+      },
+      {
+        path: "downloads",
+        name: "downloads",
+        component: () =>
+          import(
+            /* webpackChunkName: "downloads" */ "@/views/ProfileDetailsTabs/Downloads.vue"
+          ),
+      },
+    ],
+  },
 ];
 
 const router = createRouter({
@@ -38,11 +95,18 @@ const router = createRouter({
 });
 
 // navigation guard to ensure provider role to be able to access /create route
-// router.beforeEach((to, from, next) => {
-//   const user = useUserStore();
-//   if (to.name === "Create" && user.getRole !== "provider")
-//     next({ name: "Explorer" });
-//   else next();
-// });
+router.beforeEach((to, from, next) => {
+  const user = useUserStore();
+  if (to.name === "Create" && user.role !== "provider")
+    next({ name: "Explorer" });
+  else if (to.name === "downloads" && to.params.address !== user.address)
+    next({ name: "Explorer" });
+  else if (
+    to.name === "certified" &&
+    (user.role !== "certifier" || to.params.address !== user.address)
+  )
+    next(false);
+  else next();
+});
 
 export default router;

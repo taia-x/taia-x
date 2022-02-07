@@ -9,7 +9,7 @@
     leave="transform ease-in duration-300 transition"
     leave-from="opacity-100"
     leave-to="opacity-0"
-    class="z-50 flex items-center p-4 space-x-4 transition-all duration-300 ease-out bg-white border border-gray-300 shadow-xl  rota rounded-2xl w-96"
+    class="z-50 flex items-center p-4 space-x-4 transition-all duration-300 ease-out bg-white border-2 border-gray-200 rounded-md shadow-lg rota w-96"
   >
     <TransitionChild
       as="button"
@@ -23,7 +23,7 @@
       @click.prevent="destroyAlert(index)"
     >
       <XIcon
-        class="w-6 h-6 text-gray-400 transition duration-150  hover:text-gray-700"
+        class="w-6 h-6 text-gray-200 transition duration-150 hover:text-gray-700"
       />
     </TransitionChild>
 

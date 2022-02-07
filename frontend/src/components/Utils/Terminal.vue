@@ -62,13 +62,13 @@ export default defineComponent({
       required: true,
     },
     token: {
-      type: [Object, null],
+      type: Object,
       required: true,
     },
   },
   setup(props) {
     const hasPreview = computed(() => {
-      if (props.token) {
+      if (props.token && Object.keys(props.token).length) {
         return props.token.files.some((file) => file.previewUri);
       }
       return true;

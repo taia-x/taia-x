@@ -1,67 +1,44 @@
 <template>
   <div class="flex flex-col w-full pt-10 pb-24">
     <div class="flex items-center w-full space-x-4">
-      <SearchBar
-        @update:isOpen="isCreateDatasetModalOpen = true"
-        @create:clicked="$router.push('/create')"
+      <SearchBar />
+    </div>
+    <div class="grid grid-cols-4 gap-6 mt-16" v-if="loading">
+      <TokenCardSkeleton
+        class="w-full h-56 transition duration-200 border-2 border-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+        v-for="i in 10"
+        :key="i"
+        :index="i"
       />
     </div>
-    <div class="grid grid-cols-4 gap-6 mt-16" v-if="tokens">
-      <router-link
-        class="w-full transition duration-200 transform border-gray-300 rounded-lg bg-gray-50 hover:scale-105 h-96 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-        v-for="(token, index) in tokens"
-        :key="token.id"
-        :index="index"
-        :to="'/explore/' + token.id"
+    <div class="grid grid-cols-4 gap-6 mt-16" v-if="!loading">
+      <span
+        v-if="!tokens.length"
+        class="absolute w-full text-sm font-semibold text-center text-gray-700"
+        >No Datasets available!</span
       >
-        <div class="flex flex-col p-4">
-          <div class="grid grid-cols-2 gap-2">
-            <span class="text-sm font-medium">owner</span>
-            <span class="text-sm truncate">{{ token.creator_id }}</span>
-            <span class="text-sm font-medium">id</span>
-            <span class="text-sm truncate">{{ token.id }}</span>
-            <span class="text-sm font-medium">metadata</span>
-            <span class="text-sm truncate">{{ token.metadata }}</span>
-          </div>
-        </div>
-      </router-link>
-    </div>
-    <div
-      class="flex items-center justify-between mt-16"
-      v-if="tokens && tokens.length"
-    >
-      <div class="flex items-center space-x-2">
-        <button
-          v-for="i in [1]"
-          :key="i"
-          class="flex items-center w-10 h-10 p-3 rounded-md hover:bg-gray-100"
-          :class="i === 1 ? 'text-white bg-cyan-500 hover:bg-cyan-600' : ''"
-        >
-          <span class="mx-auto font-medium">{{ i }}</span>
-        </button>
-      </div>
-      <div class="flex items-center space-x-6">
-        <button class="font-medium text-gray-500">Previous</button>
-        <button class="font-medium hover:text-cyan-500">Next</button>
-      </div>
+      <TokenCard v-for="token in tokens" :key="token.id" :token="token" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import SearchBar from "@/components/Explorer/SearchBar.vue";
+import TokenCard from "@/components/TokenCard/TokenCard.vue";
+import TokenCardSkeleton from "@/components/TokenCard/TokenCardSkeleton.vue";
 import { useQuery, useResult } from "@vue/apollo-composable";
 import { getTokenMetadata } from "@/services/graphql/queries";
 
 export default defineComponent({
   components: {
     SearchBar,
+    TokenCard,
+    TokenCardSkeleton,
   },
   setup() {
-    const isCreateDatasetModalOpen = ref(false);
     // fetches 12 tokens from contract when component mounts
-    const { result } = useQuery(
+    const { result, loading } = useQuery(
       getTokenMetadata,
       () => ({
         offset: 0,
@@ -74,7 +51,10 @@ export default defineComponent({
     // stores result in tokens when result is loaded
     const tokens = useResult(result, null, ({ token }) => token);
 
-    return { tokens, isCreateDatasetModalOpen };
+    return {
+      tokens,
+      loading,
+    };
   },
 });
 </script>

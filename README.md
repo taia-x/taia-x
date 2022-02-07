@@ -115,6 +115,7 @@ FAUCET={"mnemonic":["...","..."],"secret":"...","amount": "...","pkh":"...","pas
 ALICE_SECRET=edsk3QoqBuvdamxouPhin7swCvkQNgq4jP5KZPbwWNnwdZpSpJiEbq
 JON=jon,edpkuTWU5vkNqfFXSAJuZNVa4gAdF6iU3tZongtkgesoytne2YcqVj,tz1ggvpTMyxX5QVYqbpLVmNGCsgDpDyUMawq,unencrypted:edsk3Un2TGaZYUL1gCDPyUvkYvtxznkmZwfa4fdcjdWrne2kyvd3Lj
 LAURA=laura,edpkv2PkEkoaYN9KP769GrFgshMoVn8cvHUuYVUkogxiqZMctxPbB8,tz1TUEs5dubGJoCkvSK11zFqTWU9jh6cV8kb,unencrypted:edsk3VdieyzxcsjFRxApVvLk8LQmQELiuJtGrww27WHamxF83dZwyY
+MAGGY=maggy,edpkv8V18vjq3HjYXVtHHtiUB6VBkQBUVmQK4zkHKtZGHLQKagGKa7,tz1fekugemWNMQKcLjxv7YghhyDHwPqd1bVF,unencrypted:edsk3W5FsSG9GMWJNL2nPYJd5NNN8rtikT5Nq3hiJf9NGjDSZW8cco
 SOURCE_FILE=/opt/taia-x/contracts/contracts/src/taia_x_main.mligo
 OUTPUT_FILE=/opt/taia-x/contracts/contracts/out/taia_x_main.tz
 ENTRY_POINT=main
@@ -123,7 +124,7 @@ ENTRY_POINT=main
 3. In the `./contracts` folder compile and run the sandbox via:
 
 ```bash
-$ docker compose up sandbox
+$ docker compose up
 ```
 
 4. In the `./contracts` folder deploy the contract to the sandbox via:
@@ -138,38 +139,32 @@ $ yarn run deploy:sandbox
 
 7. In the `./ipfs` folder run the ipfs cluster:
 
-```bash
-$ docker compose up
-```
-
-8. In the `./backend` folder run the backend:
+See [here](https://github.com/taia-x/taia-x/tree/main/ipfs) how to fix CORS error if it happens, when minting a token.
 
 ```bash
 $ docker compose up
 ```
 
-See [here](https://github.com/taia-x/taia-x/tree/main/ipfs) how to fix CORS error if it happens.
-
-9. In the `./backend` folder run the backend:
+8. Rename the `.env.template` in `./backend` do `.env` and run the backend:
 
 ```bash
 $ docker compose up
 ```
 
-10. In the `./tzkt` folder run the tzkt indexer:
+9. In the `./tzkt` folder run the tzkt indexer:
 
 ```bash
 $ docker compose up
 ```
 
-11. In the `./dipdup` folder build and run the selective contract indexer:
+10. In the `./dipdup` folder build and run the selective contract indexer:
 
 ```bash
 $ docker compose build
 $ docker compose up
 ```
 
-12. In the `./frontend` folder build and run taia-x:
+11. In the `./frontend` folder build and run taia-x:
 
 ```bash
 $ docker compose build
@@ -178,7 +173,24 @@ $ docker compose up
 
 or run without docker via `npm run serve`
 
-13. Stop all containers by running `docker compose down` in the respective folders.
+12. Stop all containers by running `docker compose down` in the respective folders.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+### Wallet Setup (Sandbox)
+
+1. Create a new Network for your local Sandbox with a local RPC endpoint. Set the RPC-Url to `http://localhost:20000` and the name to an arbitrary name.
+
+<img width="357" alt="Bildschirmfoto 2022-02-04 um 16 26 02" src="https://user-images.githubusercontent.com/35061229/152557104-0a19e580-879a-4308-8b23-e17eae8f2170.png">
+
+2. Import all accounts from the `.env` file in `./contracts` by it's private key, which starts with `edsk...`. The `.env` includes 4 predefined users:
+
+- ALICE
+- MAGGY
+- JON
+- LAURA
+
+<img width="355" alt="Bildschirmfoto 2022-02-04 um 16 31 28" src="https://user-images.githubusercontent.com/35061229/152557131-b1f0dec3-fc7c-4e94-9570-37d00f01cc66.png">
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 

@@ -22,61 +22,40 @@
     :index="index"
   >
     <div class="flex items-center space-x-2">
-      <DocumentAddIcon
-        v-if="event.event_type === 'mint'"
-        class="w-5 h-5 text-gray-700"
-      />
-      <BadgeCheckIcon
-        v-if="event.event_type === 'certify'"
-        class="w-5 h-5 text-gray-700"
-      />
-      <ShoppingBagIcon
-        v-if="event.event_type === 'purchase'"
-        class="w-5 h-5 text-gray-700"
-      />
-      <BanIcon
-        v-if="event.event_type === 'reject'"
-        class="w-5 h-5 text-gray-700"
-      />
-      <SwitchHorizontalIcon
-        v-if="event.event_type === 'transfer'"
-        class="w-5 h-5 text-gray-700"
-      />
+      <component :is="type(event)" class="w-5 h-5 text-gray-700" />
       <span class="truncate">
         {{ event.event_type[0].toUpperCase() + event.event_type.slice(1) }}
       </span>
     </div>
     <div v-if="event" class="flex">
-      <a
-        :href="`https://tzkt.io/${event.caller_id}`"
-        target="_blank"
-        class="flex items-center space-x-2"
+      <div
+        @click.prevent="$router.push(`/profile/${event._from_id}`)"
+        class="flex items-center space-x-2 cursor-pointer"
       >
         <img
-          v-if="event.caller_id"
-          :src="`https://services.tzkt.io/v1/avatars/${event.caller_id}`"
+          v-if="event._from_id"
+          :src="`https://services.tzkt.io/v1/avatars/${event._from_id}`"
           class="w-10 h-10 my-auto"
         />
         <span class="truncate">{{
-          event.caller_id ? getPrivatizedAddress(event.caller_id) : "-"
+          event._from_id ? getPrivatizedAddress(event._from_id) : "-"
         }}</span>
-      </a>
+      </div>
     </div>
     <div v-if="event" class="flex">
-      <a
-        target="_blank"
-        :href="`https://tzkt.io/${event.recipient_id}`"
-        class="flex items-center space-x-2"
+      <div
+        @click.prevent="$router.push(`/profile/${event._to_id}`)"
+        class="flex items-center space-x-2 cursor-pointer"
       >
         <img
-          v-if="event.recipient_id"
-          :src="`https://services.tzkt.io/v1/avatars/${event.recipient_id}`"
+          v-if="event._to_id"
+          :src="`https://services.tzkt.io/v1/avatars/${event._to_id}`"
           class="w-10 h-10 my-auto"
         />
         <span class="truncate">{{
-          event.recipient_id ? getPrivatizedAddress(event.recipient_id) : "-"
+          event._to_id ? getPrivatizedAddress(event._to_id) : "-"
         }}</span>
-      </a>
+      </div>
     </div>
     <div class="flex items-center">
       <span class="truncate">{{
@@ -118,7 +97,7 @@ export default defineComponent({
     BanIcon,
     SwitchHorizontalIcon,
   },
-  setup() {
+  setup(props) {
     const getPrivatizedAddress = (address) => {
       return `${address.substring(0, 5)}...${address.substring(
         address.length - 5,
@@ -126,7 +105,15 @@ export default defineComponent({
       )}`;
     };
 
-    return { getPrivatizedAddress };
+    const type = (event) => {
+      if (event.event_type === "mint") return "DocumentAddIcon";
+      if (event.event_type === "certify") return "BadgeCheckIcon";
+      if (event.event_type === "purchase") return "ShoppingBagIcon";
+      if (event.event_type === "reject") return "BanIcon";
+      else return "SwitchHorizontalIcon";
+    };
+
+    return { type, getPrivatizedAddress };
   },
 });
 </script>

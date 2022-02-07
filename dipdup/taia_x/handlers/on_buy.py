@@ -36,11 +36,17 @@ async def on_buy(
     
     operation = await get_operation()
 
+    token.buyer = caller
+    await token.save()
+    #await token.buyers.add(caller)
+    #await caller.purchases.add(token)
+    #await token.save()
+
     # save buy event in db
     buy_event = models.Event(
         token=token,
-        caller=caller,
-        recipient=recipient,
+        _from=caller,
+        _to=recipient,
         price=buy.data.amount,
         event_type=models.EventType.purchase,
         ophash=buy.data.hash,
@@ -55,8 +61,8 @@ async def on_buy(
     # save transfer event in db
     transfer_event = models.Event(
         token=token,
-        caller=recipient,
-        recipient=receiver,
+        _from=recipient,
+        _to=receiver,
         price=buy.data.amount,
         event_type=models.EventType.transfer,
         ophash=buy.data.hash,
@@ -66,8 +72,10 @@ async def on_buy(
     await transfer_event.save()
 
     # save purchase in db for backend access control
-    purchase = models.Purchase(
-        id=buy.parameter.__root__,
-        buyer=buy.data.sender_address
+    purchase, _ = await models.Purchase.get_or_create(
+     #   token=token
+        token_id=buy.parameter.__root__,
+        account_id=buy.data.sender_address
     )
     await purchase.save()
+    #await purchase.buyer.add(caller)

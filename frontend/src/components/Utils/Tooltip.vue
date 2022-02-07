@@ -9,7 +9,7 @@
       appear
       :show="!isHidden"
       as="template"
-      enter="transform ease-out duration-200 transition origin-bottom"
+      enter="transform ease-out duration-200 transition origin-bottom delay-500"
       enter-from="scale-95 translate-y-0.5 opacity-0"
       enter-to="scale-100 translate-y-0 opacity-100"
       leave="transition ease-in duration-100"

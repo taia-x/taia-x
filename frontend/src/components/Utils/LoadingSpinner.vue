@@ -1,7 +1,8 @@
 <template>
   <svg
-    :class="`w-${size} h-${size} text-white animate-spin`"
+    :class="`w-${size} h-${size} ${color} animate-spin`"
     viewBox="0 0 24 24"
+    fill="none"
   >
     <circle
       class="opacity-25"
@@ -27,6 +28,10 @@ export default defineComponent({
     size: {
       type: Number,
       required: true,
+    },
+    color: {
+      type: String,
+      default: "text-white",
     },
   },
 });

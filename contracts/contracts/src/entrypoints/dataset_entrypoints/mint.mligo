@@ -9,29 +9,29 @@ type mint_param = {
 (**
 Create a dataset and a token (they both have the same id), associate token to given owner, (and possibly setup an operator for this newly minted token).
 Several checks are carried out: the token  must be a new token (and not an already existing token).
-Only a provider, defined in the storage (market/users), can execute this entrypoint 
+Only a provider, defined in the storage (market/users), can execute this entrypoint
 @return storage with new token, and operators
 *)
 let mint (mint_param, store : mint_param * taia_x_storage) : (operation  list) * taia_x_storage =
     if not is_role(Tezos.sender, User Provider, store.users)
     then (failwith("A new token can only be minted by a provider") : (operation  list) * taia_x_storage)
     else
-     
+
     let token_id: token_id = get_dataset_id (store) in
 
     let create_token_with_operator (p, s : mint_param * taia_x_storage) : (operation  list) * taia_x_storage =
         let new_owners: owners = add_token_to_owner (token_id, p.owner, s.market.owners) in
         let ledger_with_minted_token = Big_map.add token_id p.owner s.ledger in
-        let ledger_and_owners_are_consistent : bool = check_ownership_is_consistent_in_ledger_and_owners (({owner=p.owner; token_id=token_id} : ownership), ledger_with_minted_token, new_owners) in        
-        let dataset_not_certified : bool = check_dataset_not_certified (token_id, s) in
+        let ledger_and_owners_are_consistent : bool = check_ownership_is_consistent_in_ledger_and_owners (({owner=p.owner; token_id=token_id} : ownership), ledger_with_minted_token, new_owners) in
+        let cert_not_set : bool = check_cert_not_set (token_id, s) in
 
-        if ledger_and_owners_are_consistent && dataset_not_certified then
+        if ledger_and_owners_are_consistent && cert_not_set then
             let next_dataset_id = token_id + 1n in
-            
+
             let new_dataset = ({ isOwned=true; owner=p.owner; price=(Some (p.price) : price option); id=token_id;  } : dataset) in
             let datasets_with_new_dataset = Big_map.add token_id new_dataset s.market.datasets in
             let datasets_ids_with_new_id = Set.add token_id s.market.datasetIds in
-            
+
             let new_token_metadata_info = Map.literal [(("" : string), p.token_metadata_uri)] in
             let new_token_metadata = ({ token_id=token_id; token_info=new_token_metadata_info; }) in
             let token_metadata_with_new_token_metadata = Big_map.add token_id new_token_metadata s.token_metadata in

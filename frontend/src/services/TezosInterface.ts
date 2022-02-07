@@ -59,7 +59,6 @@ class TezosInterface {
    */
   async mintNft(mintParams: MintParams): Promise<void> {
     const { hash, operator, address, price, metadataUri } = mintParams;
-    console.log(price);
     try {
       const op = await this.contract.methods
         .mint(hash, operator, address, price, char2Bytes(metadataUri))
@@ -102,6 +101,32 @@ class TezosInterface {
     } catch (e) {
       console.log(e);
       throw new Error(`Unable to buy token with token_id ${tokenId}!`);
+    }
+  }
+
+  /**
+   * certifies a dataset on tezos blockchain
+   * @param state certified or rejected
+   */
+  async certify(state: string, id: number, hashh: string): Promise<void> {
+    try {
+      const op = await this.contract.methods
+        .update_certs([
+          { [state]: { dataset_id: String(id), hash: char2Bytes(hashh) } },
+        ])
+        .send();
+      if (op) {
+        const result = await op.confirmation(1);
+        if (result.completed) {
+          console.log("Transaction correctly processed!");
+          console.log(`Block: ${result.block.header.level}`);
+          console.log(`Chain ID: ${result.block.chain_id}`);
+        } else {
+          console.log("An error has occurred");
+        }
+      }
+    } catch (e) {
+      throw new Error(`Unable to set cert state!`);
     }
   }
 }

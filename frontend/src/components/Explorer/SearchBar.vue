@@ -9,7 +9,7 @@
       id="first-name"
       autocomplete="given-name"
       placeholder="Search"
-      class="block w-full pl-12 transition duration-300 border-2 border-gray-300 rounded-md h-11 focus:ring-cyan-500 focus:border-cyan-500"
+      class="block w-full pl-12 transition duration-300 border-2 border-gray-200 rounded-md h-11 focus:ring-cyan-500 focus:border-cyan-500"
     />
   </div>
 </template>

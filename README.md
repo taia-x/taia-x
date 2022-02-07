@@ -144,7 +144,7 @@ See [here](https://github.com/taia-x/taia-x/tree/main/ipfs) how to fix CORS erro
 $ docker compose up
 ```
 
-8. In the `./backend` folder run the backend:
+8. Rename the `.env.template` in `./backend` do `.env` and run the backend:
 
 ```bash
 $ docker compose up

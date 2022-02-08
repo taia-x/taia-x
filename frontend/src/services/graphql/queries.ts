@@ -114,16 +114,19 @@ export const getCreations = gql`
 export const getPurchases = gql`
   query GetPurchases($address: String = "") {
     account_by_pk(address: $address) {
-      purchases {
-        creator_id
-        id
-        description
-        files
-        cert_state
-        name
-        price
-        hash
-        artifact_uri
+      account_purchases {
+        token_id
+        token {
+          creator_id
+          id
+          description
+          files
+          cert_state
+          name
+          price
+          hash
+          artifact_uri
+        }
       }
     }
   }

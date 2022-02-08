@@ -11,7 +11,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 metadata_obj = MetaData()
 
 purchase = Table(
-    'purchase', 
+    'token_account', 
     metadata_obj,
     Column('token_id', Integer, primary_key=True),
     Column('account_id', String(60), nullable=False),

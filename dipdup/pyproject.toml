@@ -6,7 +6,7 @@ authors = ["Kevin Hertwig <hertwig@campus.tu-berlin.de>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-dipdup = "^3.1.3"
+dipdup = "^4.2.3"
 
 [tool.poetry.dev-dependencies]
 

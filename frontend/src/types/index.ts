@@ -1,12 +1,3 @@
-export interface NFT {
-  owner: string;
-  id: number;
-  isOwned: boolean;
-  onSale: boolean;
-  price: null | number;
-  metadataUri: string;
-}
-
 export interface MintParams {
   hash: string;
   operator: string;

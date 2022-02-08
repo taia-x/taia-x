@@ -1,8 +1,5 @@
 <template>
-  <Header
-    @update:isOpen="isRegisterModalOpen = $event"
-    class="fixed top-0 z-10 bg-white"
-  />
+  <Header class="fixed top-0 z-10 bg-white" />
   <div class="h-24"></div>
   <div class="relative w-full max-w-6xl mx-auto">
     <router-view />

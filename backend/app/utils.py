@@ -6,12 +6,6 @@ from pydantic import BaseModel
 
 from .encoding import scrub_input, base58_decode, base58_encode
 
-
-class Purchase(BaseModel):
-  nft_id : int
-  buyer : str
-
-
 def public_key_hash(public_point) -> str:
     """Creates base58 encoded public key hash for this key.
 

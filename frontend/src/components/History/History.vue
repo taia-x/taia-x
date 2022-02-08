@@ -97,7 +97,7 @@ export default defineComponent({
     BanIcon,
     SwitchHorizontalIcon,
   },
-  setup(props) {
+  setup() {
     const getPrivatizedAddress = (address) => {
       return `${address.substring(0, 5)}...${address.substring(
         address.length - 5,

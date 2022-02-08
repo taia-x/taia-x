@@ -28,8 +28,7 @@ class Token(Model):
     formats = fields.JSONField(default=[])
     files = fields.JSONField(default=[])
     tags = fields.JSONField(default=[])
-    #buyers = fields.ManyToManyField("models.Account", related_name="purchases", through="token_account", null=True)
-    buyer = fields.ForeignKeyField('models.Account', 'purchases', index=True, null=True)
+    buyers = fields.ManyToManyField("models.Account", related_name="purchases", through="token_account", null=True)
     price = fields.BigIntField(null=False)
     cert_state = fields.CharEnumField(CertState, default=CertState.unspecified)
     hash = fields.CharField(64, null=False)
@@ -39,7 +38,7 @@ class Account(Model):
     name = fields.TextField(default='')
     description = fields.TextField(default='')
     metadata_file = fields.TextField(default='')
-    #purchases: fields.ManyToManyRelation[Token]
+    purchases: fields.ManyToManyRelation[Token]
     role = fields.TextField(default='')
 
 class Event(Model):
@@ -52,17 +51,3 @@ class Event(Model):
     ophash = fields.CharField(51)
     level = fields.BigIntField()
     timestamp = fields.DatetimeField()
-
-#class Purchase(Model):
-#    id = fields.BigIntField(pk=True)
-    #nft_id = fields.BigIntField()
- #   token = fields.ForeignKeyField('models.Token', 'purchases', null=True, index=True)
-  #  buyer = fields.ManyToManyField('models.Account', 'purchases')
-
-class Purchase(Model):
-    #id = fields.BigIntField(pk=True)
-    token_id = fields.BigIntField(pk=True)
-    account_id = fields.CharField(36)
-
-    #class Meta:
-     #   table = "token_account"

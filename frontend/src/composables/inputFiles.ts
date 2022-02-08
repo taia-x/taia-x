@@ -37,12 +37,8 @@ const inputFiles = () => {
           if (!file.startsWith("__MACOSX")) {
             zip.file(file.name, file);
           }
-          //console.log(zipArchive.files[file]["_data"]["compressedContent"]);
         });
-        //console.log(zip);
         archive.value = await zip.generateAsync({ type: "blob" });
-
-        //saveAs(archive.value, "Archive.zip");
       } else {
         zip.file(file.name, file);
         archive.value = await zip.generateAsync({ type: "blob" });

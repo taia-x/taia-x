@@ -36,11 +36,9 @@ async def on_buy(
     
     operation = await get_operation()
 
-    token.buyer = caller
+    await token.buyers.add(caller)
+    await caller.purchases.add(token)
     await token.save()
-    #await token.buyers.add(caller)
-    #await caller.purchases.add(token)
-    #await token.save()
 
     # save buy event in db
     buy_event = models.Event(
@@ -70,12 +68,3 @@ async def on_buy(
         timestamp=buy.data.timestamp,
     )
     await transfer_event.save()
-
-    # save purchase in db for backend access control
-    purchase, _ = await models.Purchase.get_or_create(
-     #   token=token
-        token_id=buy.parameter.__root__,
-        account_id=buy.data.sender_address
-    )
-    await purchase.save()
-    #await purchase.buyer.add(caller)

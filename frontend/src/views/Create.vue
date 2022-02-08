@@ -135,20 +135,6 @@ export default defineComponent({
         });
         const { artifactUri }: { artifactUri: string } =
           await uploadResponse.json();
-        // const boy: any = {
-        //   nft_id: "1",
-        //   sig: "Test",
-        //   pbkey: "Test",
-        // };
-        // const res2 = await fetch(artifactUri, {
-        //   method: "POST",
-        //   headers: { "Content-Type": "application/json" },
-        //   body: JSON.stringify(boy),
-        // });
-        // console.log(
-        //   "cool2 ",
-        //   await generateSHA256(new Blob([await res2.arrayBuffer()]))
-        // );
 
         // generate hash from zip archive
         const hash = await generateSHA256(archive.value);

@@ -21,11 +21,6 @@ async def fix_token_metadata(token):
     token.formats = get_formats(metadata)
     token.files = get_files(metadata)
     token.tags = get_tags(metadata)
-    #token.display_uri = get_display_uri(metadata)
-    #token.thumbnail_uri = get_thumbnail_uri(metadata)
-    #token.mime = get_mime(metadata)
-    #token.extra = metadata.get('extra', {})
-    #await add_tags(token, metadata)
     await token.save()
     return metadata != {}
 
@@ -62,27 +57,7 @@ async def get_metadata(token):
             _logger.info(f'metadata for {token.id} from BCD')
 
     return data
-
-
-# def normalize_metadata(token, metadata):
-#     n = {
-#         '__version': 1,
-#         'token_id': token.id,
-#         'symbol': metadata.get('symbol', 'OBJKT'),
-#         'name': get_name(metadata),
-#         'description': get_description(metadata),
-#         'artifact_uri': get_artifact_uri(metadata),
-#         #'display_uri': get_display_uri(metadata),
-#         #'thumbnail_uri': get_thumbnail_uri(metadata),
-#         #'formats': get_formats(metadata),
-#         'creators': get_creators(metadata),
-#         # not cleaned / not lowercased, store as-is
-#         'tags': metadata.get('tags', []),
-#         'extra': {},
-#     }
-
-#     return n
-
+    
 
 async def fetch_metadata_bcd(token):
     session = aiohttp.ClientSession()

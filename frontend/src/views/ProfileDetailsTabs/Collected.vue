@@ -28,10 +28,8 @@ export default defineComponent({
       }
     );
 
-    const tokens = useResult(
-      result,
-      null,
-      ({ account_by_pk }) => account_by_pk.purchases
+    const tokens = useResult(result, null, ({ account_by_pk }) =>
+      account_by_pk.account_purchases.map((purchase) => purchase.token)
     );
 
     watch(route, () => {

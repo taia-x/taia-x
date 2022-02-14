@@ -21,7 +21,7 @@ services:
     networks:
       - taia-x
     restart: always
-    image: bakingbad/tzkt-api:latest
+    image: bakingbad/tzkt-api:1.6.4
     depends_on:
       - db_tzkt
     environment:
@@ -37,7 +37,7 @@ services:
     networks:
       - taia-x
     restart: always
-    image: bakingbad/tzkt-sync:latest
+    image: bakingbad/tzkt-sync:1.6.4
     environment:
       TZKT_TezosNode__Endpoint: http://sandbox:20000
       TZKT_ConnectionStrings__DefaultConnection: host=db_tzkt;port=5432;database=tzkt_db;username=tzkt;password=qwerty;

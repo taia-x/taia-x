@@ -1,0 +1,37 @@
+{
+  "data": {
+    "token_by_pk": {
+      "artifact_uri": "http://localhost:8000/download/ce93a033-d7e6-48ec-8c31-04f4ebb4e7c9",
+      "cert_state": "pending",
+      "creator_id": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
+      "description": "This is a digital of a Mercedes Benz.",
+      "files": [
+        {
+          "fileName": "battery.json",
+          "fileSize": 4530,
+          "mimeType": "application/json",
+          "previewUri": "ipfs://QmRQUSjnx5VMBV1spuGdpYe6WoiXSA44v9CQgZSRcXACjG"
+        }
+      ],
+      "formats": [
+        {
+          "uri": "http://localhost:8000/download/ce93a033-d7e6-48ec-8c31-04f4ebb4e7c9",
+          "hash": "sha256://bc696692bef3a8b5ae09a8d63cef989fdc7de28a7af05e5069b76670dd9ec3a2",
+          "mimeType": "application/zip"
+        },
+        {
+          "uri": "ipfs://QmRQUSjnx5VMBV1spuGdpYe6WoiXSA44v9CQgZSRcXACjG",
+          "hash": "sha256://99395e53034b452ee82d791a0204ba8c6a8c9ce121cd0a9481925b1d9e7ae058",
+          "mimeType": "application/json"
+        }
+      ],
+      "hash": "bc696692bef3a8b5ae09a8d63cef989fdc7de28a7af05e5069b76670dd9ec3a2",
+      "id": 1,
+      "metadata": "ipfs://QmRXU6sSaNLsY4PxznZ56wiF9oMpwFifsDL2qXMCyTJBnh",
+      "name": "Mercedes Benz",
+      "price": 10000000,
+      "tags": ["car", "mercedes", "benz"],
+      "timestamp": "2022-02-13T02:21:48+00:00"
+    }
+  }
+}

@@ -25,14 +25,14 @@
           </p></template
         ></Section
       >
-      <Section
+      <!-- <Section
         ><template #title>Attributes</template
         ><template #content
           ><p class="text-base text-gray-700">
             {{ token.description }}
           </p></template
         ></Section
-      >
+      > -->
       <Section
         ><template #title>Files</template
         ><template #content

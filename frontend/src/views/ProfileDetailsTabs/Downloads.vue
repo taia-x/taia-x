@@ -51,7 +51,6 @@ import Tooltip from "@/components/Utils/Tooltip.vue";
 import inputFiles from "@/composables/inputFiles";
 import { saveAs } from "file-saver";
 import { useUserStore } from "@/stores/useUser";
-import { char2Bytes } from "@taquito/utils";
 
 export default defineComponent({
   components: {

@@ -7,7 +7,7 @@ run:
 docker-compose up
 ```
 
-This will spawn a FastAPI, an IPFS and a postgres container.
+This will spawn a FastAPI and a postgres container.
 
 To see all routes supported by the api, open a browser and follow the link: [http://0.0.0.0:8000/docs](http://0.0.0.0:8000/docs)
 
@@ -18,6 +18,10 @@ docker exec -ti <CONTAINER_ID> pytest
 ```
 
 ## Debugging
+```
+Error: standard_init_linux.go:228: exec user process caused: no such file or directory
+```
+If the docker-compose command is being executed on a Windows system, change the "End of Line Sequence" from the docker-start.sh script to LF, if it was previously saved as CRLF. 
 
 ### VSCode
 
